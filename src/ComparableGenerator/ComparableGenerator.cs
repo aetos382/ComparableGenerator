@@ -278,8 +278,6 @@ namespace ComparableGenerator
             string suffix)
         {
             string fullName = symbol.GetFullName();
-            fullName = fullName.Replace('+', '.');
-
             return $"{fullName}_{suffix}.cs";
         }
 

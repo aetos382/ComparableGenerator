@@ -153,7 +153,7 @@ namespace ComparableGenerator
             namespaceNames.Reverse();
 
             namespaceName = string.Join(".", namespaceNames);
-            typeName = string.Join("+", typeNames);
+            typeName = string.Join(".", typeNames);
 
             string fullName = $"{namespaceName}.{typeName}";
             return fullName;
