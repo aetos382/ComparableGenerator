@@ -1,0 +1,62 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#@ import namespace="Microsoft.CodeAnalysis" #>
+<#
+    base.TransformText();
+#>
+<#+
+    protected override void WriteUsings()
+    {
+#>
+using System.Collections.Generic;
+<#+
+    }
+#>
+<#+
+    protected override void WriteCode(
+        ITypeSymbol type)
+    {
+        var context = this.Context;
+
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
+#>
+partial <#= typeKind #> <#= typeName #> :
+    IComparable<<#= typeName #>>
+{
+    public int CompareTo(
+        <#= context.NullableTypeName #> other)
+    {
+<#+
+        if (!type.IsValueType)
+        {
+#>            
+        if (other is null)
+        {
+            return int.MaxValue;
+        }
+<#+
+        }
+#>
+
+        int result;
+
+<#+
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
+#>
+        result = Comparer<<#= member.TypeName #>>.Default.Compare(this.<#= memberName #>, other.<#= memberName #>);
+        if (result != 0)
+        {
+            return result;
+        }
+<#+
+        }
+#>
+
+        return 0;
+    }
+}
+<#+
+    }
+#>

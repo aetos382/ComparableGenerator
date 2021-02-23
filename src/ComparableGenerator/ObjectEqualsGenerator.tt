@@ -1,0 +1,49 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#@ import namespace="Microsoft.CodeAnalysis" #>
+<#
+    base.TransformText();
+#>
+<#+
+    protected override void WriteUsings()
+    {
+#>
+using System.Collections.Generic;
+<#+
+    }
+
+    protected override void WriteCode(
+        ITypeSymbol type)
+    {
+        var context = this.Context;
+
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
+#>
+partial <#= typeKind #> <#= typeName #>
+{
+    public override bool Equals(
+        <#= context.NullableObjectTypeName #> other)
+    {
+        if (other is not <#= type.Name #> other2)
+        {
+            return false;
+        }
+
+<#+
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
+#>
+        if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(this.<#= memberName #>, other2.<#= memberName #>))
+        {
+            return false;
+        }
+<#+
+        }
+#>
+        return true;
+    }
+}
+<#+
+    }
+#>
