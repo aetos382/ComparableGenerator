@@ -72,13 +72,14 @@ namespace ComparableGenerator
             }
 
             var options = context.AnalyzerConfigOptions;
-            string buildPropertyName = $"build_property.{optionName}";
 
-            if (options.GetOptions(syntax.SyntaxTree).TryGetBooleanOption(buildPropertyName, out var boolValue2))
+            string buildMetadataName = $"build_metadata.Compile.{optionName}";
+            if (options.GetOptions(syntax.SyntaxTree).TryGetBooleanOption(buildMetadataName, out var boolValue2))
             {
                 return boolValue2;
             }
 
+            string buildPropertyName = $"build_property.{optionName}";
             if (options.GlobalOptions.TryGetBooleanOption(buildPropertyName, out var boolValue3))
             {
                 return boolValue3;
