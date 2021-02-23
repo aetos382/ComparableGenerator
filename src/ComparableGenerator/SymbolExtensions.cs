@@ -8,7 +8,6 @@ namespace ComparableGenerator
 {
     internal static class SymbolExtensions
     {
-        // TODO: interfaceSymbol がジェネリック インターフェイスの場合、構築済み型でなければエラーにする
         public static bool HasInterface(
             this ITypeSymbol type,
             INamedTypeSymbol interfaceSymbol)
@@ -26,6 +25,17 @@ namespace ComparableGenerator
             if (interfaceSymbol.TypeKind != TypeKind.Interface)
             {
                 throw new ArgumentException();
+            }
+
+            if (interfaceSymbol.IsGenericType)
+            {
+                bool hasTypeParameter =
+                    interfaceSymbol.TypeArguments.Any(x => x.TypeKind == TypeKind.TypeParameter);
+
+                if (hasTypeParameter)
+                {
+                    throw new ArgumentException();
+                }
             }
 
             var comparer = SymbolEqualityComparer.Default;
