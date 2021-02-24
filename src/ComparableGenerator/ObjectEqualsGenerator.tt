@@ -1,4 +1,4 @@
-<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
     base.TransformText();

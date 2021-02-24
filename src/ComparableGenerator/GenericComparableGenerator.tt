@@ -1,4 +1,4 @@
-<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
     base.TransformText();
@@ -38,12 +38,22 @@ partial <#= typeKind #> <#= typeName #> :
         }
 #>
 
+<#+
+        if (context.SourceTypeInfo.IsNonGenericComparable)
+        {
+#>
+        return this.CompareTo(other);
+<#+
+        }
+        else
+        {
+#>
         int result;
 
 <#+
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 #>
         result = Comparer<<#= member.TypeName #>>.Default.Compare(this.<#= memberName #>, other.<#= memberName #>);
         if (result != 0)
@@ -51,10 +61,13 @@ partial <#= typeKind #> <#= typeName #> :
             return result;
         }
 <#+
-        }
+            }
 #>
 
         return 0;
+<#+
+        }
+#>
     }
 }
 <#+

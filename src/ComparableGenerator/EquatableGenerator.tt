@@ -1,4 +1,4 @@
-<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
     base.TransformText();
@@ -36,19 +36,33 @@ partial <#= typeKind #> <#= typeName #> :
 <#+
         }
 #>
+
 <#+
-        foreach (var member in context.Members)
+        if (context.SourceTypeInfo.OverridesObjectEquals)
         {
-            string memberName = member.Name;
+#>
+        return this.Equals(other);
+<#+
+        }
+        else
+        {
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 #>
         if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(this.<#= memberName #>, other.<#= memberName #>))
         {
             return false;
         }
 <#+
+            }
+
+#>
+
+        return true;
+<#+
         }
 #>
-        return true;
     }
 }
 <#+
