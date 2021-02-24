@@ -210,9 +210,7 @@ namespace ComparableGenerator
                     GenerateCode(
                         context,
                         new EquatableGenerator(c),
-                        symbol,
-                        syntax,
-                        "Equatable");
+                        $"{fullName}_Equatable.cs");
                 }
 
                 if (options.GenerateGenericComparable && !sourceTypeInfo.IsGenericComparable)
@@ -220,9 +218,7 @@ namespace ComparableGenerator
                     GenerateCode(
                         context,
                         new GenericComparableGenerator(c),
-                        symbol,
-                        syntax,
-                        "GenericComparable");
+                        $"{fullName}_GenericComparable.cs");
                 }
 
                 if (options.GenerateNonGenericComparable && !sourceTypeInfo.IsNonGenericComparable)
@@ -230,9 +226,7 @@ namespace ComparableGenerator
                     GenerateCode(
                         context,
                         new NonGenericComparableGenerator(c),
-                        symbol,
-                        syntax,
-                        "NonGenericComparable");
+                        $"{fullName}_NonGenericComparable.cs");
                 }
 
                 if (options.GenerateObjectEquals && !sourceTypeInfo.OverridesObjectEquals)
@@ -240,9 +234,7 @@ namespace ComparableGenerator
                     GenerateCode(
                         context,
                         new ObjectEqualsGenerator(c),
-                        symbol,
-                        syntax,
-                        "ObjectEquals");
+                        $"{fullName}_ObjectEquals.cs");
                 }
             }
         }
@@ -250,35 +242,10 @@ namespace ComparableGenerator
         private static void GenerateCode(
             GeneratorExecutionContext context,
             GeneratorBase generator,
-            INamedTypeSymbol symbol,
-            SyntaxNode syntax,
-            string fileNameSuffix)
+            string hintName)
         {
             string code = generator.TransformText();
-
-            string fileName = GetFileName(symbol, fileNameSuffix);
-            context.AddSource(fileName, code);
-
-#if DEBUG
-
-            string syntaxPath = syntax.SyntaxTree.FilePath;
-            if (!string.IsNullOrEmpty(syntaxPath))
-            {
-                string txtPath = Path.Combine(
-                    Path.GetDirectoryName(syntaxPath),
-                    $"{fileName}.txt");
-
-                File.WriteAllText(txtPath, code, Encoding.UTF8);
-            }
-#endif
-        }
-
-        private static string GetFileName(
-            ITypeSymbol symbol,
-            string suffix)
-        {
-            string fullName = symbol.GetFullName();
-            return $"{fullName}_{suffix}.cs";
+            context.AddSource(hintName, code);
         }
 
         private class SyntaxReceiver :

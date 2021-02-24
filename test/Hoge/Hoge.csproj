@@ -4,7 +4,20 @@
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
+
+  <Target Name="SetCompilerGeneratedFilesOutputPath" BeforeTargets="CreateCompilerGeneratedFilesOutputPath" Condition="'$(EmitCompilerGeneratedFiles)' == 'true'">
+
+    <PropertyGroup>
+      <CompilerGeneratedFilesOutputPath>$(IntermediateOutputPath)\generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="$(CompilerGeneratedFilesOutputPath)\**\*" Condition="'$(CompilerGeneratedFilesOutputPath)' != ''" />
+    </ItemGroup>
+    
+  </Target>
 
   <ItemGroup>
     <CompilerVisibleProperty Include="DebugGenerator" />
