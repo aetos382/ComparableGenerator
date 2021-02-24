@@ -10,6 +10,27 @@ namespace ComparableGenerator.UnitTests
     [TestFixture]
     public class Hoge
     {
+        private static Compilation CreateCompilation(
+            string source)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+
+            string assemblyName = Guid.NewGuid().ToString("D");
+            
+            var references = new[] {
+                MetadataReference.CreateFromFile(typeof(Type).Assembly.Location)
+            };
+
+            var compilation = CSharpCompilation.Create(
+                assemblyName,
+                new[] {
+                    syntaxTree
+                },
+                references);
+
+            return compilation;
+        }
+
         [Test]
         public void HogeTest()
         {
@@ -17,15 +38,7 @@ namespace ComparableGenerator.UnitTests
 
             var generator = new ComparableGenerator();
             var driver = CSharpGeneratorDriver.Create(generator);
-
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            string assemblyName = Guid.NewGuid().ToString("D");
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName,
-                new[] {
-                    syntaxTree
-                });
+            var compilation = CreateCompilation(source);
 
             driver.RunGeneratorsAndUpdateCompilation(
                 compilation,
@@ -51,21 +64,7 @@ partial class Hoge
 
             var generator = new ComparableGenerator();
             var driver = CSharpGeneratorDriver.Create(generator);
-
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            
-            string assemblyName = Guid.NewGuid().ToString("D");
-
-            var references = new[] {
-                MetadataReference.CreateFromFile(typeof(Type).Assembly.Location)
-            };
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName,
-                new[] {
-                    syntaxTree
-                },
-                references);
+            var compilation = CreateCompilation(source);
 
             driver.RunGeneratorsAndUpdateCompilation(
                 compilation,
