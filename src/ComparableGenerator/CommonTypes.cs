@@ -151,7 +151,7 @@ namespace ComparableGenerator
 
             if (type is null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"{typeName} not found.");
             }
 
             return type;

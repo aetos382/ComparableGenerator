@@ -17,7 +17,7 @@ namespace ComparableGenerator
             new DiagnosticDescriptor(
                 nameof(TypeIsNotPartial),
                 "TypeIsNotPartial",
-                "TypeIsNotPartial",
+                "{0} is not partial type.",
                 "Hoge",
                 DiagnosticSeverity.Error,
                 true);

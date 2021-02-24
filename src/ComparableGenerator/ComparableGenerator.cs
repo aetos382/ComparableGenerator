@@ -86,7 +86,8 @@ namespace ComparableGenerator
                     context.ReportDiagnostic(
                         Diagnostic.Create(
                             DiagnosticDescriptors.TypeIsNotPartial,
-                            syntaxLocation));
+                            syntaxLocation,
+                            symbol.GetFullName()));
 
                     continue;
                 }
