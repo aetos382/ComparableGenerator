@@ -5,18 +5,7 @@
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CleanCompilerGeneratedFilesBeforeCompile>false</CleanCompilerGeneratedFilesBeforeCompile>
   </PropertyGroup>
-
-  <Target Name="SetCompilerGeneratedFilesOutputPath" BeforeTargets="CleanCompilerGeneratedFiles" Condition="'$(EmitCompilerGeneratedFiles)' == 'true'">
-    <PropertyGroup>
-      <CompilerGeneratedFilesOutputPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)', 'generated'))</CompilerGeneratedFilesOutputPath>
-    </PropertyGroup>
-  </Target>
-
-  <Target Name="CleanCompilerGeneratedFiles" BeforeTargets="CreateCompilerGeneratedFilesOutputPath" Condition="'$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and '$(CleanCompilerGeneratedFilesBeforeCompile)' == 'true'">
-    <Delete Files="$([System.IO.Path]::Combine('$(CompilerGeneratedFilesOutputPath)', '**\*')" />
-  </Target>
 
   <ItemGroup>
     <CompilerVisibleProperty Include="DebugGenerator" />
@@ -47,3 +36,4 @@
   </ItemGroup>
 
 </Project>
+ 
