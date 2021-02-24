@@ -12,10 +12,10 @@ using System.Collections.Generic;
     }
 #>
 <#+
-    protected override void WriteCode(
-        ITypeSymbol type)
+    protected override void WriteCode()
     {
         var context = this.Context;
+        var type = context.Type;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);

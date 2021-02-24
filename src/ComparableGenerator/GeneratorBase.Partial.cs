@@ -35,8 +35,7 @@ namespace ComparableGenerator
             this.PushIndent("    ");
         }
 
-        protected abstract void WriteCode(
-            ITypeSymbol type);
+        protected abstract void WriteCode();
 
         protected virtual void WriteUsings()
         {

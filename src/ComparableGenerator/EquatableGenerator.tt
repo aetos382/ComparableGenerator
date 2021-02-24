@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
     base.TransformText();
@@ -11,10 +11,10 @@ using System.Collections.Generic;
 <#+
     }
 
-    protected override void WriteCode(
-        ITypeSymbol type)
+    protected override void WriteCode()
     {
         var context = this.Context;
+        var type = context.Type;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);

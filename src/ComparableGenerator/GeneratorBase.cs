@@ -61,8 +61,7 @@ namespace ComparableGenerator
         this.PushIndent();
     }
 
-    var targetType = context.Types[numTypes - 1];
-    this.WriteCode(targetType);
+    this.WriteCode();
 
     for (int i = 0; i < numTypes - 1; ++i)
     {
