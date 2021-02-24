@@ -81,6 +81,7 @@ namespace ComparableGenerator
 
     }
 
+            this.Write("\r\n// --------------------------\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
