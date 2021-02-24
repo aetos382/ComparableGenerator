@@ -20,7 +20,7 @@ namespace ComparableGenerator
 
         public CommonTypes CommonTypes { get; }
 
-        public SourceTypeInfo SourceTypeInfo { get; }
+        public SourceTypeInfo SourceType { get; }
 
         public NullableContext NullableContext { get; }
 
@@ -116,7 +116,7 @@ namespace ComparableGenerator
             this.Members = members;
             this.Options = options;
             this.CommonTypes = commonTypes;
-            this.SourceTypeInfo = sourceTypeInfo;
+            this.SourceType= sourceTypeInfo;
             this.NullableContext = nullableContext;
         }
     }

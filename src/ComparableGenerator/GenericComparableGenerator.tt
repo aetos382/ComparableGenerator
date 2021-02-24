@@ -1,24 +1,24 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
-    base.TransformText();
+base.TransformText();
 #>
 <#+
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 #>
 using System.Collections.Generic;
 <#+
-    }
+}
 #>
 <#+
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
 #>
 partial <#= typeKind #> <#= typeName #> :
     IComparable<<#= typeName #>>
@@ -27,30 +27,30 @@ partial <#= typeKind #> <#= typeName #> :
         <#= context.NullableTypeName #> other)
     {
 <#+
-        if (context.SourceTypeInfo.IsNonGenericComparable)
-        {
+    if (context.SourceType.IsNonGenericComparable)
+    {
 #>
         return this.CompareTo(other);
 <#+
-        }
-        else
+    }
+    else
+    {
+        if (!type.IsValueType)
         {
-            if (!type.IsValueType)
-            {
-#>            
+#>
         if (other is null)
         {
             return int.MaxValue;
         }
 <#+
-            }
+        }
 #>
         int result;
 
 <#+
-            foreach (var member in context.Members)
-            {
-                string memberName = member.Name;
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
 #>
         result = Comparer<<#= member.TypeName #>>.Default.Compare(this.<#= memberName #>, other.<#= memberName #>);
         if (result != 0)
@@ -58,15 +58,15 @@ partial <#= typeKind #> <#= typeName #> :
             return result;
         }
 <#+
-            }
+        }
 #>
 
         return 0;
 <#+
-        }
+    }
 #>
     }
 }
 <#+
-    }
+}
 #>

@@ -1,23 +1,35 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
-    base.TransformText();
+base.TransformText();
 #>
 <#+
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 #>
 using System.Collections.Generic;
 <#+
-    }
+}
 
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
+
+    bool delegateToEquatable =
+        sourceType.IsEquatable || options.GenerateEquatable;
+
+    bool delegateToGenericComparable =
+        sourceType.IsGenericComparable || options.GenerateGenericComparable;
+
+    bool delegateToNonGenericComparable =
+        sourceType.IsNonGenericComparable || options.GenerateNonGenericComparable;
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -28,8 +40,22 @@ partial <#= typeKind #> <#= typeName #>
         {
             return false;
         }
-
 <#+
+    if (delegateToEquatable)
+    {
+#>
+        return this.Equals(other2);
+<#+
+
+    }
+    else if (delegateToGenericComparable || delegateToNonGenericComparable)
+    {
+#>
+        return this.CompareTo(other2) == 0;
+<#+
+    }
+    else
+    {
         foreach (var member in context.Members)
         {
             string memberName = member.Name;
@@ -42,8 +68,11 @@ partial <#= typeKind #> <#= typeName #>
         }
 #>
         return true;
+<#+
+    }
+#>
     }
 }
 <#+
-    }
+}
 #>

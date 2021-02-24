@@ -1,23 +1,26 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
-    base.TransformText();
+base.TransformText();
 #>
 <#+
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 #>
 using System.Collections.Generic;
 <#+
-    }
+}
 
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
 #>
 partial <#= typeKind #> <#= typeName #> :
     IEquatable<<#= typeName #>>
@@ -26,43 +29,49 @@ partial <#= typeKind #> <#= typeName #> :
         <#= context.NullableTypeName #> other)
     {
 <#+
-        if (context.SourceTypeInfo.OverridesObjectEquals)
-        {
+    if (sourceType.OverridesObjectEquals)
+    {
 #>
         return this.Equals(other);
 <#+
-        }
-        else
+    }
+    else if (sourceType.IsGenericComparable || options.GenerateGenericComparable)
+    {
+#>
+        return this.CompareTo(other) == 0;
+<#+
+    }
+    else
+    {
+        if (!type.IsValueType)
         {
-            if (!type.IsValueType)
-            {
 #>            
         if (other is null)
         {
             return false;
         }
 <#+
-            }
+        }
 
-            foreach (var member in context.Members)
-            {
-                string memberName = member.Name;
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
 #>
         if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(this.<#= memberName #>, other.<#= memberName #>))
         {
             return false;
         }
 <#+
-            }
+        }
 
 #>
 
         return true;
 <#+
-        }
+    }
 #>
     }
 }
 <#+
-    }
+}
 #>

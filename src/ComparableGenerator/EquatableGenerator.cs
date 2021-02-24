@@ -24,26 +24,29 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-    base.TransformText();
+base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 
 this.Write("using System.Collections.Generic;\r\n");
 
 
-    }
+}
 
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
 
 this.Write("partial ");
 
@@ -64,27 +67,34 @@ this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableTypeName));
 this.Write(" other)\r\n    {\r\n");
 
 
-        if (context.SourceTypeInfo.OverridesObjectEquals)
-        {
+    if (sourceType.OverridesObjectEquals)
+    {
 
 this.Write("        return this.Equals(other);\r\n");
 
 
-        }
-        else
+    }
+    else if (sourceType.IsGenericComparable || options.GenerateGenericComparable)
+    {
+
+this.Write("        return this.CompareTo(other) == 0;\r\n");
+
+
+    }
+    else
+    {
+        if (!type.IsValueType)
         {
-            if (!type.IsValueType)
-            {
 
 this.Write("            \r\n        if (other is null)\r\n        {\r\n            return false;\r\n " +
         "       }\r\n");
 
 
-            }
+        }
 
-            foreach (var member in context.Members)
-            {
-                string memberName = member.Name;
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
 
 this.Write("        if (!EqualityComparer<");
 
@@ -101,18 +111,18 @@ this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 this.Write("))\r\n        {\r\n            return false;\r\n        }\r\n");
 
 
-            }
+        }
 
 
 this.Write("\r\n        return true;\r\n");
 
 
-        }
+    }
 
 this.Write("    }\r\n}\r\n");
 
 
-    }
+}
 
     }
 }

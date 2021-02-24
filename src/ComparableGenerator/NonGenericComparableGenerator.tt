@@ -1,24 +1,24 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
-    base.TransformText();
+base.TransformText();
 #>
 <#+
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 #>
 using System.Collections.Generic;
 <#+
-    }
+}
 #>
 <#+
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
 #>
 partial <#= typeKind #> <#= typeName #> :
     IComparable
@@ -36,8 +36,18 @@ partial <#= typeKind #> <#= typeName #> :
             throw new ArgumentException();
         }
 
+<#+
+    if (context.SourceType.IsGenericComparable ||
+        context.Options.GenerateGenericComparable)
+    {
+#>
+        return this.CompareTo(other2);
+<#+
+    }
+    else
+    {
+#>
         int result;
-
 <#+
         foreach (var member in context.Members)
         {
@@ -53,8 +63,11 @@ partial <#= typeKind #> <#= typeName #> :
 #>
 
         return 0;
+<#+
+    }
+#>
     }
 }
 <#+
-    }
+}
 #>

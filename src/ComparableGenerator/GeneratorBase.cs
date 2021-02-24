@@ -27,30 +27,30 @@ namespace ComparableGenerator
             this.Write(this.ToStringHelper.ToStringWithCulture(DateTimeOffset.Now));
             this.Write("\r\n*/\r\n\r\nusing System;\r\n");
 
-    this.WriteUsings();
+this.WriteUsings();
 
             this.Write("\r\n");
 
-    var context = this.Context;
+var context = this.Context;
 
-    var namespaceName = context.Namespace;
-    bool hasNamespace = !string.IsNullOrEmpty(namespaceName);
-    if (hasNamespace)
-    {
+var namespaceName = context.Namespace;
+bool hasNamespace = !string.IsNullOrEmpty(namespaceName);
+if (hasNamespace)
+{
 
             this.Write("namespace ");
             this.Write(this.ToStringHelper.ToStringWithCulture(namespaceName));
             this.Write("\r\n{\r\n");
 
-        this.PushIndent();
-    }
+    this.PushIndent();
+}
 
-    int numTypes = context.Types.Count;
+int numTypes = context.Types.Count;
 
-    for (int i = 0; i < numTypes - 1; ++i)
-    {
-        var type = context.Types[i];
-        string typeKind = GetTypeKind(type);
+for (int i = 0; i < numTypes - 1; ++i)
+{
+    var type = context.Types[i];
+    string typeKind = GetTypeKind(type);
 
             this.Write("partial ");
             this.Write(this.ToStringHelper.ToStringWithCulture(typeKind));
@@ -58,28 +58,28 @@ namespace ComparableGenerator
             this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
             this.Write("\r\n{\r\n");
 
-        this.PushIndent();
-    }
+    this.PushIndent();
+}
 
-    this.WriteCode();
+this.WriteCode();
 
-    for (int i = 0; i < numTypes - 1; ++i)
-    {
-        this.PopIndent();
-
-            this.Write("}\r\n");
-
-    }
-
-
-    // end namespace
-    if (hasNamespace)
-    {
-        this.PopIndent();
+for (int i = 0; i < numTypes - 1; ++i)
+{
+    this.PopIndent();
 
             this.Write("}\r\n");
 
-    }
+}
+
+
+// end namespace
+if (hasNamespace)
+{
+    this.PopIndent();
+
+            this.Write("}\r\n");
+
+}
 
             this.Write("\r\n// --------------------------\r\n");
             return this.GenerationEnvironment.ToString();

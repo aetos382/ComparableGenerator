@@ -24,26 +24,38 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-    base.TransformText();
+base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-    protected override void WriteUsings()
-    {
+protected override void WriteUsings()
+{
 
 this.Write("using System.Collections.Generic;\r\n");
 
 
-    }
+}
 
-    protected override void WriteCode()
-    {
-        var context = this.Context;
-        var type = context.Type;
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
 
-        string typeName = type.Name;
-        string typeKind = GetTypeKind(type);
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
+
+    bool delegateToEquatable =
+        sourceType.IsEquatable || options.GenerateEquatable;
+
+    bool delegateToGenericComparable =
+        sourceType.IsGenericComparable || options.GenerateGenericComparable;
+
+    bool delegateToNonGenericComparable =
+        sourceType.IsNonGenericComparable || options.GenerateNonGenericComparable;
 
 this.Write("partial ");
 
@@ -61,9 +73,26 @@ this.Write(" other)\r\n    {\r\n        if (other is not ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
 
-this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n");
+this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n");
 
 
+    if (delegateToEquatable)
+    {
+
+this.Write("        return this.Equals(other2);\r\n");
+
+
+
+    }
+    else if (delegateToGenericComparable || delegateToNonGenericComparable)
+    {
+
+this.Write("        return this.CompareTo(other2) == 0;\r\n");
+
+
+    }
+    else
+    {
         foreach (var member in context.Members)
         {
             string memberName = member.Name;
@@ -85,10 +114,15 @@ this.Write("))\r\n        {\r\n            return false;\r\n        }\r\n");
 
         }
 
-this.Write("        return true;\r\n    }\r\n}\r\n");
+this.Write("        return true;\r\n");
 
 
     }
+
+this.Write("    }\r\n}\r\n");
+
+
+}
 
     }
 }
