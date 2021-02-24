@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.VisualBasic;
 
 using NUnit.Framework;
 
@@ -19,7 +16,12 @@ namespace ComparableGenerator.UnitTests
         private static Compilation CreateCompilation(
             string source)
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var parseOptions = CSharpParseOptions.Default
+                .WithLanguageVersion(LanguageVersion.CSharp9);
+
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                source,
+                parseOptions);
 
             string assemblyName = Guid.NewGuid().ToString("D");
             
@@ -28,7 +30,8 @@ namespace ComparableGenerator.UnitTests
             };
 
             var options = new CSharpCompilationOptions(
-                OutputKind.DynamicallyLinkedLibrary);
+                OutputKind.DynamicallyLinkedLibrary,
+                nullableContextOptions: NullableContextOptions.Enable);
 
             var compilation = CSharpCompilation.Create(
                 assemblyName,
@@ -39,43 +42,6 @@ namespace ComparableGenerator.UnitTests
                 options);
 
             return compilation;
-        }
-
-        [Test]
-        public void VisualBasicはサポートしません()
-        {
-            const string source = @"";
-
-            var generator = new ComparableGenerator();
-            var driver = CSharpGeneratorDriver.Create(generator);
-
-            var syntaxTree = VisualBasicSyntaxTree.ParseText(source);
-
-            string assemblyName = Guid.NewGuid().ToString("D");
-            
-            var references = new[] {
-                MetadataReference.CreateFromFile(typeof(Type).Assembly.Location)
-            };
-
-            var compilation = VisualBasicCompilation.Create(
-                assemblyName,
-                new[] {
-                    syntaxTree
-                },
-                references);
-
-            driver.RunGeneratorsAndUpdateCompilation(
-                compilation,
-                out var outputCompilation,
-                out var diagnostics);
-
-            foreach (var diag in diagnostics)
-            {
-                TestContext.WriteLine(diag.ToString());
-            }
-
-            Assert.True(diagnostics.Any(x =>
-                x.Descriptor == DiagnosticDescriptors.LanguageNotSupported));
         }
 
         [Test]
