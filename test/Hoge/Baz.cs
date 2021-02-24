@@ -8,7 +8,7 @@ namespace Hoge
     	public partial class Inner
     	{
         	[CompareBy(0)]
-        	public object Foo { get; set; }
+        	public int Foo { get; set; }
         }
     }
 
@@ -17,7 +17,7 @@ namespace Hoge
         public partial class Inner
         {
             [CompareBy(1)]
-            public object Bar { get; set; }
+            public int Bar { get; set; }
         }
     }
 }
