@@ -1,5 +1,4 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" #>
-<#@ import namespace="Microsoft.CodeAnalysis" #>
 /*
     Generated: <#= DateTimeOffset.Now #>
 */

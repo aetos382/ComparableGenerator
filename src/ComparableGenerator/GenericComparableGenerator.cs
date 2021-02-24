@@ -9,7 +9,6 @@
 // ------------------------------------------------------------------------------
 namespace ComparableGenerator
 {
-    using Microsoft.CodeAnalysis;
     using System;
     
     /// <summary>
