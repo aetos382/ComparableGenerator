@@ -2,13 +2,13 @@
 
 namespace ComparableGenerator
 {
-    internal static class DiagnosticDescriptors
+    public static class DiagnosticDescriptors
     {
         public static readonly DiagnosticDescriptor LanguageNotSupported =
             new DiagnosticDescriptor(
                 nameof(LanguageNotSupported),
                 "LanguageNotSupported",
-                "LanguageNotSupported",
+                "{0} is not supported.",
                 "Hoge",
                 DiagnosticSeverity.Error,
                 true);

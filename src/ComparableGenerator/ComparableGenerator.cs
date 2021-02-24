@@ -44,7 +44,8 @@ namespace ComparableGenerator
                 context.ReportDiagnostic(
                     Diagnostic.Create(
                         DiagnosticDescriptors.LanguageNotSupported,
-                        null));
+                        null,
+                        context.Compilation.Language));
 
                 return;
             }
