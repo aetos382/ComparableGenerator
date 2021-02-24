@@ -65,16 +65,6 @@ this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableTypeName));
 this.Write(" other)\r\n    {\r\n");
 
 
-        if (!type.IsValueType)
-        {
-
-this.Write("            \r\n        if (other is null)\r\n        {\r\n            return int.MaxVa" +
-        "lue;\r\n        }\r\n");
-
-
-        }
-
-
         if (context.SourceTypeInfo.IsNonGenericComparable)
         {
 
@@ -84,6 +74,14 @@ this.Write("        return this.CompareTo(other);\r\n");
         }
         else
         {
+            if (!type.IsValueType)
+            {
+
+this.Write("            \r\n        if (other is null)\r\n        {\r\n            return int.MaxVa" +
+        "lue;\r\n        }\r\n");
+
+
+            }
 
 this.Write("        int result;\r\n\r\n");
 

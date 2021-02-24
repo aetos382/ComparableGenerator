@@ -26,18 +26,6 @@ partial <#= typeKind #> <#= typeName #> :
         <#= context.NullableTypeName #> other)
     {
 <#+
-        if (!type.IsValueType)
-        {
-#>            
-        if (other is null)
-        {
-            return false;
-        }
-<#+
-        }
-#>
-
-<#+
         if (context.SourceTypeInfo.OverridesObjectEquals)
         {
 #>
@@ -46,6 +34,16 @@ partial <#= typeKind #> <#= typeName #> :
         }
         else
         {
+            if (!type.IsValueType)
+            {
+#>            
+        if (other is null)
+        {
+            return false;
+        }
+<#+
+            }
+
             foreach (var member in context.Members)
             {
                 string memberName = member.Name;

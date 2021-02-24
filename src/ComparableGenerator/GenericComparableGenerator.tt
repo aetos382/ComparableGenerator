@@ -27,18 +27,6 @@ partial <#= typeKind #> <#= typeName #> :
         <#= context.NullableTypeName #> other)
     {
 <#+
-        if (!type.IsValueType)
-        {
-#>            
-        if (other is null)
-        {
-            return int.MaxValue;
-        }
-<#+
-        }
-#>
-
-<#+
         if (context.SourceTypeInfo.IsNonGenericComparable)
         {
 #>
@@ -47,6 +35,15 @@ partial <#= typeKind #> <#= typeName #> :
         }
         else
         {
+            if (!type.IsValueType)
+            {
+#>            
+        if (other is null)
+        {
+            return int.MaxValue;
+        }
+<#+
+            }
 #>
         int result;
 

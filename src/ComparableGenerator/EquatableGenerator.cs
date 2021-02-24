@@ -64,16 +64,6 @@ this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableTypeName));
 this.Write(" other)\r\n    {\r\n");
 
 
-        if (!type.IsValueType)
-        {
-
-this.Write("            \r\n        if (other is null)\r\n        {\r\n            return false;\r\n " +
-        "       }\r\n");
-
-
-        }
-
-
         if (context.SourceTypeInfo.OverridesObjectEquals)
         {
 
@@ -83,6 +73,15 @@ this.Write("        return this.Equals(other);\r\n");
         }
         else
         {
+            if (!type.IsValueType)
+            {
+
+this.Write("            \r\n        if (other is null)\r\n        {\r\n            return false;\r\n " +
+        "       }\r\n");
+
+
+            }
+
             foreach (var member in context.Members)
             {
                 string memberName = member.Name;
