@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -9,8 +9,6 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>0.1.0</Version>
     <Authors>aetos</Authors>
-    <Company />
-    <Product />
     <Copyright>Copyright (c) 2021 aetos</Copyright>
     <PackageProjectUrl>https://github.com/aetos382/ComparableGenerator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/aetos382/ComparableGenerator.git</RepositoryUrl>
