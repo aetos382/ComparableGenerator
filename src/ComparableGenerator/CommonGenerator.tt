@@ -30,7 +30,7 @@ using System.ComponentModel;
 partial <#= typeKind #> <#= typeName #>
 {
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    private static bool EqualsCore(
+    private static bool __EqualsCore(
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {
@@ -55,14 +55,14 @@ partial <#= typeKind #> <#= typeName #>
             return false;
         }
 <#+
-        }
+            }
 #>
 
         bool result;
 <#+
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 #>
 
         result = EqualityComparer<<#= member.TypeName #>>.Default.Equals(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
@@ -71,7 +71,7 @@ partial <#= typeKind #> <#= typeName #>
             return result;
         }
 <#+
-        }
+            }
 
 #>
 
@@ -79,23 +79,23 @@ partial <#= typeKind #> <#= typeName #>
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    private static int CompareCore(
+    private static int __CompareCore(
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {
 <#+
-        if (!isValueType)
-        {
+            if (!isValueType)
+            {
 #>
         if (object.ReferenceEquals(left, right))
         {
             return 0;
         }
 <#+
-        }
+            }
 
-        if (context.IsNullable)
-        {
+            if (context.IsNullable)
+            {
 #>
         if (left is null)
         {
@@ -107,14 +107,14 @@ partial <#= typeKind #> <#= typeName #>
             return int.MaxValue;
         }
 <#+
-        }
+            }
 #>
 
         int result;
 <#+
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 #>
 
         result = Comparer<<#= member.TypeName #>>.Default.Compare(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
@@ -123,7 +123,7 @@ partial <#= typeKind #> <#= typeName #>
             return result;
         }
 <#+
-        }
+            }
 
 #>
 
@@ -131,5 +131,5 @@ partial <#= typeKind #> <#= typeName #>
     }
 }
 <#+
-}
+    }
 #>

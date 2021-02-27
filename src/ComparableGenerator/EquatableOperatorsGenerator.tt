@@ -85,7 +85,7 @@ partial <#= typeKind #> <#= typeName #>
         else
         {
 #>
-        return EqualsCore(<#= leftVarName #>, <#= rightVarName #>);
+        return __EqualsCore(<#= leftVarName #>, <#= rightVarName #>);
 <#+
         }
 #>
@@ -99,5 +99,5 @@ partial <#= typeKind #> <#= typeName #>
     }
 }
 <#+
-}
+    }
 #>

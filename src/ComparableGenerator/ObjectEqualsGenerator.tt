@@ -28,7 +28,7 @@ partial <#= typeKind #> <#= typeName #>
     public override bool Equals(
         <#= context.NullableObjectTypeName #> other)
     {
-        if (other is not <#= type.Name #> other2)
+        if (other is not <#= typeName #> other2)
         {
             return false;
         }
@@ -37,20 +37,26 @@ partial <#= typeKind #> <#= typeName #>
     if (delegateToEquatable)
     {
 #>
-        return this.Equals(other2);
+        return ((IEquatable<<#= typeName #>>)this).Equals(other2);
 <#+
 
     }
-    else if (delegateToGenericComparable || delegateToNonGenericComparable)
+    else if (delegateToGenericComparable)
     {
 #>
-        return this.CompareTo(other2) == 0;
+        return ((IComparable<<#= typeName #>>)this).CompareTo(other2) == 0;
+<#+
+    }
+    else if (delegateToNonGenericComparable)
+    {
+#>
+        return ((IComparable)this).CompareTo(other2) == 0;
 <#+
     }
     else
     {
 #>
-        return EqualsCore(this, other2);
+        return __EqualsCore(this, other2);
 <#+
     }
 #>

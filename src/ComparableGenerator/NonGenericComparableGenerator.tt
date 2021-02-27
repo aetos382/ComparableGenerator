@@ -1,20 +1,27 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
+
+        var sourceType = context.SourceType;
+
+        string virtualModifier =
+            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+                " virtual" : "";
+
 #>
 partial <#= typeKind #> <#= typeName #> :
     IComparable
 {
-    public int CompareTo(
+    public<#= virtualModifier #> int CompareTo(
         <#= context.NullableObjectTypeName #> other)
     {
         if (other is null)
@@ -22,28 +29,28 @@ partial <#= typeKind #> <#= typeName #> :
             return int.MaxValue;
         }
 
-        if (other is not <#= type.Name #> other2)
+        if (other is not <#= typeName #> other2)
         {
             throw new ArgumentException();
         }
 
 <#+
-    if (context.SourceType.IsGenericComparable ||
-        context.Options.GenerateGenericComparable)
-    {
+        if (context.SourceType.IsGenericComparable ||
+            context.Options.GenerateGenericComparable)
+        {
 #>
-        return this.CompareTo(other2);
+        return ((IComparable<<#= typeName #>>)this).CompareTo(other2);
 <#+
-    }
-    else
-    {
+        }
+        else
+        {
 #>
-        return CompareCore(this, other2);
+        return __CompareCore(this, other2);
 <#+
-    }
+        }
 #>
     }
 }
 <#+
-}
+    }
 #>

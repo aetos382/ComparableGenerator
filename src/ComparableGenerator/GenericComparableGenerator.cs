@@ -23,21 +23,27 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    string parameterType =
-        context.SourceType.IsValueType ? typeName : context.NullableTypeName;
+        var sourceType = context.SourceType;
+
+        string parameterType =
+            sourceType.IsValueType ? typeName : context.NullableTypeName;
+
+        string virtualModifier =
+            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+                " virtual" : "";
 
 
 this.Write("partial ");
@@ -52,40 +58,44 @@ this.Write(" :\r\n    IComparable<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(">\r\n{\r\n    public int CompareTo(\r\n        ");
+this.Write(">\r\n{\r\n    public");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
+
+this.Write(" int CompareTo(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
 
 this.Write(" other)\r\n    {\r\n");
 
 
-    if (context.SourceType.IsNonGenericComparable)
-    {
-
-this.Write("        return this.CompareTo(other);\r\n");
-
-
-    }
-    else
-    {
-        if (!type.IsValueType)
+        if (context.SourceType.IsNonGenericComparable)
         {
+
+this.Write("        return ((IComparable)this).CompareTo(other);\r\n");
+
+
+        }
+        else
+        {
+            if (!type.IsValueType)
+            {
 
 this.Write("        if (other is null)\r\n        {\r\n            return int.MaxValue;\r\n        " +
         "}\r\n");
 
 
+            }
+
+this.Write("        return __CompareCore(this, other);\r\n");
+
+
         }
-
-this.Write("        return CompareCore(this, other);\r\n");
-
-
-    }
 
 this.Write("    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }

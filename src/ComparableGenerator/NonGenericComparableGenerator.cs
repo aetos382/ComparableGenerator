@@ -23,18 +23,25 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
+
+        var sourceType = context.SourceType;
+
+        string virtualModifier =
+            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+                " virtual" : "";
+
 
 this.Write("partial ");
 
@@ -44,38 +51,46 @@ this.Write(" ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(" :\r\n    IComparable\r\n{\r\n    public int CompareTo(\r\n        ");
+this.Write(" :\r\n    IComparable\r\n{\r\n    public");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
+
+this.Write(" int CompareTo(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeName));
 
 this.Write(" other)\r\n    {\r\n        if (other is null)\r\n        {\r\n            return int.Max" +
         "Value;\r\n        }\r\n\r\n        if (other is not ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write(" other2)\r\n        {\r\n            throw new ArgumentException();\r\n        }\r\n\r\n");
 
 
-    if (context.SourceType.IsGenericComparable ||
-        context.Options.GenerateGenericComparable)
-    {
+        if (context.SourceType.IsGenericComparable ||
+            context.Options.GenerateGenericComparable)
+        {
 
-this.Write("        return this.CompareTo(other2);\r\n");
+this.Write("        return ((IComparable<");
 
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-    }
-    else
-    {
-
-this.Write("        return CompareCore(this, other2);\r\n");
+this.Write(">)this).CompareTo(other2);\r\n");
 
 
-    }
+        }
+        else
+        {
+
+this.Write("        return __CompareCore(this, other2);\r\n");
+
+
+        }
 
 this.Write("    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }

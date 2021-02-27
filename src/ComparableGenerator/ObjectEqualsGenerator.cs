@@ -62,7 +62,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeNam
 
 this.Write(" other)\r\n    {\r\n        if (other is not ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n");
 
@@ -70,22 +70,37 @@ this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\
     if (delegateToEquatable)
     {
 
-this.Write("        return this.Equals(other2);\r\n");
+this.Write("        return ((IEquatable<");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
+
+this.Write(">)this).Equals(other2);\r\n");
 
 
 
     }
-    else if (delegateToGenericComparable || delegateToNonGenericComparable)
+    else if (delegateToGenericComparable)
     {
 
-this.Write("        return this.CompareTo(other2) == 0;\r\n");
+this.Write("        return ((IComparable<");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
+
+this.Write(">)this).CompareTo(other2) == 0;\r\n");
+
+
+    }
+    else if (delegateToNonGenericComparable)
+    {
+
+this.Write("        return ((IComparable)this).CompareTo(other2) == 0;\r\n");
 
 
     }
     else
     {
 
-this.Write("        return EqualsCore(this, other2);\r\n");
+this.Write("        return __EqualsCore(this, other2);\r\n");
 
 
     }

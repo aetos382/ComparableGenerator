@@ -146,7 +146,7 @@ this.Write(") == 0;\r\n");
         else
         {
 
-this.Write("        return EqualsCore(");
+this.Write("        return __EqualsCore(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
 
@@ -170,7 +170,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 this.Write(" right)\r\n    {\r\n        return !(left == right);\r\n    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }

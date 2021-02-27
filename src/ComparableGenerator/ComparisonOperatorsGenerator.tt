@@ -1,20 +1,28 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
+
+        bool hasGenericCompareTo =
+            sourceType.IsGenericComparable ||
+            options.GenerateGenericComparable;
+
+        bool hasNonGenericCompareTo =
+            sourceType.IsNonGenericComparable ||
+            options.GenerateNonGenericComparable;
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -22,14 +30,14 @@ partial <#= typeKind #> <#= typeName #>
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {
-        return CompareCore(left, right) < 0;
+        return __CompareCore(left, right) < 0;
     }
 
     public static bool operator >(
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {
-        return CompareCore(left, right) > 0;
+        return __CompareCore(left, right) > 0;
     }
 
     public static bool operator <=(
@@ -47,5 +55,5 @@ partial <#= typeKind #> <#= typeName #>
     }
 }
 <#+
-}
+    }
 #>

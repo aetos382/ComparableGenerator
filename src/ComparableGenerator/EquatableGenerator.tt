@@ -1,50 +1,60 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string parameterType =
-        sourceType.IsValueType ? typeName : context.NullableTypeName;
+        string parameterType =
+            sourceType.IsValueType ? typeName : context.NullableTypeName;
+
+        string virtualModifier =
+            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+                " virtual" : "";
 #>
 partial <#= typeKind #> <#= typeName #> :
     IEquatable<<#= typeName #>>
 {
-    public bool Equals(
+    public<#= virtualModifier #> bool Equals(
         <#= parameterType #> other)
     {
 <#+
-    if (sourceType.OverridesObjectEquals)
-    {
+        if (sourceType.OverridesObjectEquals)
+        {
 #>
         return this.Equals(other);
 <#+
-    }
-    else if (sourceType.IsGenericComparable || options.GenerateGenericComparable)
-    {
+        }
+        else if (sourceType.IsGenericComparable)
+        {
 #>
-        return this.CompareTo(other) == 0;
+        return ((IComparable<<#= typeName #>>)this.CompareTo(other) == 0;
 <#+
-    }
-    else
-    {
+        }
+        else if (sourceType.IsNonGenericComparable)
+        {
 #>
-        return EqualsCore(this, other);
+        return ((IComparable)this.CompareTo(other) == 0;
 <#+
-    }
+        }
+        else
+        {
+#>
+        return __EqualsCore(this, other);
+<#+
+        }
 #>
     }
 }
 <#+
-}
+    }
 #>

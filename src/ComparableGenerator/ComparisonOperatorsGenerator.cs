@@ -23,23 +23,31 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
+
+        bool hasGenericCompareTo =
+            sourceType.IsGenericComparable ||
+            options.GenerateGenericComparable;
+
+        bool hasNonGenericCompareTo =
+            sourceType.IsNonGenericComparable ||
+            options.GenerateNonGenericComparable;
 
 this.Write("partial ");
 
@@ -57,8 +65,8 @@ this.Write(" left,\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
-this.Write(" right)\r\n    {\r\n        return CompareCore(left, right) < 0;\r\n    }\r\n\r\n    public" +
-        " static bool operator >(\r\n        ");
+this.Write(" right)\r\n    {\r\n        return __CompareCore(left, right) < 0;\r\n    }\r\n\r\n    publ" +
+        "ic static bool operator >(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
@@ -66,8 +74,8 @@ this.Write(" left,\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
-this.Write(" right)\r\n    {\r\n        return CompareCore(left, right) > 0;\r\n    }\r\n\r\n    public" +
-        " static bool operator <=(\r\n        ");
+this.Write(" right)\r\n    {\r\n        return __CompareCore(left, right) > 0;\r\n    }\r\n\r\n    publ" +
+        "ic static bool operator <=(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
@@ -87,7 +95,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 this.Write(" right)\r\n    {\r\n        return !(left < right);\r\n    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }

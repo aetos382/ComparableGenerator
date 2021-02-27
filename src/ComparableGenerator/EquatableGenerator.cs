@@ -24,25 +24,29 @@ namespace ComparableGenerator
         {
             this.Write("\n");
 
-base.TransformText();
+    base.TransformText();
 
             this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string parameterType =
-        sourceType.IsValueType ? typeName : context.NullableTypeName;
+        string parameterType =
+            sourceType.IsValueType ? typeName : context.NullableTypeName;
+
+        string virtualModifier =
+            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+                " virtual" : "";
 
 this.Write("partial ");
 
@@ -56,39 +60,54 @@ this.Write(" :\r\n    IEquatable<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(">\r\n{\r\n    public bool Equals(\r\n        ");
+this.Write(">\r\n{\r\n    public");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
+
+this.Write(" bool Equals(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
 
 this.Write(" other)\r\n    {\r\n");
 
 
-    if (sourceType.OverridesObjectEquals)
-    {
+        if (sourceType.OverridesObjectEquals)
+        {
 
 this.Write("        return this.Equals(other);\r\n");
 
 
-    }
-    else if (sourceType.IsGenericComparable || options.GenerateGenericComparable)
-    {
+        }
+        else if (sourceType.IsGenericComparable)
+        {
 
-this.Write("        return this.CompareTo(other) == 0;\r\n");
+this.Write("        return ((IComparable<");
 
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-    }
-    else
-    {
-
-this.Write("        return EqualsCore(this, other);\r\n");
+this.Write(">)this.CompareTo(other) == 0;\r\n");
 
 
-    }
+        }
+        else if (sourceType.IsNonGenericComparable)
+        {
+
+this.Write("        return ((IComparable)this.CompareTo(other) == 0;\r\n");
+
+
+        }
+        else
+        {
+
+this.Write("        return __EqualsCore(this, other);\r\n");
+
+
+        }
 
 this.Write("\n    }\n}\n");
 
 
-}
+    }
 
     }
 }

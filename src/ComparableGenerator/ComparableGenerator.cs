@@ -13,6 +13,23 @@ namespace ComparableGenerator
     public class ComparableGenerator :
         ISourceGenerator
     {
+        public ComparableGenerator()
+        {
+        }
+
+        private readonly GenerateOptions? _options;
+
+        internal ComparableGenerator(
+            GenerateOptions options)
+        {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            this._options = options;
+        }
+
         public void Initialize(
             GeneratorInitializationContext context)
         {
@@ -74,10 +91,12 @@ namespace ComparableGenerator
                 var nullableContext =
                     semanticModel.GetNullableContext(syntax.Span.End);
 
-                var options = new GenerateOptions(
-                    context,
-                    syntax,
-                    comparableAttribute);
+                var options =
+                    this._options ??
+                    new GenerateOptions(
+                        context,
+                        syntax,
+                        comparableAttribute);
 
                 var sourceTypeInfo = new SourceTypeInfo(
                     symbol,

@@ -9,6 +9,26 @@ namespace ComparableGenerator
 {
     internal class GenerateOptions
     {
+        internal GenerateOptions(
+            bool generateEquatable = true,
+            bool generateGenericComparable = true,
+            bool generateNonGenericComparable = true,
+            bool generateObjectEquals = true,
+            bool generateEqualityContract = true,
+            bool generateEqualityOperators = false,
+            bool generateComparisonOperatos = false,
+            bool generateMethodsAsVirtual = true)
+        {
+            this.GenerateEquatable = generateEquatable;
+            this.GenerateGenericComparable = generateGenericComparable;
+            this.GenerateNonGenericComparable = generateNonGenericComparable;
+            this.GenerateObjectEquals = generateObjectEquals;
+            this.GenerateEqualityContract = generateEqualityContract;
+            this.GenerateEqualityOperators = generateEqualityOperators;
+            this.GenerateComparisonOperatos = generateComparisonOperatos;
+            this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
+        }
+
         public GenerateOptions(
             GeneratorExecutionContext context,
             TypeDeclarationSyntax syntax,
@@ -28,7 +48,7 @@ namespace ComparableGenerator
                 .ToDictionary(
                     x => x.Key,
                     x => x.Value,
-                    StringComparer.Ordinal);
+                    StringComparer.OrdinalIgnoreCase);
 
             this.GenerateEquatable = LocalGetOption(nameof(this.GenerateEquatable)) ?? true;
             this.GenerateGenericComparable = LocalGetOption(nameof(this.GenerateGenericComparable)) ?? true;
@@ -37,6 +57,7 @@ namespace ComparableGenerator
             this.GenerateEqualityContract = LocalGetOption(nameof(this.GenerateEqualityContract)) ?? true;
             this.GenerateEqualityOperators = LocalGetOption(nameof(this.GenerateEqualityOperators)) ?? false;
             this.GenerateComparisonOperators = LocalGetOption(nameof(this.GenerateComparisonOperators)) ?? false;
+            this.GenerateMethodsAsVirtual = LocalGetOption(nameof(this.GenerateMethodsAsVirtual)) ?? true;
 
             bool? LocalGetOption(string optionName)
             {
@@ -54,9 +75,13 @@ namespace ComparableGenerator
 
         public bool GenerateEqualityOperators { get; }
 
+        public bool GenerateComparisonOperatos { get; }
+
         public bool GenerateComparisonOperators { get; }
 
         public bool GenerateEqualityContract { get; }
+        
+        public bool GenerateMethodsAsVirtual { get; }
 
         private static bool? GetOption(
             GeneratorExecutionContext context,

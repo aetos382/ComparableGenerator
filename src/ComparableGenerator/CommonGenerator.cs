@@ -61,7 +61,7 @@ this.Write(" ");
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write("\r\n{\r\n    [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n    private static boo" +
-        "l EqualsCore(\r\n        ");
+        "l __EqualsCore(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
@@ -89,14 +89,14 @@ this.Write("        if (left is null || right is null)\r\n        {\r\n         
         "\n        }\r\n");
 
 
-        }
+            }
 
 this.Write("\r\n        bool result;\r\n");
 
 
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 
 this.Write("\r\n        result = EqualityComparer<");
 
@@ -121,11 +121,11 @@ this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 this.Write(");\r\n        if (!result)\r\n        {\r\n            return result;\r\n        }\r\n");
 
 
-        }
+            }
 
 
 this.Write("\r\n        return true;\r\n    }\r\n\r\n    [EditorBrowsable(EditorBrowsableState.Advanc" +
-        "ed)]\r\n    private static int CompareCore(\r\n        ");
+        "ed)]\r\n    private static int __CompareCore(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
@@ -136,31 +136,31 @@ this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 this.Write(" right)\r\n    {\r\n");
 
 
-        if (!isValueType)
-        {
+            if (!isValueType)
+            {
 
 this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return 0" +
         ";\r\n        }\r\n");
 
 
-        }
+            }
 
-        if (context.IsNullable)
-        {
+            if (context.IsNullable)
+            {
 
 this.Write("        if (left is null)\r\n        {\r\n            return int.MinValue;\r\n        }" +
         "\r\n\r\n        if (right is null)\r\n        {\r\n            return int.MaxValue;\r\n   " +
         "     }\r\n");
 
 
-        }
+            }
 
 this.Write("\r\n        int result;\r\n");
 
 
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
 
 this.Write("\r\n        result = Comparer<");
 
@@ -185,13 +185,13 @@ this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return result;\r\n        }\r\n");
 
 
-        }
+            }
 
 
 this.Write("\r\n        return 0;\r\n    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }
