@@ -73,7 +73,7 @@ this.Write("        if (other is null)\r\n        {\r\n            return int.Ma
 
         }
 
-this.Write("        return Compare(this, other);\r\n");
+this.Write("        return CompareCore(this, other);\r\n");
 
 
     }

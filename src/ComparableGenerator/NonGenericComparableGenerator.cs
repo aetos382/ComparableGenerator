@@ -67,7 +67,7 @@ this.Write("        return this.CompareTo(other2);\r\n");
     else
     {
 
-this.Write("        return Compare(this, other2);\r\n");
+this.Write("        return CompareCore(this, other2);\r\n");
 
 
     }

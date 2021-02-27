@@ -85,7 +85,7 @@ this.Write("        return this.CompareTo(other2) == 0;\r\n");
     else
     {
 
-this.Write("        return Compare(this, other2) == 0;\r\n");
+this.Write("        return EqualsCore(this, other2);\r\n");
 
 
     }

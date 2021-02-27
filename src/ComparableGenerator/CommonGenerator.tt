@@ -27,6 +27,48 @@ protected override void WriteCode()
 partial <#= typeKind #> <#= typeName #>
 {
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    private static bool EqualsCore(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+<#+
+        if (context.IsNullable)
+        {
+#>
+        if (object.ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+<#+
+        }
+#>
+
+        bool result;
+<#+
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
+#>
+
+        result = EqualityComparer<<#= member.TypeName #>>.Default.Equals(left.<#= memberName #>, right.<#= memberName #>);
+        if (!result)
+        {
+            return result;
+        }
+<#+
+        }
+
+#>
+
+        return true;
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
     private static int Compare(
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)

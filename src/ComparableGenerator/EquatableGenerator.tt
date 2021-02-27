@@ -36,7 +36,7 @@ partial <#= typeKind #> <#= typeName #> :
     else
     {
 #>
-        return Compare(this, other) == 0;
+        return EqualsCore(this, other);
 <#+
     }
 #>

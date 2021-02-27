@@ -77,7 +77,7 @@ this.Write("        return this.CompareTo(other) == 0;\r\n");
     else
     {
 
-this.Write("        return Compare(this, other) == 0;\r\n");
+this.Write("        return EqualsCore(this, other);\r\n");
 
 
     }

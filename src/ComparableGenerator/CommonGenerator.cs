@@ -57,8 +57,55 @@ this.Write(" ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write("\r\n{\r\n    [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n    private static int" +
-        " Compare(\r\n        ");
+this.Write("\r\n{\r\n    [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n    private static boo" +
+        "l EqualsCore(\r\n        ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+
+this.Write(" left,\r\n        ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+
+this.Write(" right)\r\n    {\r\n");
+
+
+        if (context.IsNullable)
+        {
+
+this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return t" +
+        "rue;\r\n        }\r\n\r\n        if (left is null || right is null)\r\n        {\r\n      " +
+        "      return false;\r\n        }\r\n");
+
+
+        }
+
+this.Write("\r\n        bool result;\r\n");
+
+
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
+
+this.Write("\r\n        result = EqualityComparer<");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
+
+this.Write(">.Default.Equals(left.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
+
+this.Write(", right.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
+
+this.Write(");\r\n        if (!result)\r\n        {\r\n            return result;\r\n        }\r\n");
+
+
+        }
+
+
+this.Write("\r\n        return true;\r\n    }\r\n\r\n    [EditorBrowsable(EditorBrowsableState.Advanc" +
+        "ed)]\r\n    private static int CompareCore(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 

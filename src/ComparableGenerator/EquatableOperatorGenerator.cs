@@ -91,7 +91,7 @@ this.Write("        return left.CompareTo(right) == 0;\r\n");
         else
         {
 
-this.Write("        return Compare(left, right) == 0;\r\n");
+this.Write("        return EqualsCore(left, right);\r\n");
 
 
         }
