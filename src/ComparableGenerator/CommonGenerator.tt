@@ -69,7 +69,7 @@ partial <#= typeKind #> <#= typeName #>
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    private static int Compare(
+    private static int CompareCore(
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {

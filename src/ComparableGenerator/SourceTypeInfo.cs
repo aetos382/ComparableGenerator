@@ -19,8 +19,6 @@ namespace ComparableGenerator
 
         public bool DefinedEqualityOperators { get; }
 
-        public bool DefinedStrictlyComparisonOperators { get; }
-
         public bool DefinedEqualityComparisonOperators { get; }
 
         public bool HasEqualityContract { get; }
@@ -68,10 +66,6 @@ namespace ComparableGenerator
                 {
                     case "op_Equality":
                         this.DefinedEqualityOperators = true;
-                        break;
-
-                    case "op_LessThan":
-                        this.DefinedStrictlyComparisonOperators = true;
                         break;
 
                     case "op_LessThanOrEqual":

@@ -1,0 +1,51 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#
+base.TransformText();
+#>
+<#+
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
+
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
+
+    string nullableTypeName = context.NullableTypeName;
+#>
+partial <#= typeKind #> <#= typeName #>
+{
+    public static bool operator <(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        return CompareCore(left, right) < 0;
+    }
+
+    public static bool operator >(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        return CompareCore(left, right) > 0;
+    }
+
+    public static bool operator <=(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        return !(left > right);
+    }
+    
+    public static bool operator >=(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        return !(left < right);
+    }
+}
+<#+
+}
+#>

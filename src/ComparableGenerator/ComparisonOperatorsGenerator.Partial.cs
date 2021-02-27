@@ -1,8 +1,8 @@
 ﻿namespace ComparableGenerator
 {
-    internal partial class EquatableOperatorGenerator
+    internal partial class ComparisonOperatorsGenerator
     {
-        public EquatableOperatorGenerator(
+        public ComparisonOperatorsGenerator(
             ComparableGeneratorContext context)
             : base(
                 context)

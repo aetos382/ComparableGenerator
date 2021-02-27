@@ -43,47 +43,56 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>NonGenericComparableGenerator.cs</LastGenOutput>
     </None>
-    <None Update="EquatableOperatorGenerator.tt">
+    <None Update="EquatableOperatorsGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EquatableOperatorGenerator.cs</LastGenOutput>
+      <LastGenOutput>EquatableOperatorsGenerator.cs</LastGenOutput>
+    </None>
+    <None Update="ComparisonOperatorsGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ComparisonOperatorsGenerator.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="GeneratorBase.cs">
+      <DependentUpon>GeneratorBase.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>GeneratorBase.tt</DependentUpon>
     </Compile>
     <Compile Update="CommonGenerator.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
       <DependentUpon>CommonGenerator.tt</DependentUpon>
-    </Compile>
-    <Compile Update="EquatableGenerator.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>EquatableGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="ObjectEqualsGenerator.cs">
+      <DependentUpon>ObjectEqualsGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ObjectEqualsGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Update="EquatableGenerator.cs">
+      <DependentUpon>EquatableGenerator.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="GenericComparableGenerator.cs">
+      <DependentUpon>GenericComparableGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>GenericComparableGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="NonGenericComparableGenerator.cs">
+      <DependentUpon>NonGenericComparableGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>NonGenericComparableGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="EquatableOperatorGenerator.cs">
+      <DependentUpon>EquatableOperatorGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>EquatableOperatorGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ComparisonOperatorsGenerator.cs">
+      <DependentUpon>ComparisonOperatorsGenerator.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
 

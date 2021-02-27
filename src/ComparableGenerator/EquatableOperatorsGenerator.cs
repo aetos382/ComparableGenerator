@@ -15,7 +15,7 @@ namespace ComparableGenerator
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    internal partial class EquatableOperatorGenerator : GeneratorBase
+    internal partial class EquatableOperatorsGenerator : GeneratorBase
     {
         /// <summary>
         /// Create the template output

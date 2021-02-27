@@ -248,8 +248,16 @@ namespace ComparableGenerator
                 {
                     GenerateCode(
                         context,
-                        new EquatableOperatorGenerator(c),
+                        new EquatableOperatorsGenerator(c),
                         $"{fullName}_EqualityOperators.cs");
+                }
+
+                if (options.GenerateComparisonOperators && !sourceTypeInfo.DefinedEqualityComparisonOperators)
+                {
+                    GenerateCode(
+                        context,
+                        new ComparisonOperatorsGenerator(c),
+                        $"{fullName}_ComparisonOperators.cs");
                 }
             }
         }
