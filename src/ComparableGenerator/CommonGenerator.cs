@@ -188,7 +188,25 @@ this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return re
             }
 
 
-this.Write("\r\n        return 0;\r\n    }\r\n}\r\n");
+this.Write("\r\n        return 0;\r\n    }\r\n\r\n");
+
+
+        if (options.GenerateEqualityContract &&
+            !sourceType.HasEqualityContract &&
+            !isValueType)
+        {
+
+this.Write("    protected virtual Type EqualityContract\r\n    {\r\n        get\r\n        {\r\n     " +
+        "       return typeof(");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
+
+this.Write(");\r\n        }\r\n    }\r\n");
+
+
+        }
+
+this.Write("}\r\n");
 
 
     }

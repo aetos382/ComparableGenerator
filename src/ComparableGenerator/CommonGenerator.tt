@@ -129,6 +129,23 @@ partial <#= typeKind #> <#= typeName #>
 
         return 0;
     }
+
+<#+
+        if (options.GenerateEqualityContract &&
+            !sourceType.HasEqualityContract &&
+            !isValueType)
+        {
+#>
+    protected virtual Type EqualityContract
+    {
+        get
+        {
+            return typeof(<#= typeName #>);
+        }
+    }
+<#+
+        }
+#>
 }
 <#+
     }
