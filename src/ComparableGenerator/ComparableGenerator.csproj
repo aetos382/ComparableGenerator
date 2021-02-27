@@ -6,12 +6,12 @@
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>0.1.0</Version>
     <Authors>aetos</Authors>
     <Company />
     <Product />
     <Copyright>Copyright (c) 2021 aetos</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/aetos382/ComparableGenerator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/aetos382/ComparableGenerator.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -20,7 +20,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\LICENSE" PackagePath="" Visible="false" />
     <Content Include="build\ComparableGenerator.props" PackagePath="build" />
   </ItemGroup>
 
