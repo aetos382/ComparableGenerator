@@ -4,9 +4,9 @@ using NUnit.Framework;
 
 using NSubstitute;
 
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
-namespace ComparableGenerator.UnitTests
+namespace ComparableGenerator.Tests
 {
     public class EquatableTest :
         GeneratorTestBase
@@ -165,8 +165,8 @@ public partial class Person
 
             Assert.That(equals, Is.Not.Null);
 
-            // インターフェイスの実装であるメソッドは明示的に virtual と書かなくても IsVirtual は True
-            // 明示的に virtual と書いていない場合、IsFinal が True になり、オーバーライドできない
+            // インターフェイスの実装であるメソッドは明示的に virtual と書かなくても IsVirtual は True になる。
+            // 明示的に virtual と書いていない場合、IsFinal が True になり、オーバーライドできない。
             Assert.That(equals.IsFinal, Is.True);
         }
 
@@ -175,13 +175,13 @@ public partial class Person
         {
             const string source = @"
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {
@@ -231,7 +231,8 @@ public partial class Person
             var result = equals.Invoke(instance, new[] { instance });
             Assert.That(result, Is.True);
 
-            hook.Received().EqualsHook(Arg.Any<object>(), Arg.Any<object>());
+            hook.Received()
+                .EqualsHook(Arg.Any<object>(), Arg.Any<object>());
         }
 
         [Test]
@@ -241,14 +242,14 @@ public partial class Person
 using System;
 
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person :
     IComparable<Person>
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {
@@ -303,7 +304,7 @@ public partial class Person :
                 .CompareHook(Arg.Any<object>(), Arg.Any<object>());
         }
 
-        
+
         [Test]
         public void IEquitableT_EqualsがIComparable_CompareToに移譲される()
         {
@@ -311,14 +312,14 @@ public partial class Person :
 using System;
 
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person :
     IComparable
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {

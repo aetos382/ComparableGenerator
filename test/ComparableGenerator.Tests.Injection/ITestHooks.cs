@@ -1,4 +1,4 @@
-﻿namespace ComparableGenerator.UnitTest.Injection
+﻿namespace ComparableGenerator.Tests.Injection
 {
     public interface ITestHooks
     {

@@ -14,9 +14,9 @@ using Microsoft.CodeAnalysis.Emit;
 
 using NUnit.Framework;
 
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
-namespace ComparableGenerator.UnitTests
+namespace ComparableGenerator.Tests
 {
     public abstract class GeneratorTestBase
     {

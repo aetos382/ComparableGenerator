@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace ComparableGenerator.UnitTests
+namespace ComparableGenerator.Tests
 {
     public class LightweightGeneratorBaseTest
     {

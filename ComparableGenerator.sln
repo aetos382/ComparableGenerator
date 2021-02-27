@@ -10,15 +10,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B2FAF8C4-1AC0-44B7-AF6F-1BAC83024855}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator", "src\ComparableGenerator\ComparableGenerator.csproj", "{3A730D13-5914-4A95-8407-0D3DF8EEDC88}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A3733593-98D5-4526-A695-F3D35892EF34}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator", "src\ComparableGenerator\ComparableGenerator.csproj", "{3A730D13-5914-4A95-8407-0D3DF8EEDC88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator.Tests", "test\ComparableGenerator.Tests\ComparableGenerator.Tests.csproj", "{BFFCDC75-3AEB-4996-9BC3-C758AAD97ABD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator.Tests.Injection", "test\ComparableGenerator.Tests.Injection\ComparableGenerator.Tests.Injection.csproj", "{13306ADE-A858-4F39-B478-E70CA6C3B40B}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoge", "test\Hoge\Hoge.csproj", "{10125804-9FBA-4025-A7B3-655225A06499}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator.UnitTests", "test\ComparableGenerator.UnitTests\ComparableGenerator.UnitTests.csproj", "{BFFCDC75-3AEB-4996-9BC3-C758AAD97ABD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparableGenerator.UnitTest.Injection", "test\ComparableGenerator.UnitTest.Injection\ComparableGenerator.UnitTest.Injection.csproj", "{13306ADE-A858-4F39-B478-E70CA6C3B40B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

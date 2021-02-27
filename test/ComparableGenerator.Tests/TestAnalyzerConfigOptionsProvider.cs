@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ComparableGenerator.UnitTests
+namespace ComparableGenerator.Tests
 {
     internal class TestAnalyzerConfigOptionsProvider :
         AnalyzerConfigOptionsProvider

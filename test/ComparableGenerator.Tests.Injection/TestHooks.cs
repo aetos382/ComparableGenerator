@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ComparableGenerator.UnitTest.Injection
+namespace ComparableGenerator.Tests.Injection
 {
     public class TestHooks :
         ITestHooks

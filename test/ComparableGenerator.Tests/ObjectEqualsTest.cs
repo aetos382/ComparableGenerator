@@ -4,9 +4,9 @@ using NSubstitute;
 
 using NUnit.Framework;
 
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
-namespace ComparableGenerator.UnitTests
+namespace ComparableGenerator.Tests
 {
     public class ObjectEqualsTest :
         GeneratorTestBase
@@ -94,14 +94,14 @@ public partial class Person
 using System;
 
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person :
     IEquatable<Person>
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {
@@ -163,14 +163,14 @@ public partial class Person :
 using System;
 
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person :
     IComparable<Person>
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {
@@ -225,7 +225,7 @@ public partial class Person :
                 .CompareHook(Arg.Any<object>(), Arg.Any<object>());
         }
 
-        
+
         [Test]
         public void Object_EqualsがIComparable_CompareToに移譲される()
         {
@@ -233,14 +233,14 @@ public partial class Person :
 using System;
 
 using ComparableGenerator;
-using ComparableGenerator.UnitTest.Injection;
+using ComparableGenerator.Tests.Injection;
 
 [Comparable]
 public partial class Person :
     IComparable
 {
     private readonly ITestHooks _hooks;
-    
+
     public Person(
         ITestHooks hooks)
     {

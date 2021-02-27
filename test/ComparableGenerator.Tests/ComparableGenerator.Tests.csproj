@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ComparableGenerator\ComparableGenerator.csproj" />
-    <ProjectReference Include="..\ComparableGenerator.UnitTest.Injection\ComparableGenerator.UnitTest.Injection.csproj" />
+    <ProjectReference Include="..\ComparableGenerator.UnitTest.Injection\ComparableGenerator.Tests.Injection.csproj" />
   </ItemGroup>
 
 </Project>
