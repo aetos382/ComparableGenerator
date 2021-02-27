@@ -238,6 +238,14 @@ namespace ComparableGenerator
                         new ObjectEqualsGenerator(c),
                         $"{fullName}_ObjectEquals.cs");
                 }
+
+                if (options.GenerateEqualityOperators && !sourceTypeInfo.DefinedEqualityOperators)
+                {
+                    GenerateCode(
+                        context,
+                        new EquatableOperatorGenerator(c),
+                        $"{fullName}_EqualityOperators.cs");
+                }
             }
         }
 

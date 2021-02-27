@@ -1,0 +1,88 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#
+base.TransformText();
+#>
+<#+
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
+
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
+
+    string nullableTypeName = context.NullableTypeName;
+
+    bool hasEquals =
+        sourceType.OverridesObjectEquals ||
+            options.GenerateObjectEquals ||
+            sourceType.IsEquatable ||
+            options.GenerateEquatable;
+
+        bool hasCompareTo =
+            sourceType.IsGenericComparable ||
+                options.GenerateGenericComparable ||
+                sourceType.IsNonGenericComparable ||
+                options.GenerateNonGenericComparable;
+#>
+partial <#= typeKind #> <#= typeName #>
+{
+    public static bool operator ==(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        if (object.ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+<#+
+        if (hasEquals)
+        {
+#>
+        return left.Equals(right);
+<#+
+        }
+        else if (hasCompareTo)
+        {
+#>
+        return left.CompareTo(right) == 0;
+<#+
+        }
+        else
+        {
+            foreach (var member in context.Members)
+            {
+                string memberName = member.Name;
+#>
+        if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(left.<#= memberName #>, right.<#= memberName #>))
+        {
+            return false;
+        }
+<#+
+            }
+#>
+        return true;
+<#+
+        }
+#>
+    }
+
+    public static bool operator !=(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+        return !(left == right);
+    }
+}
+<#+
+}
+#>

@@ -7,10 +7,6 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>DEBUG;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
@@ -43,6 +39,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>NonGenericComparableGenerator.cs</LastGenOutput>
     </None>
+    <None Update="EquatableOperatorGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EquatableOperatorGenerator.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +70,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>NonGenericComparableGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Update="EquatableOperatorGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EquatableOperatorGenerator.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
