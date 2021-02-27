@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -82,6 +83,7 @@ namespace ComparableGenerator
 
         public struct Helper
         {
+            [SuppressMessage("Performance", "CA1822:メンバーを static に設定します", Justification = "By design.")]
             public string ToStringWithCulture(
                 object? obj)
             {

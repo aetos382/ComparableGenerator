@@ -1,25 +1,11 @@
-﻿using System;
+﻿using ComparableGenerator;
 
-using ComparableGenerator;
-
-namespace Hoge
+[Comparable]
+public partial class Person
 {
-    [Comparable(
-        GenerateEquatable = true)]
-    public partial class Person
-    {
-        public Person(
-            string firstName,
-            string lastName)
-        {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-        }
+    [CompareBy(0)]
+    public string FirstName { get; set; }
 
-        [CompareBy(0)]
-        public string FirstName { get; init; }
-
-        [CompareBy(1)]
-        public string LastName { get; init; }
-    }
+    [CompareBy(1)]
+    public string LastName { get; set; }
 }

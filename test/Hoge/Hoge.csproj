@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
@@ -16,6 +15,7 @@
     <CompilerVisibleProperty Include="GenerateEqualityOperators" />
     <CompilerVisibleProperty Include="GenerateComparisonOperators" />
     <CompilerVisibleProperty Include="GenerateEqualityContract" />
+    <CompilerVisibleProperty Include="GenerateMethodsAsVirtual" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +26,7 @@
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityOperators" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateComparisonOperators" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityContract" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateMethodsAsVirtual" />
   </ItemGroup>
   
   <ItemGroup>

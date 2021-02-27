@@ -32,6 +32,8 @@ namespace ComparableGenerator
         public bool GenerateEqualityOperators { get; init; } = false;
 
         public bool GenerateComparisonOperators { get; init; } = false;
+
+        public bool GenerateMethodsAsVirtual { get; init; } = true;
     }
 }
 ";

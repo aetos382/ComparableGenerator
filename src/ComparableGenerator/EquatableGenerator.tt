@@ -31,19 +31,19 @@ partial <#= typeKind #> <#= typeName #> :
         if (sourceType.OverridesObjectEquals)
         {
 #>
-        return this.Equals(other);
+        return this.Equals((<#= context.NullableObjectTypeName #>)other);
 <#+
         }
         else if (sourceType.IsGenericComparable)
         {
 #>
-        return ((IComparable<<#= typeName #>>)this.CompareTo(other) == 0;
+        return ((IComparable<<#= typeName #>>)this).CompareTo(other) == 0;
 <#+
         }
         else if (sourceType.IsNonGenericComparable)
         {
 #>
-        return ((IComparable)this.CompareTo(other) == 0;
+        return ((IComparable)this).CompareTo(other) == 0;
 <#+
         }
         else

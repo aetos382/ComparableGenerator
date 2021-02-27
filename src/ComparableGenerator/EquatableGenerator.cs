@@ -72,7 +72,11 @@ this.Write(" other)\r\n    {\r\n");
         if (sourceType.OverridesObjectEquals)
         {
 
-this.Write("        return this.Equals(other);\r\n");
+this.Write("        return this.Equals((");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeName));
+
+this.Write(")other);\r\n");
 
 
         }
@@ -83,14 +87,14 @@ this.Write("        return ((IComparable<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(">)this.CompareTo(other) == 0;\r\n");
+this.Write(">)this).CompareTo(other) == 0;\r\n");
 
 
         }
         else if (sourceType.IsNonGenericComparable)
         {
 
-this.Write("        return ((IComparable)this.CompareTo(other) == 0;\r\n");
+this.Write("        return ((IComparable)this).CompareTo(other) == 0;\r\n");
 
 
         }

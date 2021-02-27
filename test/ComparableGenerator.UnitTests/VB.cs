@@ -9,7 +9,6 @@ using NUnit.Framework;
 
 namespace ComparableGenerator.UnitTests
 {
-    [TestFixture]
     public class VBTest
     {
         [Test]
