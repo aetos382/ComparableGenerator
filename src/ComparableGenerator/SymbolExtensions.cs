@@ -101,9 +101,16 @@ namespace ComparableGenerator
                     continue;
                 }
 
-                if (comparer.Equals(method.OverriddenMethod, baseSymbol))
+                var overriddenMethod = method.OverriddenMethod;
+
+                while (overriddenMethod is not null)
                 {
-                    return method;
+                    if (comparer.Equals(overriddenMethod, baseSymbol))
+                    {
+                        return method;
+                    }
+
+                    overriddenMethod = overriddenMethod.OverriddenMethod;
                 }
             }
 
