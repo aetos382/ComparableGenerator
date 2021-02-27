@@ -207,6 +207,11 @@ namespace ComparableGenerator
                     sourceTypeInfo,
                     nullableContext);
 
+                GenerateCode(
+                    context,
+                    new CommonGenerator(c),
+                    $"{fullName}_Common.cs");
+
                 if (options.GenerateEquatable && !sourceTypeInfo.IsEquatable)
                 {
                     GenerateCode(

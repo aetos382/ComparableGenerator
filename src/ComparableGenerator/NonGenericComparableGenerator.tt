@@ -3,14 +3,6 @@
 base.TransformText();
 #>
 <#+
-protected override void WriteUsings()
-{
-#>
-using System.Collections.Generic;
-<#+
-}
-#>
-<#+
 protected override void WriteCode()
 {
     var context = this.Context;
@@ -46,22 +38,7 @@ partial <#= typeKind #> <#= typeName #> :
     else
     {
 #>
-        int result;
-<#+
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
-#>
-        result = Comparer<object>.Default.Compare(this.<#= memberName #>, other2.<#= memberName #>);
-        if (result != 0)
-        {
-            return result;
-        }
-<#+
-        }
-#>
-
-        return 0;
+        return Compare(this, other2);
 <#+
     }
 #>

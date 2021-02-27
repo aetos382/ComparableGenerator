@@ -24,6 +24,14 @@ namespace ComparableGenerator
 
         public NullableContext NullableContext { get; }
 
+        public bool IsNullable
+        {
+            get
+            {
+                return !this.Type.IsValueType || this.NullableAnnotationEnabled;
+            }
+        }
+
         public bool NullableAnnotationEnabled
         {
             get

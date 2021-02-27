@@ -18,15 +18,15 @@ protected override void WriteCode()
 
     bool hasEquals =
         sourceType.OverridesObjectEquals ||
-            options.GenerateObjectEquals ||
-            sourceType.IsEquatable ||
-            options.GenerateEquatable;
+        options.GenerateObjectEquals ||
+        sourceType.IsEquatable ||
+        options.GenerateEquatable;
 
-        bool hasCompareTo =
-            sourceType.IsGenericComparable ||
-                options.GenerateGenericComparable ||
-                sourceType.IsNonGenericComparable ||
-                options.GenerateNonGenericComparable;
+    bool hasCompareTo =
+        sourceType.IsGenericComparable ||
+        options.GenerateGenericComparable ||
+        sourceType.IsNonGenericComparable ||
+        options.GenerateNonGenericComparable;
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -59,18 +59,8 @@ partial <#= typeKind #> <#= typeName #>
         }
         else
         {
-            foreach (var member in context.Members)
-            {
-                string memberName = member.Name;
 #>
-        if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(left.<#= memberName #>, right.<#= memberName #>))
-        {
-            return false;
-        }
-<#+
-            }
-#>
-        return true;
+        return Compare(left, right) == 0;
 <#+
         }
 #>

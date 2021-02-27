@@ -22,19 +22,13 @@ namespace ComparableGenerator
         /// </summary>
         public override string TransformText()
         {
+            this.Write("\n");
 
 base.TransformText();
 
+            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
-
-protected override void WriteUsings()
-{
-
-this.Write("using System.Collections.Generic;\r\n");
-
-
-}
 
 protected override void WriteCode()
 {
@@ -82,43 +76,13 @@ this.Write("        return this.CompareTo(other) == 0;\r\n");
     }
     else
     {
-        if (!type.IsValueType)
-        {
 
-this.Write("            \r\n        if (other is null)\r\n        {\r\n            return false;\r\n " +
-        "       }\r\n");
-
-
-        }
-
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
-
-this.Write("        if (!EqualityComparer<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
-
-this.Write(">.Default.Equals(this.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write(", other.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write("))\r\n        {\r\n            return false;\r\n        }\r\n");
-
-
-        }
-
-
-this.Write("\r\n        return true;\r\n");
+this.Write("        return Compare(this, other) == 0;\r\n");
 
 
     }
 
-this.Write("    }\r\n}\r\n");
+this.Write("\n    }\n}\n");
 
 
 }

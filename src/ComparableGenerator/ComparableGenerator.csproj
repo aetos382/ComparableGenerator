@@ -23,6 +23,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GeneratorBase.cs</LastGenOutput>
     </None>
+    <None Update="CommonGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>CommonGenerator.cs</LastGenOutput>
+    </None>
     <None Update="ObjectEqualsGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ObjectEqualsGenerator.cs</LastGenOutput>
@@ -46,15 +50,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="EquatableGenerator.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EquatableGenerator.tt</DependentUpon>
-    </Compile>
     <Compile Update="GeneratorBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GeneratorBase.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CommonGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommonGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Update="EquatableGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EquatableGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="ObjectEqualsGenerator.cs">
       <DesignTime>True</DesignTime>

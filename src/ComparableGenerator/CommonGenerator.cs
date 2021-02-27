@@ -15,7 +15,7 @@ namespace ComparableGenerator
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    internal partial class EquatableOperatorGenerator : GeneratorBase
+    internal partial class CommonGenerator : GeneratorBase
     {
         /// <summary>
         /// Create the template output
@@ -27,6 +27,14 @@ base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
+
+protected override void WriteUsings()
+{
+
+this.Write("using System.Collections.Generic;\r\nusing System.ComponentModel;\r\n");
+
+
+}
 
 protected override void WriteCode()
 {
@@ -41,18 +49,6 @@ protected override void WriteCode()
 
     string nullableTypeName = context.NullableTypeName;
 
-    bool hasEquals =
-        sourceType.OverridesObjectEquals ||
-        options.GenerateObjectEquals ||
-        sourceType.IsEquatable ||
-        options.GenerateEquatable;
-
-    bool hasCompareTo =
-        sourceType.IsGenericComparable ||
-        options.GenerateGenericComparable ||
-        sourceType.IsNonGenericComparable ||
-        options.GenerateNonGenericComparable;
-
 this.Write("partial ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeKind));
@@ -61,7 +57,8 @@ this.Write(" ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write("\r\n{\r\n    public static bool operator ==(\r\n        ");
+this.Write("\r\n{\r\n    [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n    private static int" +
+        " Compare(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
@@ -69,42 +66,57 @@ this.Write(" left,\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
-this.Write(" right)\r\n    {\r\n        if (object.ReferenceEquals(left, right))\r\n        {\r\n    " +
-        "        return true;\r\n        }\r\n\r\n        if (left is null || right is null)\r\n " +
-        "       {\r\n            return false;\r\n        }\r\n\r\n");
+this.Write(" right)\r\n    {\r\n");
 
 
-        if (hasEquals)
+        if (context.IsNullable)
         {
 
-this.Write("        return left.Equals(right);\r\n");
-
-
+this.Write(@"        if (object.ReferenceEquals(left, right))
+        {
+            return 0;
         }
-        else if (hasCompareTo)
+
+        if (left is null)
         {
-
-this.Write("        return left.CompareTo(right) == 0;\r\n");
-
-
+            return int.MinValue;
         }
-        else
-        {
 
-this.Write("        return Compare(left, right) == 0;\r\n");
+        if (right is null)
+        {
+            return int.MaxValue;
+        }
+");
 
 
         }
 
-this.Write("    }\r\n\r\n    public static bool operator !=(\r\n        ");
+this.Write("\r\n        int result;\r\n");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
-this.Write(" left,\r\n        ");
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write("\r\n        result = Comparer<");
 
-this.Write(" right)\r\n    {\r\n        return !(left == right);\r\n    }\r\n}\r\n");
+this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
+
+this.Write(">.Default.Compare(left.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
+
+this.Write(", right.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
+
+this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return result;\r\n        }\r\n");
+
+
+        }
+
+
+this.Write("\r\n        return 0;\r\n    }\r\n}\r\n");
 
 
 }

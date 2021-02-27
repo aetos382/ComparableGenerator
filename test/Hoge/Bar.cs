@@ -2,7 +2,8 @@
 
 namespace Hoge
 {
-    [ComparableGenerator.Comparable]
+    [ComparableGenerator.Comparable(
+        GenerateObjectEquals = false)]
     partial class Bar
     {
         [CompareBy(0)]

@@ -28,14 +28,6 @@ base.TransformText();
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteUsings()
-{
-
-this.Write("using System.Collections.Generic;\r\n");
-
-
-}
-
 protected override void WriteCode()
 {
     var context = this.Context;
@@ -72,7 +64,7 @@ this.Write(" other)\r\n    {\r\n        if (other is not ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(type.Name));
 
-this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n");
+this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n");
 
 
     if (delegateToEquatable)
@@ -92,28 +84,8 @@ this.Write("        return this.CompareTo(other2) == 0;\r\n");
     }
     else
     {
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
 
-this.Write("        if (!EqualityComparer<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
-
-this.Write(">.Default.Equals(this.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write(", other2.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write("))\r\n        {\r\n            return false;\r\n        }\r\n");
-
-
-        }
-
-this.Write("        return true;\r\n");
+this.Write("        return Compare(this, other2) == 0;\r\n");
 
 
     }

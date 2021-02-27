@@ -1,0 +1,78 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#
+base.TransformText();
+#>
+<#+
+protected override void WriteUsings()
+{
+#>
+using System.Collections.Generic;
+using System.ComponentModel;
+<#+
+}
+
+protected override void WriteCode()
+{
+    var context = this.Context;
+    var type = context.Type;
+
+    string typeName = type.Name;
+    string typeKind = GetTypeKind(type);
+
+    var sourceType = context.SourceType;
+    var options = context.Options;
+
+    string nullableTypeName = context.NullableTypeName;
+#>
+partial <#= typeKind #> <#= typeName #>
+{
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    private static int Compare(
+        <#= nullableTypeName #> left,
+        <#= nullableTypeName #> right)
+    {
+<#+
+        if (context.IsNullable)
+        {
+#>
+        if (object.ReferenceEquals(left, right))
+        {
+            return 0;
+        }
+
+        if (left is null)
+        {
+            return int.MinValue;
+        }
+
+        if (right is null)
+        {
+            return int.MaxValue;
+        }
+<#+
+        }
+#>
+
+        int result;
+<#+
+        foreach (var member in context.Members)
+        {
+            string memberName = member.Name;
+#>
+
+        result = Comparer<<#= member.TypeName #>>.Default.Compare(left.<#= memberName #>, right.<#= memberName #>);
+        if (result != 0)
+        {
+            return result;
+        }
+<#+
+        }
+
+#>
+
+        return 0;
+    }
+}
+<#+
+}
+#>

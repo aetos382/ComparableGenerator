@@ -3,13 +3,6 @@
 base.TransformText();
 #>
 <#+
-protected override void WriteUsings()
-{
-#>
-using System.Collections.Generic;
-<#+
-}
-
 protected override void WriteCode()
 {
     var context = this.Context;
@@ -39,6 +32,7 @@ partial <#= typeKind #> <#= typeName #>
         {
             return false;
         }
+
 <#+
     if (delegateToEquatable)
     {
@@ -55,18 +49,8 @@ partial <#= typeKind #> <#= typeName #>
     }
     else
     {
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
 #>
-        if (!EqualityComparer<<#= member.TypeName #>>.Default.Equals(this.<#= memberName #>, other2.<#= memberName #>))
-        {
-            return false;
-        }
-<#+
-        }
-#>
-        return true;
+        return Compare(this, other2) == 0;
 <#+
     }
 #>

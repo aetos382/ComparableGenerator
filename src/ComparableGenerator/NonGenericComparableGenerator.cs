@@ -28,15 +28,6 @@ base.TransformText();
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteUsings()
-{
-
-this.Write("using System.Collections.Generic;\r\n");
-
-
-}
-
-
 protected override void WriteCode()
 {
     var context = this.Context;
@@ -76,27 +67,7 @@ this.Write("        return this.CompareTo(other2);\r\n");
     else
     {
 
-this.Write("        int result;\r\n");
-
-
-        foreach (var member in context.Members)
-        {
-            string memberName = member.Name;
-
-this.Write("        result = Comparer<object>.Default.Compare(this.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write(", other2.");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
-
-this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return result;\r\n        }\r\n");
-
-
-        }
-
-this.Write("\r\n        return 0;\r\n");
+this.Write("        return Compare(this, other2);\r\n");
 
 
     }
