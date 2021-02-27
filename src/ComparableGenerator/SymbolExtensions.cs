@@ -152,11 +152,18 @@ namespace ComparableGenerator
             typeNames.Reverse();
             namespaceNames.Reverse();
 
-            namespaceName = string.Join(".", namespaceNames);
             typeName = string.Join(".", typeNames);
 
-            string fullName = $"{namespaceName}.{typeName}";
-            return fullName;
+            if (namespaceNames.Any())
+            {
+                namespaceName = string.Join(".", namespaceNames);
+                return $"{namespaceName}.{typeName}";
+            }
+            else
+            {
+                namespaceName = string.Empty;
+                return typeName;
+            }
         }
     }
 }

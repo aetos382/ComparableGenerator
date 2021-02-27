@@ -22,11 +22,9 @@ namespace ComparableGenerator
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n");
 
     base.TransformText();
 
-            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
 
@@ -104,7 +102,7 @@ this.Write("        return __EqualsCore(this, other);\r\n");
 
         }
 
-this.Write("\n    }\n}\n");
+this.Write("    }\r\n}\r\n");
 
 
     }

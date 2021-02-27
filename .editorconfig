@@ -1,0 +1,13 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+indent_style = space
+
+[*.{cs,tt}]
+charset = utf-8-bom
+indent_size = 4
+
+[*.{xml,*proj,props,targets}]
+indent_size = 2

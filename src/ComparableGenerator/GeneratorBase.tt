@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" linePragmas="false" visibility="internal" #>
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="LightweightGeneratorBase" #>
 /*
     Generated: <#= DateTimeOffset.Now #>
 */
