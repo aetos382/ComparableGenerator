@@ -54,6 +54,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="EquatableOperatorsGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EquatableOperatorsGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Update="GeneratorBase.cs">
       <DependentUpon>GeneratorBase.tt</DependentUpon>
       <DesignTime>True</DesignTime>

@@ -9,6 +9,14 @@ namespace ComparableGenerator
     {
         public INamedTypeSymbol Symbol { get; }
 
+        public bool IsValueType
+        {
+            get
+            {
+                return this.Symbol.IsValueType;
+            }
+        }
+
         public bool IsEquatable { get; }
 
         public bool IsGenericComparable { get; }
@@ -17,19 +25,29 @@ namespace ComparableGenerator
 
         public bool OverridesObjectEquals { get; }
 
-        public bool DefinedEqualityOperators { get; }
+        public bool DefinedNullableEqualityOperators { get; }
 
-        public bool DefinedEqualityComparisonOperators { get; }
+        public bool DefinedNullableComparisonOperators { get; }
+
+        public bool DefinedNonNullableEqualityOperators { get; }
+
+        public bool DefinedNonNullableComparisonOperators { get; }
 
         public bool HasEqualityContract { get; }
 
         public SourceTypeInfo(
+            INamedTypeSymbol symbol,
             CommonTypes commonTypes,
-            INamedTypeSymbol symbol)
+            NullableContext nullableContext)
         {
             if (symbol is null)
             {
                 throw new ArgumentNullException(nameof(symbol));
+            }
+
+            if (commonTypes is null)
+            {
+                throw new ArgumentNullException(nameof(commonTypes));
             }
 
             this.Symbol = symbol;
@@ -51,25 +69,67 @@ namespace ComparableGenerator
 
             this.OverridesObjectEquals = objectEqualsOverride is not null;
 
+            ITypeSymbol nullableType;
+
+            if (symbol.IsValueType)
+            {
+                nullableType = commonTypes.MakeNullable(symbol);
+            }
+            else if (nullableContext.AnnotationsEnabled())
+            {
+                nullableType = symbol.WithNullableAnnotation(NullableAnnotation.Annotated);
+            }
+            else
+            {
+                nullableType = symbol;
+            }
+
             var operators =
                 symbol.GetMembers()
                     .OfType<IMethodSymbol>()
                     .Where(x =>
                         x.MethodKind == MethodKind.UserDefinedOperator &&
-                        x.Parameters.Length == 2 &&
-                        comparer.Equals(x.Parameters[0].Type, symbol) &&
-                        comparer.Equals(x.Parameters[1].Type, symbol));
+                        x.Parameters.Length == 2);
+
+            var nullableComparer = SymbolEqualityComparer.IncludeNullability;
 
             foreach (var op in operators)
             {
+                var type1 = op.Parameters[0].Type;
+                var type2 = op.Parameters[1].Type;
+
+                bool matchNonNullableTypes =
+                    nullableComparer.Equals(type1, symbol) &&
+                    nullableComparer.Equals(type2, symbol);
+
+                bool matchNullableTypes =
+                    nullableComparer.Equals(type1, nullableType) &&
+                    nullableComparer.Equals(type2, nullableType);
+
                 switch (op.Name)
                 {
                     case "op_Equality":
-                        this.DefinedEqualityOperators = true;
+                        if (matchNonNullableTypes)
+                        {
+                            this.DefinedNonNullableEqualityOperators = true;
+                        }
+                        else if (matchNullableTypes)
+                        {
+                            this.DefinedNullableEqualityOperators = true;
+                        }
+
                         break;
 
-                    case "op_LessThanOrEqual":
-                        this.DefinedEqualityComparisonOperators = true;
+                    case "op_LessThan":
+                        if (matchNonNullableTypes)
+                        {
+                            this.DefinedNonNullableComparisonOperators = true;
+                        }
+                        else if (matchNullableTypes)
+                        {
+                            this.DefinedNullableComparisonOperators = true;
+                        }
+
                         break;
                 }
             }

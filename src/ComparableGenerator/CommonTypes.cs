@@ -20,6 +20,7 @@ namespace ComparableGenerator
             this.Object = compilation.GetSpecialType(SpecialType.System_Object);
             this.Type = GetType(compilation, typeof(Type));
             this.Equatable = GetType(compilation, typeof(IEquatable<>));
+            this.Nullable = GetType(compilation, typeof(Nullable<>));
             this.GenericComparable = GetType(compilation, typeof(IComparable<>));
             this.NonGenericComparable = GetType(compilation, typeof(IComparable));
         }
@@ -34,6 +35,8 @@ namespace ComparableGenerator
 
         public INamedTypeSymbol Equatable { get; }
 
+        public INamedTypeSymbol Nullable { get; }
+
         public INamedTypeSymbol GenericComparable { get; }
 
         public INamedTypeSymbol NonGenericComparable { get; }
@@ -46,12 +49,29 @@ namespace ComparableGenerator
                 throw new ArgumentNullException(nameof(type));
             }
 
-            var equatable = this.GetConstructedEquatable(type);
+            var equatable = this.MakeConstructedEquatable(type);
             bool result = type.HasInterface(equatable);
 
             return result;
         }
-        
+
+        public bool IsNullable(
+            INamedTypeSymbol type)
+        {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (!type.IsValueType || !type.IsGenericType)
+            {
+                return false;
+            }
+
+            return
+                SymbolEqualityComparer.Default.Equals(type.ConstructedFrom, this.Nullable);
+        }
+
         public bool IsGenericComparable(
             ITypeSymbol type)
         {
@@ -60,7 +80,7 @@ namespace ComparableGenerator
                 throw new ArgumentNullException(nameof(type));
             }
 
-            var comparable = this.GetConstructedComparable(type);
+            var comparable = this.MakeConstructedComparable(type);
             bool result = type.HasInterface(comparable);
 
             return result;
@@ -79,7 +99,25 @@ namespace ComparableGenerator
             return result;
         }
 
-        public INamedTypeSymbol GetConstructedEquatable(
+        public INamedTypeSymbol MakeNullable(
+            ITypeSymbol typeArgument)
+        {
+            if (typeArgument is null)
+            {
+                throw new ArgumentNullException(nameof(typeArgument));
+            }
+
+            if (!typeArgument.IsValueType)
+            {
+                throw new ArgumentException(
+                    $"The typeArgument must be value type.",
+                    nameof(typeArgument));
+            }
+
+            return this.Nullable.Construct(typeArgument);
+        }
+
+        public INamedTypeSymbol MakeConstructedEquatable(
             ITypeSymbol typeArgument)
         {
             if (typeArgument is null)
@@ -90,7 +128,7 @@ namespace ComparableGenerator
             return this.Equatable.Construct(typeArgument);
         }
         
-        public INamedTypeSymbol GetConstructedComparable(
+        public INamedTypeSymbol MakeConstructedComparable(
             ITypeSymbol typeArgument)
         {
             if (typeArgument is null)

@@ -36,6 +36,10 @@ protected override void WriteCode()
     string typeName = type.Name;
     string typeKind = GetTypeKind(type);
 
+    string parameterType =
+        context.SourceType.IsValueType ? typeName : context.NullableTypeName;
+
+
 this.Write("partial ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeKind));
@@ -50,7 +54,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write(">\r\n{\r\n    public int CompareTo(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
 
 this.Write(" other)\r\n    {\r\n");
 

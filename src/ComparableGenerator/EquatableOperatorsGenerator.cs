@@ -23,35 +23,40 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
 
-    bool hasEquals =
-        sourceType.OverridesObjectEquals ||
-        options.GenerateObjectEquals ||
-        sourceType.IsEquatable ||
-        options.GenerateEquatable;
+        bool hasEquals =
+            sourceType.OverridesObjectEquals ||
+            options.GenerateObjectEquals ||
+            sourceType.IsEquatable ||
+            options.GenerateEquatable;
 
-    bool hasCompareTo =
-        sourceType.IsGenericComparable ||
-        options.GenerateGenericComparable ||
-        sourceType.IsNonGenericComparable ||
-        options.GenerateNonGenericComparable;
+        bool hasCompareTo =
+            sourceType.IsGenericComparable ||
+            options.GenerateGenericComparable ||
+            sourceType.IsNonGenericComparable ||
+            options.GenerateNonGenericComparable;
+
+        string leftVarName = sourceType.IsValueType ? "leftValue" : "left";
+        string rightVarName = sourceType.IsValueType ? "rightValue" : "right";
+
+        var isValueType = sourceType.IsValueType;
 
 this.Write("partial ");
 
@@ -69,29 +74,87 @@ this.Write(" left,\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 
-this.Write(" right)\r\n    {\r\n        if (object.ReferenceEquals(left, right))\r\n        {\r\n    " +
-        "        return true;\r\n        }\r\n\r\n        if (left is null || right is null)\r\n " +
-        "       {\r\n            return false;\r\n        }\r\n\r\n");
+this.Write(" right)\r\n    {\r\n");
 
 
-        if (hasEquals)
+        if (!isValueType)
         {
 
-this.Write("        return left.Equals(right);\r\n");
+this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return t" +
+        "rue;\r\n        }\r\n");
+
+
+        }
+
+this.Write("        if (left is null || right is null)\r\n        {\r\n            return false;\r" +
+        "\n        }\r\n\r\n");
+
+
+        if (isValueType)
+        {
+
+this.Write("        var leftValue = left.Value;\r\n        var rightValue = right.Value;\r\n");
+
+
+        }
+
+        if (sourceType.DefinedNonNullableEqualityOperators)
+        {
+
+this.Write("        return ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
+
+this.Write(" == ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
+
+this.Write(";\r\n");
+
+
+        }
+        else if (hasEquals)
+        {
+
+this.Write("        return ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
+
+this.Write(".Equals(");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
+
+this.Write(");     \r\n");
 
 
         }
         else if (hasCompareTo)
         {
 
-this.Write("        return left.CompareTo(right) == 0;\r\n");
+this.Write("        return ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
+
+this.Write(".CompareTo(");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
+
+this.Write(") == 0;\r\n");
 
 
         }
         else
         {
 
-this.Write("        return EqualsCore(left, right);\r\n");
+this.Write("        return EqualsCore(");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
+
+this.Write(", ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
+
+this.Write(");\r\n");
 
 
         }

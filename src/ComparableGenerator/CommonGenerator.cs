@@ -23,31 +23,34 @@ namespace ComparableGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteUsings()
-{
+    protected override void WriteUsings()
+    {
 
 this.Write("using System.Collections.Generic;\r\nusing System.ComponentModel;\r\n");
 
 
-}
+    }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
+
+        var isValueType = sourceType.IsValueType;
+        string dotValue = isValueType ? ".Value" : "";
 
 this.Write("partial ");
 
@@ -69,12 +72,21 @@ this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 this.Write(" right)\r\n    {\r\n");
 
 
-        if (context.IsNullable)
+        if (!isValueType)
         {
 
 this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return t" +
-        "rue;\r\n        }\r\n\r\n        if (left is null || right is null)\r\n        {\r\n      " +
-        "      return false;\r\n        }\r\n");
+        "rue;\r\n        }\r\n");
+
+
+        }
+
+
+        if (context.IsNullable)
+        {
+
+this.Write("        if (left is null || right is null)\r\n        {\r\n            return false;\r" +
+        "\n        }\r\n");
 
 
         }
@@ -90,11 +102,19 @@ this.Write("\r\n        result = EqualityComparer<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
 
-this.Write(">.Default.Equals(left.");
+this.Write(">.Default.Equals(left");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(dotValue));
+
+this.Write(".");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
-this.Write(", right.");
+this.Write(", right");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(dotValue));
+
+this.Write(".");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
@@ -116,24 +136,21 @@ this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
 this.Write(" right)\r\n    {\r\n");
 
 
+        if (!isValueType)
+        {
+
+this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return 0" +
+        ";\r\n        }\r\n");
+
+
+        }
+
         if (context.IsNullable)
         {
 
-this.Write(@"        if (object.ReferenceEquals(left, right))
-        {
-            return 0;
-        }
-
-        if (left is null)
-        {
-            return int.MinValue;
-        }
-
-        if (right is null)
-        {
-            return int.MaxValue;
-        }
-");
+this.Write("        if (left is null)\r\n        {\r\n            return int.MinValue;\r\n        }" +
+        "\r\n\r\n        if (right is null)\r\n        {\r\n            return int.MaxValue;\r\n   " +
+        "     }\r\n");
 
 
         }
@@ -149,11 +166,19 @@ this.Write("\r\n        result = Comparer<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
 
-this.Write(">.Default.Compare(left.");
+this.Write(">.Default.Compare(left");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(dotValue));
+
+this.Write(".");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
-this.Write(", right.");
+this.Write(", right");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(dotValue));
+
+this.Write(".");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 

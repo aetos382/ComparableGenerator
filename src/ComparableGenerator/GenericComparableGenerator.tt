@@ -10,12 +10,16 @@ protected override void WriteCode()
 
     string typeName = type.Name;
     string typeKind = GetTypeKind(type);
+
+    string parameterType =
+        context.SourceType.IsValueType ? typeName : context.NullableTypeName;
+
 #>
 partial <#= typeKind #> <#= typeName #> :
     IComparable<<#= typeName #>>
 {
     public int CompareTo(
-        <#= context.NullableTypeName #> other)
+        <#= parameterType #> other)
     {
 <#+
     if (context.SourceType.IsNonGenericComparable)

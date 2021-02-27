@@ -13,12 +13,15 @@ protected override void WriteCode()
 
     var sourceType = context.SourceType;
     var options = context.Options;
+
+    string parameterType =
+        sourceType.IsValueType ? typeName : context.NullableTypeName;
 #>
 partial <#= typeKind #> <#= typeName #> :
     IEquatable<<#= typeName #>>
 {
     public bool Equals(
-        <#= context.NullableTypeName #> other)
+        <#= parameterType #> other)
     {
 <#+
     if (sourceType.OverridesObjectEquals)

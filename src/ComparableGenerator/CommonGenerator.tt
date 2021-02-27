@@ -1,28 +1,31 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteUsings()
-{
+    protected override void WriteUsings()
+    {
 #>
 using System.Collections.Generic;
 using System.ComponentModel;
 <#+
-}
+    }
 
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
+
+        var isValueType = sourceType.IsValueType;
+        string dotValue = isValueType ? ".Value" : "";
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -32,14 +35,21 @@ partial <#= typeKind #> <#= typeName #>
         <#= nullableTypeName #> right)
     {
 <#+
-        if (context.IsNullable)
+        if (!isValueType)
         {
 #>
         if (object.ReferenceEquals(left, right))
         {
             return true;
         }
+<#+
+        }
+#>
 
+<#+
+        if (context.IsNullable)
+        {
+#>
         if (left is null || right is null)
         {
             return false;
@@ -55,7 +65,7 @@ partial <#= typeKind #> <#= typeName #>
             string memberName = member.Name;
 #>
 
-        result = EqualityComparer<<#= member.TypeName #>>.Default.Equals(left.<#= memberName #>, right.<#= memberName #>);
+        result = EqualityComparer<<#= member.TypeName #>>.Default.Equals(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
         if (!result)
         {
             return result;
@@ -74,14 +84,19 @@ partial <#= typeKind #> <#= typeName #>
         <#= nullableTypeName #> right)
     {
 <#+
-        if (context.IsNullable)
+        if (!isValueType)
         {
 #>
         if (object.ReferenceEquals(left, right))
         {
             return 0;
         }
+<#+
+        }
 
+        if (context.IsNullable)
+        {
+#>
         if (left is null)
         {
             return int.MinValue;
@@ -102,7 +117,7 @@ partial <#= typeKind #> <#= typeName #>
             string memberName = member.Name;
 #>
 
-        result = Comparer<<#= member.TypeName #>>.Default.Compare(left.<#= memberName #>, right.<#= memberName #>);
+        result = Comparer<<#= member.TypeName #>>.Default.Compare(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
         if (result != 0)
         {
             return result;

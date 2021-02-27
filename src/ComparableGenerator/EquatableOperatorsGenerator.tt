@@ -1,32 +1,37 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteCode()
-{
-    var context = this.Context;
-    var type = context.Type;
+    protected override void WriteCode()
+    {
+        var context = this.Context;
+        var type = context.Type;
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+        var sourceType = context.SourceType;
+        var options = context.Options;
 
-    string nullableTypeName = context.NullableTypeName;
+        string nullableTypeName = context.NullableTypeName;
 
-    bool hasEquals =
-        sourceType.OverridesObjectEquals ||
-        options.GenerateObjectEquals ||
-        sourceType.IsEquatable ||
-        options.GenerateEquatable;
+        bool hasEquals =
+            sourceType.OverridesObjectEquals ||
+            options.GenerateObjectEquals ||
+            sourceType.IsEquatable ||
+            options.GenerateEquatable;
 
-    bool hasCompareTo =
-        sourceType.IsGenericComparable ||
-        options.GenerateGenericComparable ||
-        sourceType.IsNonGenericComparable ||
-        options.GenerateNonGenericComparable;
+        bool hasCompareTo =
+            sourceType.IsGenericComparable ||
+            options.GenerateGenericComparable ||
+            sourceType.IsNonGenericComparable ||
+            options.GenerateNonGenericComparable;
+
+        string leftVarName = sourceType.IsValueType ? "leftValue" : "left";
+        string rightVarName = sourceType.IsValueType ? "rightValue" : "right";
+
+        var isValueType = sourceType.IsValueType;
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -34,33 +39,53 @@ partial <#= typeKind #> <#= typeName #>
         <#= nullableTypeName #> left,
         <#= nullableTypeName #> right)
     {
+<#+
+        if (!isValueType)
+        {
+#>
         if (object.ReferenceEquals(left, right))
         {
             return true;
         }
-
+<#+
+        }
+#>
         if (left is null || right is null)
         {
             return false;
         }
 
 <#+
-        if (hasEquals)
+        if (isValueType)
         {
 #>
-        return left.Equals(right);
+        var leftValue = left.Value;
+        var rightValue = right.Value;
+<#+
+        }
+
+        if (sourceType.DefinedNonNullableEqualityOperators)
+        {
+#>
+        return <#= leftVarName #> == <#= rightVarName #>;
+<#+
+        }
+        else if (hasEquals)
+        {
+#>
+        return <#= leftVarName #>.Equals(<#= rightVarName #>);     
 <#+
         }
         else if (hasCompareTo)
         {
 #>
-        return left.CompareTo(right) == 0;
+        return <#= leftVarName #>.CompareTo(<#= rightVarName #>) == 0;
 <#+
         }
         else
         {
 #>
-        return EqualsCore(left, right);
+        return EqualsCore(<#= leftVarName #>, <#= rightVarName #>);
 <#+
         }
 #>

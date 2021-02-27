@@ -41,6 +41,9 @@ protected override void WriteCode()
     var sourceType = context.SourceType;
     var options = context.Options;
 
+    string parameterType =
+        sourceType.IsValueType ? typeName : context.NullableTypeName;
+
 this.Write("partial ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeKind));
@@ -55,7 +58,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write(">\r\n{\r\n    public bool Equals(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
 
 this.Write(" other)\r\n    {\r\n");
 

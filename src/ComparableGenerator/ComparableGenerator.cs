@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -73,12 +71,18 @@ namespace ComparableGenerator
                     continue;
                 }
                 
+                var nullableContext =
+                    semanticModel.GetNullableContext(syntax.Span.End);
+
                 var options = new GenerateOptions(
                     context,
                     syntax,
                     comparableAttribute);
 
-                var sourceTypeInfo = new SourceTypeInfo(commonTypes, symbol);
+                var sourceTypeInfo = new SourceTypeInfo(
+                    symbol,
+                    commonTypes,
+                    nullableContext);
 
                 var syntaxLocation = syntax.GetLocation();
 
@@ -194,9 +198,6 @@ namespace ComparableGenerator
                     .Select(x => x.member)
                     .ToArray();
 
-                var nullableContext =
-                    semanticModel.GetNullableContext(syntax.Span.End);
-
                 var c = new ComparableGeneratorContext(
                     compilation,
                     ns,
@@ -212,7 +213,8 @@ namespace ComparableGenerator
                     new CommonGenerator(c),
                     $"{fullName}_Common.cs");
 
-                if (options.GenerateEquatable && !sourceTypeInfo.IsEquatable)
+                if (options.GenerateEquatable &&
+                    !sourceTypeInfo.IsEquatable)
                 {
                     GenerateCode(
                         context,
@@ -220,7 +222,8 @@ namespace ComparableGenerator
                         $"{fullName}_Equatable.cs");
                 }
 
-                if (options.GenerateGenericComparable && !sourceTypeInfo.IsGenericComparable)
+                if (options.GenerateGenericComparable &&
+                    !sourceTypeInfo.IsGenericComparable)
                 {
                     GenerateCode(
                         context,
@@ -228,7 +231,8 @@ namespace ComparableGenerator
                         $"{fullName}_GenericComparable.cs");
                 }
 
-                if (options.GenerateNonGenericComparable && !sourceTypeInfo.IsNonGenericComparable)
+                if (options.GenerateNonGenericComparable &&
+                    !sourceTypeInfo.IsNonGenericComparable)
                 {
                     GenerateCode(
                         context,
@@ -236,7 +240,8 @@ namespace ComparableGenerator
                         $"{fullName}_NonGenericComparable.cs");
                 }
 
-                if (options.GenerateObjectEquals && !sourceTypeInfo.OverridesObjectEquals)
+                if (options.GenerateObjectEquals &&
+                    !sourceTypeInfo.OverridesObjectEquals)
                 {
                     GenerateCode(
                         context,
@@ -244,7 +249,8 @@ namespace ComparableGenerator
                         $"{fullName}_ObjectEquals.cs");
                 }
 
-                if (options.GenerateEqualityOperators && !sourceTypeInfo.DefinedEqualityOperators)
+                if (options.GenerateEqualityOperators &&
+                    !sourceTypeInfo.DefinedNullableEqualityOperators)
                 {
                     GenerateCode(
                         context,
@@ -252,7 +258,8 @@ namespace ComparableGenerator
                         $"{fullName}_EqualityOperators.cs");
                 }
 
-                if (options.GenerateComparisonOperators && !sourceTypeInfo.DefinedEqualityComparisonOperators)
+                if (options.GenerateComparisonOperators &&
+                    !sourceTypeInfo.DefinedNullableComparisonOperators)
                 {
                     GenerateCode(
                         context,
