@@ -1,10 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>aetos</Authors>
+    <Company />
+    <Product />
+    <Copyright>Copyright (c) 2021 aetos</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/aetos382/ComparableGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aetos382/ComparableGenerator.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +29,11 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ComparableGenerator.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" PackagePath="" Visible="false" />
+    <Content Include="build\ComparableGenerator.props" PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>
@@ -98,5 +113,29 @@
       <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
+
+  <PropertyGroup>
+    <BeforePack>
+      _PrepareForPack;
+      $(BeforePack)
+    </BeforePack>
+  </PropertyGroup>
+
+  <Target Name="_PrepareForPack">
+    <PropertyGroup>
+      <!-- Do not include the generator as a lib dependency -->
+      <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <Touch Files="$(IntermediateOutputPath)_._" AlwaysCreate="True">
+      <Output TaskParameter="TouchedFiles" ItemName="FilesTouched" />
+    </Touch>
+
+    <ItemGroup>
+      <!-- Package the generator in the analyzer directory of the nuget package -->
+      <None Include="$(TargetPath)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+      <None Include="@(FilesTouched)" Pack="true" PackagePath="lib/netstandard2.0" Visible="false" />
+    </ItemGroup>
+  </Target>
 
 </Project>

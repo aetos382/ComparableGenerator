@@ -1,14 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-  </PropertyGroup>
-
+<Project>
   <ItemGroup>
-    <CompilerVisibleProperty Include="DebugGenerator" />
     <CompilerVisibleProperty Include="GenerateObjectEquals" />
     <CompilerVisibleProperty Include="GenerateEquatable" />
     <CompilerVisibleProperty Include="GenerateGenericComparable" />
@@ -29,12 +20,4 @@
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityContract" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateMethodsAsVirtual" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\ComparableGenerator\ComparableGenerator.csproj">
-      <OutputItemType>Analyzer</OutputItemType>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-
 </Project>
