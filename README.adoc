@@ -1,5 +1,6 @@
 = ComparableGenerator
 
-image:https://github.com/aetos382/ComparableGenerator/workflows/.NET/badge.svg[link=https://github.com/aetos382/ComparableGenerator/actions/workflows/dotnet.yml]
+image:https://github.com/aetos382/ComparableGenerator/workflows/.NET/badge.svg[GitHub Workflow Status,link=https://github.com/aetos382/ComparableGenerator/actions/workflows/dotnet.yml]
+image:https://img.shields.io/myget/aetos/vpre/ComparableGenerator[MyGet (with prereleases),link=https://www.myget.org/feed/aetos/package/nuget/ComparableGenerator]
 
 TBD
