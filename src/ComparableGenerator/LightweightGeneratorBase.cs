@@ -18,7 +18,7 @@ namespace ComparableGenerator
         public void Write(
             string? text)
         {
-            if (string.IsNullOrEmpty(text))
+            if (text is null)
             {
                 return;
             }
@@ -38,7 +38,7 @@ namespace ComparableGenerator
                     buffer.Append(this._currentIndent);
                 }
 
-                int index = text.IndexOf(newLine, start);
+                int index = text.IndexOf(newLine, start, StringComparison.OrdinalIgnoreCase);
                 if (index == -1)
                 {
                     buffer.Append(text, start, length - start);
@@ -77,7 +77,7 @@ namespace ComparableGenerator
 
         protected readonly StringBuilder GenerationEnvironment = new();
 
-        protected readonly Helper ToStringHelper = default;
+        protected readonly Helper ToStringHelper;
 
         private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -28,6 +29,7 @@ namespace ComparableGenerator.Tests
 
         public override bool TryGetValue(
             string key,
+            [MaybeNullWhen(false)]
             out string value)
         {
             return this._options.TryGetValue(key, out value);
