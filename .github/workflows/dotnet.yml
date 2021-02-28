@@ -24,7 +24,7 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Build
-      run: dotnet build --configuration ${CONFIGURATION} /p:RepositoryBranch=${GITHUB_REF} /p:RepositoryCommit=${GITHUB_SHA} /p:ContinuousIntegrationBuild=true
+      run: dotnet build --configuration ${CONFIGURATION} /p:RepositoryBranch=${GITHUB_REF#refs/heads/} /p:RepositoryCommit=${GITHUB_SHA} /p:ContinuousIntegrationBuild=true
 
     - name: Test
       run: dotnet test --configuration ${CONFIGURATION} --verbosity normal
