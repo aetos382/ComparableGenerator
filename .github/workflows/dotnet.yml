@@ -3,6 +3,7 @@ name: .NET
 on:
   push:
     branches: [ master ]
+
   pull_request:
     branches: [ master ]
 
@@ -13,13 +14,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Push
+      run: dotnet nuget push src/ComparableGenerator/bin/Release/ComparableGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ secrets.SuperSecret }}
