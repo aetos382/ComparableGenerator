@@ -27,4 +27,4 @@ jobs:
       run: dotnet test --configuration Release --verbosity normal
 
     - name: Push
-      run: dotnet nuget push src/ComparableGenerator/bin/Release/ComparableGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ secrets.SuperSecret }}
+      run: dotnet nuget push src/ComparableGenerator/bin/Release/ComparableGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ secrets.MYGET_API_KEY }}
