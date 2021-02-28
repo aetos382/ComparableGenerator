@@ -1,0 +1,5 @@
+= ComparableGenerator
+
+image:https://github.com/aetos382/ComparableGenerator/workflows/.NET/badge.svg[link=https://github.com/aetos382/ComparableGenerator/actions/workflows/dotnet.yml]
+
+TBD
