@@ -11,6 +11,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      CONFIGURATION: Release
+      MYGET_API_KEY: ${{secrets.MYGET_API_KEY}}
 
     steps:
     - uses: actions/checkout@v2
@@ -21,10 +24,10 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration ${CONFIGURATION} /p:RepositoryBranch=${GITHUB_REF} /p:RepositoryCommit=${GITHUB_SHA} /p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration Release --verbosity normal
+      run: dotnet test --configuration ${CONFIGURATION} --verbosity normal
 
     - name: Push
-      run: dotnet nuget push src/ComparableGenerator/bin/Release/ComparableGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ secrets.MYGET_API_KEY }}
+      run: dotnet nuget push src/ComparableGenerator/bin/${CONFIGURATION}/ComparableGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
