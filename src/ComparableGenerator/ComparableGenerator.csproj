@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -130,5 +130,10 @@
       <None Include="$(TargetPath)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
   </Target>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="RepositoryBranch" Value="$(RepositoryBranch)" Condition="'$(RepositoryBranch)' != ''"/>
+    <AssemblyMetadata Include="RepositoryCommit" Value="$(RepositoryCommit)" Condition="'$(RepositoryCommit)' != ''"/>
+  </ItemGroup>
 
 </Project>
