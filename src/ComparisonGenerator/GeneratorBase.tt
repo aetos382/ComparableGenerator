@@ -1,0 +1,59 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="SimpleGeneratorBase" #>
+/*
+    Generated: <#= DateTimeOffset.Now #>
+*/
+
+using System;
+<#
+this.WriteUsings();
+#>
+
+<#
+var context = this.Context;
+
+var namespaceName = context.Namespace;
+bool hasNamespace = !string.IsNullOrEmpty(namespaceName);
+if (hasNamespace)
+{
+#>
+namespace <#= namespaceName #>
+{
+<#
+    this.PushIndent();
+}
+
+int numTypes = context.Types.Count;
+
+for (int i = 0; i < numTypes - 1; ++i)
+{
+    var type = context.Types[i];
+    string typeKind = GetTypeKind(type);
+#>
+partial <#= typeKind #> <#= type.Name #>
+{
+<#
+    this.PushIndent();
+}
+
+this.WriteCode();
+
+for (int i = 0; i < numTypes - 1; ++i)
+{
+    this.PopIndent();
+#>
+}
+<#
+}
+#>
+<#
+// end namespace
+if (hasNamespace)
+{
+    this.PopIndent();
+#>
+}
+<#
+}
+#>
+
+// --------------------------
