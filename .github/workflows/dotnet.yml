@@ -30,4 +30,4 @@ jobs:
       run: dotnet test --configuration ${CONFIGURATION} --verbosity normal
 
     - name: Push
-      run: dotnet nuget push src/ComparisonGenerator/bin/${CONFIGURATION}/ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
+      run: dotnet nuget push src/ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
