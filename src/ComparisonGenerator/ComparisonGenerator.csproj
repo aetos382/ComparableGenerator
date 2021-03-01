@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="build\ComparisonGenerator.props" PackagePath="build" />
+    <Content Include="build\Aetos.ComparisonGenerator.props" PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>
