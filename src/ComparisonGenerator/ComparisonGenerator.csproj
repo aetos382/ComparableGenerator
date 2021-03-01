@@ -9,6 +9,7 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Aetos.ComparisonGenerator</PackageId>
+    <Description>C# source generator for generating IComparable&lt;T&gt; and IEquatable&lt;T&gt; implementations, comparison operator implementations, etc.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>0.1.0-alpha</Version>
     <Authors>aetos</Authors>
