@@ -13,7 +13,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>C# source generator for generating IComparable&lt;T&gt; and IEquatable&lt;T&gt; implementations, comparison operator implementations, etc.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.0-alpha4</Version>
     <Authors>aetos</Authors>
     <Copyright>Copyright (c) 2021 aetos</Copyright>
     <PackageProjectUrl>https://github.com/aetos382/ComparisonGenerator</PackageProjectUrl>
