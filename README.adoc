@@ -4,3 +4,5 @@ image:https://github.com/aetos382/ComparisonGenerator/workflows/.NET/badge.svg[G
 image:https://img.shields.io/myget/aetos/vpre/Aetos.ComparisonGenerator[MyGet (with prereleases),link=https://www.myget.org/feed/aetos/package/nuget/Aetos.ComparisonGenerator]
 
 TBD
+
+This project inspired by https://github.com/nuitsjp/ComparableGenerator[nuitsjp/ComparableGenerator]😘
