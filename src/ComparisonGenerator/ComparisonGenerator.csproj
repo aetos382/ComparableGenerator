@@ -7,6 +7,9 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>5.0</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Aetos.ComparisonGenerator</PackageId>
     <Description>C# source generator for generating IComparable&lt;T&gt; and IEquatable&lt;T&gt; implementations, comparison operator implementations, etc.</Description>
