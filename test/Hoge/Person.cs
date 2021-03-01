@@ -1,6 +1,6 @@
 ﻿using System;
 
-using ComparisonGenerator;
+using Aetos.ComparisonGenerator;
 
 [Comparable]
 public partial class Person
