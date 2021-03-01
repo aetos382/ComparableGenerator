@@ -8,6 +8,7 @@
     <AnalysisLevel>5.0</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Aetos.ComparisonGenerator</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>0.1.0</Version>
     <Authors>aetos</Authors>
