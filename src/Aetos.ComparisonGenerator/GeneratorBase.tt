@@ -1,5 +1,6 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="SimpleGeneratorBase" #>
 <#@ import namespace="System.Reflection" #>
+<#@ import namespace="Microsoft.CodeAnalysis" #>
 <#
     var infoVer =
         typeof(GeneratorBase).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
@@ -19,6 +20,25 @@ Generator version: <#= infoVer #>.
 #>
 </auto-generated>
 */
+
+<#
+    bool annotationsEnabled = this.Context.NullableContext.AnnotationsEnabled();
+    bool warningsEnabled = this.Context.NullableContext.WarningsEnabled();
+
+    string? nullableContext = (annotationsEnabled, warningsEnabled) switch {
+        (true, true) => "enable",
+        (true, false) => "enable annotations",
+        (false, true) => "enable warnings",
+        _ => null
+    };
+
+    if (nullableContext is not null)
+    {
+#>
+#nullable <#= nullableContext #>
+<#
+    }
+#>
 
 using System;
 <#

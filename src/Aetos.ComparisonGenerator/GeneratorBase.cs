@@ -10,6 +10,7 @@
 namespace Aetos.ComparisonGenerator
 {
     using System.Reflection;
+    using Microsoft.CodeAnalysis;
     using System;
     
     /// <summary>
@@ -23,6 +24,7 @@ namespace Aetos.ComparisonGenerator
         /// </summary>
         public override string TransformText()
         {
+            this.Write("\n");
 
     var infoVer =
         typeof(GeneratorBase).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
@@ -39,7 +41,28 @@ namespace Aetos.ComparisonGenerator
 
     }
 
-            this.Write("</auto-generated>\r\n*/\r\n\r\nusing System;\r\n");
+            this.Write("</auto-generated>\r\n*/\r\n\r\n");
+
+    bool annotationsEnabled = this.Context.NullableContext.AnnotationsEnabled();
+    bool warningsEnabled = this.Context.NullableContext.WarningsEnabled();
+
+    string? nullableContext = (annotationsEnabled, warningsEnabled) switch {
+        (true, true) => "enable",
+        (true, false) => "enable annotations",
+        (false, true) => "enable warnings",
+        _ => null
+    };
+
+    if (nullableContext is not null)
+    {
+
+            this.Write("#nullable ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(nullableContext));
+            this.Write("\r\n");
+
+    }
+
+            this.Write("\r\nusing System;\r\n");
 
 this.WriteUsings();
 
