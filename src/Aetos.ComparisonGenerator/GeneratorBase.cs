@@ -48,7 +48,7 @@ namespace Aetos.ComparisonGenerator
     bool annotationsEnabled = nullableContext.AnnotationsEnabled();
     bool warningsEnabled = nullableContext.WarningsEnabled();
 
-    string? pragmaValue = (annotationsEnabled, warningsEnabled) switch {
+    var pragmaValue = (annotationsEnabled, warningsEnabled) switch {
         (true, true) => "enable",
         (true, false) => "enable annotations",
         (false, true) => "enable warnings",
