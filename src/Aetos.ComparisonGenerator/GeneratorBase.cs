@@ -43,21 +43,23 @@ namespace Aetos.ComparisonGenerator
 
             this.Write("</auto-generated>\r\n*/\r\n\r\n");
 
-    bool annotationsEnabled = this.Context.NullableContext.AnnotationsEnabled();
-    bool warningsEnabled = this.Context.NullableContext.WarningsEnabled();
+    var nullableContext = this.Context.NullableContext;
 
-    string? nullableContext = (annotationsEnabled, warningsEnabled) switch {
+    bool annotationsEnabled = nullableContext.AnnotationsEnabled();
+    bool warningsEnabled = nullableContext.WarningsEnabled();
+
+    string? pragmaValue = (annotationsEnabled, warningsEnabled) switch {
         (true, true) => "enable",
         (true, false) => "enable annotations",
         (false, true) => "enable warnings",
         _ => null
     };
 
-    if (nullableContext is not null)
+    if (pragmaValue is not null)
     {
 
             this.Write("#nullable ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(nullableContext));
+            this.Write(this.ToStringHelper.ToStringWithCulture(pragmaValue));
             this.Write("\r\n");
 
     }
