@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Aetos.ComparisonGenerator</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Version>0.1.0</Version>
+    <Version>0.1.0-alpha</Version>
     <Authors>aetos</Authors>
     <Copyright>Copyright (c) 2021 aetos</Copyright>
     <PackageProjectUrl>https://github.com/aetos382/ComparisonGenerator</PackageProjectUrl>
