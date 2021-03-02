@@ -24,7 +24,6 @@ namespace Aetos.ComparisonGenerator
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n");
 
     var infoVer =
         typeof(GeneratorBase).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
@@ -120,7 +119,6 @@ if (hasNamespace)
 
 }
 
-            this.Write("\r\n// --------------------------\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

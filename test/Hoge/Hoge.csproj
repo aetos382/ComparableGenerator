@@ -20,4 +20,17 @@
     </ProjectReference>
   </ItemGroup>
 
+  <PropertyGroup>
+    <RemoveCompilerGeneratedFiles>true</RemoveCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <Target Name="_RemoveCompilerGeneratedFiles"
+    AfterTargets="CreateCompilerGeneratedFilesOutputPath"
+    Condition="'$(RemoveCompilerGeneratedFiles)' == 'true' and '$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and !('$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true')">
+    <ItemGroup>
+      <_CompilerGeneratedFiles Include="$(CompilerGeneratedFilesOutputPath)/**/*"/>
+    </ItemGroup>
+    <Delete Files="@(_CompilerGeneratedFiles)"/>
+  </Target>
+
 </Project>
