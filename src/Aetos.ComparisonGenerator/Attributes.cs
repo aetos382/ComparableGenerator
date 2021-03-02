@@ -7,6 +7,30 @@ namespace Aetos.ComparisonGenerator
 {
     internal static class Attributes
     {
+        private const string _equatableAttributeSource = @"
+using System;
+using System.Diagnostics;
+
+namespace Aetos.ComparisonGenerator
+{
+    [Conditional(""COMPILE_TIME_ONLY"")]
+    [AttributeUsage(
+        AttributeTargets.Class | AttributeTargets.Struct)]
+    internal class EquatableAttribute :
+        Attribute
+    {
+        public bool GenerateEquatable { get; init; } = true;
+
+        public bool GenerateObjectEquals { get; init; } = true;
+
+        public bool GenerateEqualityContract { get; init; } = true;
+
+        public bool GenerateEqualityOperators { get; init; } = false;
+
+        public bool GenerateMethodsAsVirtual { get; init; } = true;
+    }
+}";
+
         private const string _comparableAttributeSource = @"
 using System;
 using System.Diagnostics;
@@ -17,26 +41,15 @@ namespace Aetos.ComparisonGenerator
     [AttributeUsage(
         AttributeTargets.Class | AttributeTargets.Struct)]
     internal sealed class ComparableAttribute :
-        Attribute
+        EquatableAttribute
     {
-        public bool GenerateEquatable { get; init; } = true;
-
         public bool GenerateGenericComparable { get; init; } = true;
 
         public bool GenerateNonGenericComparable { get; init; } = true;
 
-        public bool GenerateObjectEquals { get; init; } = true;
-
-        public bool GenerateEqualityContract { get; init; } = true;
-
-        public bool GenerateEqualityOperators { get; init; } = false;
-
         public bool GenerateComparisonOperators { get; init; } = false;
-
-        public bool GenerateMethodsAsVirtual { get; init; } = true;
     }
-}
-";
+}";
 
         private const string _compareByAttributeSource = @"
 using System;
@@ -60,12 +73,14 @@ namespace Aetos.ComparisonGenerator
     }
 }";
 
+        public const string EquatableAttributeName = "Aetos.ComparisonGenerator.EquatableAttribute";
         public const string ComparableAttributeName = "Aetos.ComparisonGenerator.ComparableAttribute";
         public const string CompareByAttributeName = "Aetos.ComparisonGenerator.CompareByAttribute";
 
         public static void AddToProject(
             GeneratorExecutionContext context)
         {
+            context.AddSource("EquatableAttribute.cs", _equatableAttributeSource);
             context.AddSource("ComparableAttribute.cs", _comparableAttributeSource);
             context.AddSource("CompareByAttribute.cs", _compareByAttributeSource);
         }
@@ -74,6 +89,7 @@ namespace Aetos.ComparisonGenerator
             GeneratorExecutionContext context)
         {
             var sourceCodes = new[] {
+                _equatableAttributeSource,
                 _comparableAttributeSource,
                 _compareByAttributeSource
             };
