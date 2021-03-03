@@ -27,6 +27,7 @@
   <Target Name="_RemoveCompilerGeneratedFiles"
     AfterTargets="CreateCompilerGeneratedFilesOutputPath"
     Condition="'$(RemoveCompilerGeneratedFiles)' == 'true' and '$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and !('$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true')">
+    Condition="'$(RemoveCompilerGeneratedFiles)' == 'true' and '$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and '$(DesignTimeBuild)' != 'true' and '$(BuildingProject)' == 'true'">
     <ItemGroup>
       <_CompilerGeneratedFiles Include="$(CompilerGeneratedFilesOutputPath)/**/*"/>
     </ItemGroup>
