@@ -16,7 +16,7 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
         {
             const string source = @"";
 
-            var generator = new OrdinalComparableObjectGenerator();
+            var generator = new ComparableObjectGenerator();
             var driver = CSharpGeneratorDriver.Create(generator);
 
             var syntaxTree = VisualBasicSyntaxTree.ParseText(source);

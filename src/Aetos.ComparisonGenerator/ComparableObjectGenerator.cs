@@ -10,16 +10,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Aetos.ComparisonGenerator
 {
     [Generator]
-    public class OrdinalComparableObjectGenerator :
+    public class ComparableObjectGenerator :
         ISourceGenerator
     {
-        public OrdinalComparableObjectGenerator()
+        public ComparableObjectGenerator()
         {
         }
 
         private readonly GenerateOptions? _options;
 
-        internal OrdinalComparableObjectGenerator(
+        internal ComparableObjectGenerator(
             GenerateOptions options)
         {
             if (options is null)

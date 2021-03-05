@@ -30,7 +30,7 @@ public partial class Person
             var options = new GenerateOptions(
                 generateEquatable: true);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -68,7 +68,7 @@ public partial class Person
             var options = new GenerateOptions(
                 generateEquatable: false);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -107,7 +107,7 @@ public partial class Person
                 generateEquatable: true,
                 generateMethodsAsVirtual: true);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -147,7 +147,7 @@ public partial class Person
                 generateEquatable: true,
                 generateMethodsAsVirtual: false);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -203,7 +203,7 @@ public partial class Person
 
             var options = new GenerateOptions();
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -272,7 +272,7 @@ public partial class Person :
             var options = new GenerateOptions(
                 generateEquatable: true);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
@@ -343,7 +343,7 @@ public partial class Person :
                 generateEquatable: true,
                 generateGenericComparable: false);
 
-            var generator = new OrdinalComparableObjectGenerator(options);
+            var generator = new ComparableObjectGenerator(options);
 
             var assembly = GenerateAssembly(
                 generator,
