@@ -21,7 +21,7 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
 {
     public abstract class GeneratorTestBase
     {
-        protected static Assembly? GenerateAssembly(
+        protected static Assembly? RunGeneratorAndGenerateAssembly(
             ISourceGenerator generator,
             string source,
             out ImmutableArray<Diagnostic> diagnostics,

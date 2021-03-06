@@ -32,7 +32,7 @@ public partial class Person
 
             var generator = new ComparableObjectGenerator(options);
 
-            var assembly = GenerateAssembly(
+            var assembly = RunGeneratorAndGenerateAssembly(
                 generator,
                 source,
                 out _);
@@ -70,7 +70,7 @@ public partial class Person
 
             var generator = new ComparableObjectGenerator(options);
 
-            var assembly = GenerateAssembly(
+            var assembly = RunGeneratorAndGenerateAssembly(
                 generator,
                 source,
                 out _);
@@ -127,7 +127,7 @@ public partial class Person :
 
             var generator = new ComparableObjectGenerator(options);
 
-            var assembly = GenerateAssembly(
+            var assembly = RunGeneratorAndGenerateAssembly(
                 generator,
                 source,
                 out _);
@@ -195,7 +195,7 @@ public partial class Person :
 
             var generator = new ComparableObjectGenerator(options);
 
-            var assembly = GenerateAssembly(
+            var assembly = RunGeneratorAndGenerateAssembly(
                 generator,
                 source,
                 out _);
@@ -266,7 +266,7 @@ public partial class Person :
 
             var generator = new ComparableObjectGenerator(options);
 
-            var assembly = GenerateAssembly(
+            var assembly = RunGeneratorAndGenerateAssembly(
                 generator,
                 source,
                 out _);
