@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -332,6 +332,7 @@ namespace Aetos.ComparisonGenerator
         }
 
         // TODO: IStructuralEquatable / IStructuralComparable を考慮する
+        // TODO: 対象のメンバーが複数あって Order が設定されていない場合は Diagnostic を出す
         private static bool ValidateMembers(
             INamedTypeSymbol symbol,
             KnownTypes commonTypes,
