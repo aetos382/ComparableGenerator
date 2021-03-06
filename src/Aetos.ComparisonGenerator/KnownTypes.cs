@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 using Microsoft.CodeAnalysis;
 
@@ -24,6 +25,8 @@ namespace Aetos.ComparisonGenerator
             this.Nullable = GetType(compilation, typeof(Nullable<>));
             this.GenericComparable = GetType(compilation, typeof(IComparable<>));
             this.NonGenericComparable = GetType(compilation, typeof(IComparable));
+            this.StructuralEquatable = GetType(compilation, typeof(IStructuralEquatable));
+            this.StructuralComparable = GetType(compilation, typeof(IStructuralComparable));
         }
 
         public INamedTypeSymbol EquatableAttribute { get; }
@@ -43,6 +46,10 @@ namespace Aetos.ComparisonGenerator
         public INamedTypeSymbol GenericComparable { get; }
 
         public INamedTypeSymbol NonGenericComparable { get; }
+
+        public INamedTypeSymbol StructuralEquatable { get; }
+
+        public INamedTypeSymbol StructuralComparable { get; }
 
         public bool IsEquatable(
             ITypeSymbol type)
@@ -98,7 +105,30 @@ namespace Aetos.ComparisonGenerator
             }
 
             bool result = type.HasInterface(this.NonGenericComparable);
+            return result;
+        }
 
+        public bool IsStructuralEquatable(
+            ITypeSymbol type)
+        {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            bool result = type.HasInterface(this.StructuralEquatable);
+            return result;
+        }
+        
+        public bool IsStructuralComparable(
+            ITypeSymbol type)
+        {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            bool result = type.HasInterface(this.StructuralComparable);
             return result;
         }
 
