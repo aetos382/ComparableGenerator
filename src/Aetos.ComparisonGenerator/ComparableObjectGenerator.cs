@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -253,16 +253,7 @@ namespace Aetos.ComparisonGenerator
             Debug.Assert(candidateAttribute is not null);
 
             attribute = candidateAttribute!;
-
-            try
-            {
-                diagnostics = diagnosticsBuilder.ToImmutable();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            diagnostics = diagnosticsBuilder.ToImmutable();
         }
 
         private static bool ValidateModifiers(
