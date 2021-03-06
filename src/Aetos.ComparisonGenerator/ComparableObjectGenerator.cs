@@ -19,10 +19,10 @@ namespace Aetos.ComparisonGenerator
         {
         }
 
-        private readonly GenerateOptions? _options;
+        private readonly GeneratorOptions? _options;
 
         internal ComparableObjectGenerator(
-            GenerateOptions options)
+            GeneratorOptions options)
         {
             if (options is null)
             {
@@ -104,7 +104,7 @@ namespace Aetos.ComparisonGenerator
             GeneratorExecutionContext context,
             CandidateTypeInfo candidateType,
             KnownTypes knownTypes,
-            GenerateOptions? options)
+            GeneratorOptions? options)
         {
             ValidateAttribute(
                 candidateType,
@@ -121,7 +121,7 @@ namespace Aetos.ComparisonGenerator
                 return;
             }
 
-            options ??= new GenerateOptions(
+            options ??= new GeneratorOptions(
                 context,
                 candidateType.SyntaxNode,
                 attribute);
@@ -336,7 +336,7 @@ namespace Aetos.ComparisonGenerator
         private static bool ValidateMembers(
             INamedTypeSymbol symbol,
             KnownTypes commonTypes,
-            GenerateOptions options,
+            GeneratorOptions options,
             out ImmutableArray<SourceMemberInfo> members,
             out ImmutableArray<Diagnostic> diagnostics)
         {

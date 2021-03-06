@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Aetos.ComparisonGenerator
 {
-    internal class GenerateOptions
+    internal class GeneratorOptions
     {
-        internal GenerateOptions(
+        internal GeneratorOptions(
             bool generateEquatable = true,
             bool generateGenericComparable = true,
             bool generateNonGenericComparable = true,
@@ -29,7 +29,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
         }
 
-        public GenerateOptions(
+        public GeneratorOptions(
             GeneratorExecutionContext context,
             TypeDeclarationSyntax syntax,
             AttributeData attribute)

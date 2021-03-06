@@ -27,7 +27,7 @@ public partial class Person
     public string LastName { get; set; }
 }";
 
-            var options = new GenerateOptions(
+            var options = new GeneratorOptions(
                 generateObjectEquals: true);
 
             var generator = new ComparableObjectGenerator(options);
@@ -65,7 +65,7 @@ public partial class Person
     public string LastName { get; set; }
 }";
 
-            var options = new GenerateOptions(
+            var options = new GeneratorOptions(
                 generateObjectEquals: false);
 
             var generator = new ComparableObjectGenerator(options);
@@ -121,7 +121,7 @@ public partial class Person :
     }
 }";
 
-            var options = new GenerateOptions(
+            var options = new GeneratorOptions(
                 generateObjectEquals: true,
                 generateEquatable: false);
 
@@ -190,7 +190,7 @@ public partial class Person :
     }
 }";
 
-            var options = new GenerateOptions(
+            var options = new GeneratorOptions(
                 generateObjectEquals: true);
 
             var generator = new ComparableObjectGenerator(options);
@@ -260,7 +260,7 @@ public partial class Person :
     }
 }";
 
-            var options = new GenerateOptions(
+            var options = new GeneratorOptions(
                 generateEquatable: true,
                 generateGenericComparable: false);
 
