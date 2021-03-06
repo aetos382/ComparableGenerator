@@ -1,13 +1,8 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-
-namespace Aetos.ComparisonGenerator
+﻿namespace Aetos.ComparisonGenerator
 {
     internal static class Attributes
     {
-        private const string _equatableAttributeSource = @"
+        public const string EquatableAttributeSource = @"
 using System;
 using System.Diagnostics;
 
@@ -31,7 +26,7 @@ namespace Aetos.ComparisonGenerator
     }
 }";
 
-        private const string _comparableAttributeSource = @"
+        public const string ComparableAttributeSource = @"
 using System;
 using System.Diagnostics;
 
@@ -51,7 +46,7 @@ namespace Aetos.ComparisonGenerator
     }
 }";
 
-        private const string _compareByAttributeSource = @"
+        public const string CompareByAttributeSource = @"
 using System;
 using System.Diagnostics;
 
@@ -63,13 +58,9 @@ namespace Aetos.ComparisonGenerator
     internal sealed class CompareByAttribute :
         Attribute
     {
-        public CompareByAttribute(
-            int order)
-        {
-            this.Order = order;
-        }
+        public int Order { get; init; } = 0;
 
-        public int Order { get; }
+        public bool PreferStructuralComparison { get; init; } = false;
     }
 }";
 
@@ -77,32 +68,7 @@ namespace Aetos.ComparisonGenerator
         public const string ComparableAttributeName = "Aetos.ComparisonGenerator.ComparableAttribute";
         public const string CompareByAttributeName = "Aetos.ComparisonGenerator.CompareByAttribute";
 
-        public static void AddToProject(
-            GeneratorExecutionContext context)
-        {
-            context.AddSource("EquatableAttribute.cs", _equatableAttributeSource);
-            context.AddSource("ComparableAttribute.cs", _comparableAttributeSource);
-            context.AddSource("CompareByAttribute.cs", _compareByAttributeSource);
-        }
-
-        public static Compilation AddToCompilation(
-            GeneratorExecutionContext context)
-        {
-            var sourceCodes = new[] {
-                _equatableAttributeSource,
-                _comparableAttributeSource,
-                _compareByAttributeSource
-            };
-
-            var syntaxTrees = sourceCodes
-                .Select(source =>
-                    CSharpSyntaxTree.ParseText(
-                        source,
-                        (CSharpParseOptions) context.ParseOptions,
-                        cancellationToken: context.CancellationToken));
-
-            var compilation = context.Compilation.AddSyntaxTrees(syntaxTrees);
-            return compilation;
-        }
+        public const string EquatableAttributeNameWithGlobalPrefix = "global::Aetos.ComparisonGenerator.EquatableAttribute";
+        public const string ComparableAttributeNameWithGlobalPrefix = "global::Aetos.ComparisonGenerator.ComparableAttribute";
     }
 }

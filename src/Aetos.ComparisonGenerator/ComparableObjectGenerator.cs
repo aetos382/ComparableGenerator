@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,25 +36,23 @@ namespace Aetos.ComparisonGenerator
             GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(
-                () => new SyntaxReceiver());
+                () => new SyntaxReceiver(context.CancellationToken));
+
+            context.RegisterForPostInitialization(this.PostInitialize);
+        }
+
+        private void PostInitialize(
+            GeneratorPostInitializationContext context)
+        {
+            context.AddSource("EquatableAttribute.cs", Attributes.EquatableAttributeSource);
+            context.AddSource("ComparableAttribute.cs", Attributes.ComparableAttributeSource);
+            context.AddSource("CompareByAttribute.cs", Attributes.CompareByAttributeSource);
         }
 
         public void Execute(
             GeneratorExecutionContext context)
         {
-#if DEBUG
-            if (!Debugger.IsAttached &&
-                context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.DebugGenerator", out var debugOption) &&
-                bool.TryParse(debugOption, out var debug) &&
-                debug)
-            {
-                var currentProcessName = Process.GetCurrentProcess().ProcessName;
-                if (string.Equals(currentProcessName, "dotnet", StringComparison.OrdinalIgnoreCase))
-                {
-                    Debugger.Launch();
-                }
-            }
-#endif
+            LaunchDebugger(context);
 
             if (context.Compilation.Language != LanguageNames.CSharp)
             {
@@ -65,227 +65,344 @@ namespace Aetos.ComparisonGenerator
                 return;
             }
 
-            Attributes.AddToProject(context);
-
-            if (context.SyntaxReceiver is not SyntaxReceiver receiver)
+            if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
             {
                 return;
             }
 
-            var compilation = Attributes.AddToCompilation(context);
-            var commonTypes = new CommonTypes(compilation);
-
-            foreach (var syntax in receiver.CandidateSyntaxes)
+            var knownTypes = new KnownTypes(context.Compilation);
+            
+            foreach (var candidateSymbol in receiver.CandidateSymbols)
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-
-                var semanticModel = compilation.GetSemanticModel(syntax.SyntaxTree);
-                var symbol = semanticModel.GetDeclaredSymbol(syntax, context.CancellationToken);
-
-                var comparableAttribute = commonTypes.GetComparableAttribute(symbol);
-                if (comparableAttribute is null)
-                {
-                    continue;
-                }
-                
-                var nullableContext =
-                    semanticModel.GetNullableContext(syntax.Span.End);
-
-                var options =
-                    this._options ??
-                    new GenerateOptions(
-                        context,
-                        syntax,
-                        comparableAttribute);
-
-                var sourceTypeInfo = new SourceTypeInfo(
-                    symbol,
-                    commonTypes,
-                    nullableContext);
-
-                var syntaxLocation = syntax.GetLocation();
-
-                if (!syntax.Modifiers.Any(SyntaxKind.PartialKeyword))
-                {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            DiagnosticDescriptors.TypeIsNotPartial,
-                            syntaxLocation,
-                            symbol.GetFullName()));
-
-                    continue;
-                }
-
-                if (syntax.Modifiers.Any(SyntaxKind.StaticKeyword))
-                {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            DiagnosticDescriptors.TypeIsStatic,
-                            syntaxLocation));
-
-                    continue;
-                }
-
-                var types = new List<INamedTypeSymbol>();
-                types.Add(symbol);
-
-                var enclosingType = symbol.ContainingType;
-
-                TypeDeclarationSyntax? invalidSyntax = null;
-
-                while (enclosingType is not null)
-                {
-                    invalidSyntax = enclosingType.DeclaringSyntaxReferences
-                        .Select(x => x.GetSyntax(context.CancellationToken))
-                        .OfType<TypeDeclarationSyntax>()
-                        .FirstOrDefault(x => !x.Modifiers.Any(SyntaxKind.PartialKeyword));
-
-                    if (invalidSyntax is not null)
-                    {
-                        break;
-                    }
-
-                    types.Add(enclosingType);
-                    enclosingType = enclosingType.ContainingType;
-                }
-
-                if (invalidSyntax is not null)
-                {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            DiagnosticDescriptors.TypeIsNotPartial,
-                            invalidSyntax.GetLocation()));
-
-                    continue;
-                }
-
-                types.Reverse();
-
-                string fullName = symbol.GetFullName(out var ns, out _);
-
-                var members = new List<(SourceMemberInfo member, int order)>();
-
-                foreach (var member in symbol.GetMembers())
-                {
-                    var order = commonTypes.GetComparisonOrder(member);
-                    if (order is null)
-                    {
-                        continue;
-                    }
-
-                    var memberInfo = new SourceMemberInfo(member);
-
-                    if (options.GenerateGenericComparable ||
-                        options.GenerateNonGenericComparable ||
-                        options.GenerateComparisonOperators)
-                    {
-                        var memberType = memberInfo.Type;
-
-                        if (!commonTypes.IsGenericComparable(memberType) &&
-                            !commonTypes.IsNonGenericComparable(memberType))
-                        {
-                            context.ReportDiagnostic(
-                                Diagnostic.Create(
-                                    DiagnosticDescriptors.TypeIsNotComparable,
-                                    member.Locations[0],
-                                    member.Locations.Skip(1),
-                                    fullName,
-                                    memberInfo.Name,
-                                    memberInfo.TypeName));
-                        }
-                    }
-
-                    members.Add((memberInfo, order.Value));
-                }
-
-                if (!members.Any())
-                {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            DiagnosticDescriptors.NoMembers,
-                            symbol.Locations[0],
-                            symbol.Locations.Skip(1),
-                            default,
-                            default));
-
-                    continue;
-                }
-
-                var ms = members
-                    .OrderBy(x => x.order)
-                    .ThenBy(x => x.member.Name)
-                    .Select(x => x.member)
-                    .ToArray();
-
-                var c = new ComparisonGeneratorContext(
-                    compilation,
-                    ns,
-                    types,
-                    ms,
-                    options,
-                    commonTypes,
-                    sourceTypeInfo,
-                    nullableContext);
-
                 GenerateCode(
                     context,
-                    new CommonGenerator(c),
-                    $"{fullName}_Common.cs");
+                    candidateSymbol,
+                    knownTypes,
+                    this._options);
+            }
+        }
 
-                if (options.GenerateEquatable &&
-                    !sourceTypeInfo.IsEquatable)
-                {
-                    GenerateCode(
-                        context,
-                        new EquatableGenerator(c),
-                        $"{fullName}_Equatable.cs");
-                }
+        [Conditional("DEBUG")]
+        private static void LaunchDebugger(
+            GeneratorExecutionContext context)
+        {
+            var options = context.AnalyzerConfigOptions.GlobalOptions;
 
-                if (options.GenerateGenericComparable &&
-                    !sourceTypeInfo.IsGenericComparable)
+            if (!Debugger.IsAttached &&
+                options.TryGetBooleanOption("build_property.DebugGenerator", out var debug) &&
+                debug)
+            {
+                var currentProcessName = Process.GetCurrentProcess().ProcessName;
+                if (string.Equals(currentProcessName, "dotnet", StringComparison.OrdinalIgnoreCase))
                 {
-                    GenerateCode(
-                        context,
-                        new GenericComparableGenerator(c),
-                        $"{fullName}_GenericComparable.cs");
-                }
-
-                if (options.GenerateNonGenericComparable &&
-                    !sourceTypeInfo.IsNonGenericComparable)
-                {
-                    GenerateCode(
-                        context,
-                        new NonGenericComparableGenerator(c),
-                        $"{fullName}_NonGenericComparable.cs");
-                }
-
-                if (options.GenerateObjectEquals &&
-                    !sourceTypeInfo.OverridesObjectEquals)
-                {
-                    GenerateCode(
-                        context,
-                        new ObjectEqualsGenerator(c),
-                        $"{fullName}_ObjectEquals.cs");
-                }
-
-                if (options.GenerateEqualityOperators &&
-                    !sourceTypeInfo.DefinedNullableEqualityOperators)
-                {
-                    GenerateCode(
-                        context,
-                        new EquatableOperatorsGenerator(c),
-                        $"{fullName}_EqualityOperators.cs");
-                }
-
-                if (options.GenerateComparisonOperators &&
-                    !sourceTypeInfo.DefinedNullableComparisonOperators)
-                {
-                    GenerateCode(
-                        context,
-                        new ComparisonOperatorsGenerator(c),
-                        $"{fullName}_ComparisonOperators.cs");
+                    Debugger.Launch();
                 }
             }
+        }
+
+        private static void GenerateCode(
+            GeneratorExecutionContext context,
+            CandidateTypeInfo candidateType,
+            KnownTypes knownTypes,
+            GenerateOptions? options)
+        {
+            ValidateAttribute(
+                candidateType,
+                out var attribute,
+                out var attributeDiagnostics);
+
+            context.ReportDiagnostics(attributeDiagnostics);
+
+            if (!ValidateModifiers(
+                candidateType,
+                out var modifierDiagnostics))
+            {
+                context.ReportDiagnostics(modifierDiagnostics);
+                return;
+            }
+
+            options ??= new GenerateOptions(
+                context,
+                candidateType.SyntaxNode,
+                attribute);
+
+            var sourceTypeInfo = new SourceTypeInfo(candidateType, knownTypes);
+
+            var symbol = candidateType.TypeSymbol;
+
+            if (!ValidateTypeEnclosingHierarchy(
+                symbol,
+                out var types,
+                out var hierarchyDiagnostics,
+                context.CancellationToken))
+            {
+                context.ReportDiagnostics(hierarchyDiagnostics);
+                return;
+            }
+
+            ValidateMembers(
+                symbol,
+                knownTypes,
+                options,
+                out var members,
+                out var memberDiagnostics);
+
+            context.ReportDiagnostics(memberDiagnostics);
+
+            if (!members.Any())
+            {
+                return;
+            }
+
+            var c = new ComparisonGeneratorContext(
+                context.Compilation,
+                candidateType.NamespaceName,
+                types,
+                members,
+                options,
+                knownTypes,
+                sourceTypeInfo,
+                candidateType.NullableContext);
+
+            string fullName = candidateType.FullName;
+
+            GenerateCode(
+                context,
+                new CommonGenerator(c),
+                $"{fullName}_Common.cs");
+
+            if (options.GenerateEquatable &&
+                !sourceTypeInfo.IsEquatable)
+            {
+                GenerateCode(
+                    context,
+                    new EquatableGenerator(c),
+                    $"{fullName}_Equatable.cs");
+            }
+
+            if (options.GenerateGenericComparable &&
+                !sourceTypeInfo.IsGenericComparable)
+            {
+                GenerateCode(
+                    context,
+                    new GenericComparableGenerator(c),
+                    $"{fullName}_GenericComparable.cs");
+            }
+
+            if (options.GenerateNonGenericComparable &&
+                !sourceTypeInfo.IsNonGenericComparable)
+            {
+                GenerateCode(
+                    context,
+                    new NonGenericComparableGenerator(c),
+                    $"{fullName}_NonGenericComparable.cs");
+            }
+
+            if (options.GenerateObjectEquals &&
+                !sourceTypeInfo.OverridesObjectEquals)
+            {
+                GenerateCode(
+                    context,
+                    new ObjectEqualsGenerator(c),
+                    $"{fullName}_ObjectEquals.cs");
+            }
+
+            if (options.GenerateEqualityOperators &&
+                !sourceTypeInfo.DefinedNullableEqualityOperators)
+            {
+                GenerateCode(
+                    context,
+                    new EquatableOperatorsGenerator(c),
+                    $"{fullName}_EqualityOperators.cs");
+            }
+
+            if (options.GenerateComparisonOperators &&
+                !sourceTypeInfo.DefinedNullableComparisonOperators)
+            {
+                GenerateCode(
+                    context,
+                    new ComparisonOperatorsGenerator(c),
+                    $"{fullName}_ComparisonOperators.cs");
+            }
+        }
+
+        private static void ValidateAttribute(
+            CandidateTypeInfo candidateSymbol,
+            out AttributeData attribute,
+            out ImmutableArray<Diagnostic> diagnostics)
+        {
+            var diagnosticsBuilder = ImmutableArray.CreateBuilder<Diagnostic>(1);
+
+            AttributeData? candidateAttribute = null;
+
+            if (candidateSymbol.EquatableAttribute is not null)
+            {
+                candidateAttribute = candidateSymbol.EquatableAttribute;
+            }
+
+            if (candidateSymbol.ComparableAttribute is not null)
+            {
+                if (candidateAttribute is not null)
+                {
+                    // TODO: 警告を出す
+                }
+
+                candidateAttribute = candidateSymbol.ComparableAttribute;
+            }
+
+            Debug.Assert(candidateAttribute is not null);
+
+            attribute = candidateAttribute!;
+
+            try
+            {
+                diagnostics = diagnosticsBuilder.ToImmutable();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private static bool ValidateModifiers(
+            CandidateTypeInfo candidateSymbol,
+            out ImmutableArray<Diagnostic> diagnostics)
+        {
+            var builder = ImmutableArray.CreateBuilder<Diagnostic>(2);
+
+            var syntax = candidateSymbol.SyntaxNode;
+            var symbolName = candidateSymbol.TypeSymbol.GetFullName();
+
+            var location = syntax.GetLocation();
+
+            if (!syntax.Modifiers.Any(SyntaxKind.PartialKeyword))
+            {
+                builder.Add(
+                    Diagnostic.Create(
+                        DiagnosticDescriptors.TypeIsNotPartial,
+                        location,
+                        symbolName));
+            }
+
+            if (syntax.Modifiers.Any(SyntaxKind.StaticKeyword))
+            {
+                builder.Add(
+                    Diagnostic.Create(
+                        DiagnosticDescriptors.TypeIsStatic,
+                        location,
+                        symbolName));
+            }
+
+            diagnostics = builder.ToImmutable();
+            return !diagnostics.Any();
+        }
+
+        private static bool ValidateTypeEnclosingHierarchy(
+            INamedTypeSymbol symbol,
+            out ImmutableArray<INamedTypeSymbol> enclosingHierarchy,
+            out ImmutableArray<Diagnostic> diagnostics,
+            CancellationToken cancellationToken)
+        {
+            var diagnosticsBuilder = ImmutableArray.CreateBuilder<Diagnostic>();
+
+            var typesBuilder = ImmutableArray.CreateBuilder<INamedTypeSymbol>();
+            typesBuilder.Add(symbol);
+
+            var enclosingType = symbol.ContainingType;
+
+            for (int i = 0; enclosingType is not null; ++i)
+            {
+                var invalidSyntaxes = enclosingType.DeclaringSyntaxReferences
+                    .Select(x => x.GetSyntax(cancellationToken))
+                    .OfType<TypeDeclarationSyntax>()
+                    .Where(x => !x.Modifiers.Any(SyntaxKind.PartialKeyword));
+
+                foreach (var invalidSyntax in invalidSyntaxes)
+                {
+                    var diagnostic = Diagnostic.Create(
+                        DiagnosticDescriptors.TypeIsNotPartial,
+                        invalidSyntax.GetLocation(),
+                        invalidSyntax.Identifier.ValueText);
+
+                    diagnosticsBuilder.Add(diagnostic);
+                }
+
+                typesBuilder.Add(enclosingType);
+                enclosingType = enclosingType.ContainingType;
+            }
+
+            typesBuilder.Reverse();
+
+            enclosingHierarchy = typesBuilder.ToImmutable();
+            diagnostics = diagnosticsBuilder.ToImmutable();
+
+            return !diagnostics.Any();
+        }
+
+        // TODO: IStructuralEquatable / IStructuralComparable を考慮する
+        private static bool ValidateMembers(
+            INamedTypeSymbol symbol,
+            KnownTypes commonTypes,
+            GenerateOptions options,
+            out ImmutableArray<SourceMemberInfo> members,
+            out ImmutableArray<Diagnostic> diagnostics)
+        {
+            var membersBuilder = ImmutableArray.CreateBuilder<SourceMemberInfo>();
+            var diagnosticsBuilder = ImmutableArray.CreateBuilder<Diagnostic>(1);
+
+            foreach (var member in symbol.GetMembers())
+            {
+                var compareByAttribute = commonTypes.GetComparisonOrder(member);
+                if (compareByAttribute is null)
+                {
+                    continue;
+                }
+
+                var memberInfo = new SourceMemberInfo(member, compareByAttribute);
+
+                if (options.GenerateGenericComparable ||
+                    options.GenerateNonGenericComparable ||
+                    options.GenerateComparisonOperators)
+                {
+                    var memberType = memberInfo.Type;
+
+                    if (!commonTypes.IsGenericComparable(memberType) &&
+                        !commonTypes.IsNonGenericComparable(memberType))
+                    {
+                        diagnosticsBuilder.Add(
+                            Diagnostic.Create(
+                                DiagnosticDescriptors.TypeIsNotComparable,
+                                member.Locations[0],
+                                member.Locations.Skip(1),
+                                symbol.GetFullName(),
+                                memberInfo.Name,
+                                memberInfo.TypeName));
+                    }
+                }
+
+                membersBuilder.Add(memberInfo);
+            }
+
+            if (!membersBuilder.Any())
+            {
+                diagnosticsBuilder.Add(
+                    Diagnostic.Create(
+                        DiagnosticDescriptors.NoMembers,
+                        symbol.Locations[0],
+                        symbol.Locations.Skip(1),
+                        default,
+                        default));
+            }
+
+            members = membersBuilder
+                .OrderBy(x => x.ComparisonOrder)
+                .ThenBy(x => x.Name)
+                .ToImmutableArray();
+
+            diagnostics = diagnosticsBuilder.ToImmutable();
+
+            return members.Any();
         }
 
         private static void GenerateCode(
@@ -298,33 +415,66 @@ namespace Aetos.ComparisonGenerator
         }
 
         private class SyntaxReceiver :
-            ISyntaxReceiver
+            ISyntaxContextReceiver
         {
-            public readonly List<TypeDeclarationSyntax> CandidateSyntaxes = new();
+            private readonly CancellationToken _cancellationToken;
+
+            public SyntaxReceiver(
+                CancellationToken cancellationToken = default)
+            {
+                this._cancellationToken = cancellationToken;
+            }
+
+            public readonly List<CandidateTypeInfo> CandidateSymbols = new();
 
             public void OnVisitSyntaxNode(
-                SyntaxNode syntaxNode)
+                GeneratorSyntaxContext context)
             {
-                if (syntaxNode is null)
-                {
-                    throw new ArgumentNullException(nameof(syntaxNode));
-                }
-
-                if (syntaxNode is not TypeDeclarationSyntax typeDecl)
+                if (context.Node is not TypeDeclarationSyntax tds)
                 {
                     return;
                 }
-                
-                var attrs =
-                    typeDecl.AttributeLists
-                        .SelectMany(x => x.Attributes);
 
+                var attrs = tds.AttributeLists.SelectMany(x => x.Attributes);
                 if (!attrs.Any())
                 {
                     return;
                 }
 
-                this.CandidateSyntaxes.Add(typeDecl);
+                var semanticModel = context.SemanticModel;
+
+                var symbol = semanticModel.GetDeclaredSymbol(tds, this._cancellationToken);
+                var attributes = symbol.GetAttributes();
+
+                AttributeData? equatableAttribute = null;
+                AttributeData? comparableAttribute = null;
+
+                foreach (var attribute in attributes)
+                {
+                    string attributeClassName = attribute.AttributeClass.GetFullName(true);
+
+                    if (attributeClassName == Attributes.EquatableAttributeNameWithGlobalPrefix)
+                    {
+                        equatableAttribute = attribute;
+                    }
+                    else if (attributeClassName == Attributes.ComparableAttributeNameWithGlobalPrefix)
+                    {
+                        comparableAttribute = attribute;
+                    }
+                }
+
+                if (equatableAttribute is null &&
+                    comparableAttribute is null)
+                {
+                    return;
+                }
+
+                var nullableContext = semanticModel.GetNullableContext(tds.Span.End);
+
+                var candidate = new CandidateTypeInfo(
+                    tds, symbol, equatableAttribute, comparableAttribute, nullableContext);
+
+                this.CandidateSymbols.Add(candidate);
             }
         }
     }

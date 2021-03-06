@@ -26,7 +26,7 @@ namespace Aetos.ComparisonGenerator
             new DiagnosticDescriptor(
                 nameof(TypeIsStatic),
                 "TypeIsStatic",
-                "TypeIsStatic",
+                "{0} is static class.",
                 "Hoge",
                 DiagnosticSeverity.Warning,
                 true);

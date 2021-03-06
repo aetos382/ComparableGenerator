@@ -18,7 +18,7 @@ namespace Aetos.ComparisonGenerator
 
         public GenerateOptions Options { get; }
 
-        public CommonTypes CommonTypes { get; }
+        public KnownTypes CommonTypes { get; }
 
         public SourceTypeInfo SourceType { get; }
 
@@ -84,7 +84,7 @@ namespace Aetos.ComparisonGenerator
             IReadOnlyList<INamedTypeSymbol> types,
             IReadOnlyList<SourceMemberInfo> members,
             GenerateOptions options,
-            CommonTypes commonTypes,
+            KnownTypes commonTypes,
             SourceTypeInfo sourceTypeInfo,
             NullableContext nullableContext)
         {

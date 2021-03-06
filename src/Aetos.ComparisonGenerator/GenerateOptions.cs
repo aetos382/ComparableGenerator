@@ -32,19 +32,19 @@ namespace Aetos.ComparisonGenerator
         public GenerateOptions(
             GeneratorExecutionContext context,
             TypeDeclarationSyntax syntax,
-            AttributeData comparableAttribute)
+            AttributeData attribute)
         {
             if (syntax is null)
             {
                 throw new ArgumentNullException(nameof(syntax));
             }
 
-            if (comparableAttribute is null)
+            if (attribute is null)
             {
-                throw new ArgumentNullException(nameof(comparableAttribute));
+                throw new ArgumentNullException(nameof(attribute));
             }
 
-            var attributeDictionary = comparableAttribute.NamedArguments
+            var attributeDictionary = attribute.NamedArguments
                 .ToDictionary(
                     x => x.Key,
                     x => x.Value,
@@ -96,18 +96,28 @@ namespace Aetos.ComparisonGenerator
                 return boolValue1;
             }
 
-            var options = context.AnalyzerConfigOptions;
+            var options = context.AnalyzerConfigOptions.GetOptions(syntax.SyntaxTree);
+            bool value;
 
+            // from ItemMetadata
             string buildMetadataName = $"build_metadata.Compile.{optionName}";
-            if (options.GetOptions(syntax.SyntaxTree).TryGetBooleanOption(buildMetadataName, out var boolValue2))
+            if (options.TryGetBooleanOption(buildMetadataName, out value))
             {
-                return boolValue2;
+                return value;
             }
 
-            string buildPropertyName = $"build_property.{optionName}";
-            if (options.GlobalOptions.TryGetBooleanOption(buildPropertyName, out var boolValue3))
+            // from .editorconfig
+            if (options.TryGetBooleanOption(optionName, out value))
             {
-                return boolValue3;
+                return value;
+            }
+
+            // from PropertyGroup or CommandLine
+            // build property に指定されたものも SyntaxTree ごとの options を通じて取得可能
+            string buildPropertyName = $"build_property.{optionName}";
+            if (options.TryGetBooleanOption(buildPropertyName, out value))
+            {
+                return value;
             }
 
             return null;

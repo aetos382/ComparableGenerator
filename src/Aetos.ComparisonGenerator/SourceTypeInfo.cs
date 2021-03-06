@@ -9,6 +9,8 @@ namespace Aetos.ComparisonGenerator
     {
         public INamedTypeSymbol Symbol { get; }
 
+        public string FullName { get; }
+
         public bool IsValueType
         {
             get
@@ -36,13 +38,12 @@ namespace Aetos.ComparisonGenerator
         public bool HasEqualityContract { get; }
 
         public SourceTypeInfo(
-            INamedTypeSymbol symbol,
-            CommonTypes commonTypes,
-            NullableContext nullableContext)
+            CandidateTypeInfo candidateSymbol,
+            KnownTypes commonTypes)
         {
-            if (symbol is null)
+            if (candidateSymbol is null)
             {
-                throw new ArgumentNullException(nameof(symbol));
+                throw new ArgumentNullException(nameof(candidateSymbol));
             }
 
             if (commonTypes is null)
@@ -50,7 +51,10 @@ namespace Aetos.ComparisonGenerator
                 throw new ArgumentNullException(nameof(commonTypes));
             }
 
+            var symbol = candidateSymbol.TypeSymbol;
             this.Symbol = symbol;
+
+            this.FullName = candidateSymbol.FullName;
 
             var comparer = SymbolEqualityComparer.Default;
 
@@ -75,7 +79,7 @@ namespace Aetos.ComparisonGenerator
             {
                 nullableType = commonTypes.MakeNullable(symbol);
             }
-            else if (nullableContext.AnnotationsEnabled())
+            else if (candidateSymbol.NullableContext.AnnotationsEnabled())
             {
                 nullableType = symbol.WithNullableAnnotation(NullableAnnotation.Annotated);
             }

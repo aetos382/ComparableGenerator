@@ -1,13 +1,9 @@
-﻿using System;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Aetos.ComparisonGenerator.UnitTests
 {
-    public class LightweightGeneratorBaseTest
+    public class SimpleGeneratorBaseTest
     {
-        private static readonly string newLine = Environment.NewLine;
-
         [Test]
         public void 初期状態では空()
         {
@@ -23,11 +19,11 @@ namespace Aetos.ComparisonGenerator.UnitTests
         {
             var generator = new SimpleGeneratorBase();
 
-            generator.Write($"aaa{newLine}bbb{newLine}");
+            generator.Write("aaa\r\nbbb\r\n");
 
             string result = generator.TransformText();
 
-            Assert.That(result, Is.EqualTo($"aaa{newLine}bbb{newLine}"));
+            Assert.That(result, Is.EqualTo("aaa\r\nbbb\r\n"));
         }
 
         [Test]
@@ -36,11 +32,11 @@ namespace Aetos.ComparisonGenerator.UnitTests
             var generator = new SimpleGeneratorBase();
             generator.PushIndent("    ");
 
-            generator.Write($"aaa{newLine}bbb{newLine}");
+            generator.Write("aaa\r\nbbb\r\n");
 
             string result = generator.TransformText();
 
-            Assert.That(result, Is.EqualTo($"    aaa{newLine}    bbb{newLine}"));
+            Assert.That(result, Is.EqualTo("    aaa\r\n    bbb\r\n"));
         }
 
         [Test]
@@ -49,12 +45,12 @@ namespace Aetos.ComparisonGenerator.UnitTests
             var generator = new SimpleGeneratorBase();
             generator.PushIndent("    ");
 
-            generator.Write($"aaa{newLine}");
-            generator.Write($"bbb{newLine}");
+            generator.Write("aaa\r\n");
+            generator.Write("bbb\r\n");
 
             string result = generator.TransformText();
 
-            Assert.That(result, Is.EqualTo($"    aaa{newLine}    bbb{newLine}"));
+            Assert.That(result, Is.EqualTo("    aaa\r\n    bbb\r\n"));
         }
     }
 }

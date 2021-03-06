@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.Loader;
 using System.Text;
 
@@ -85,10 +86,29 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
                 references,
                 compilationOptions);
 
-            driver.RunGeneratorsAndUpdateCompilation(
+            var driver2 = driver.RunGeneratorsAndUpdateCompilation(
                 compilation,
                 out var outputCompilation,
                 out _);
+
+            var runResult = driver2.GetRunResult();
+
+            var exceptions = runResult.Results
+                .Select(x => x.Exception)
+                .Where(x => x is not null)
+                .Select(x => x!)
+                .ToArray();
+
+            var exception = exceptions.Length switch {
+                0 => null,
+                1 => exceptions[0],
+                > 1 => new AggregateException(exceptions)
+            };
+
+            if (exception is not null)
+            {
+                ExceptionDispatchInfo.Capture(exception).Throw();
+            }
 
             var embeddedTexts = outputCompilation.SyntaxTrees
                 .Select(x => EmbeddedText.FromSource(x.FilePath, x.GetText())).ToArray();

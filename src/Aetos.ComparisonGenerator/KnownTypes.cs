@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis;
 
 namespace Aetos.ComparisonGenerator
 {
-    internal class CommonTypes
+    internal class KnownTypes
     {
-        public CommonTypes(
+        public KnownTypes(
             Compilation compilation)
         {
             if (compilation is null)
@@ -14,6 +14,7 @@ namespace Aetos.ComparisonGenerator
                 throw new ArgumentNullException(nameof(compilation));
             }
 
+            this.EquatableAttribute = GetType(compilation, Attributes.EquatableAttributeName);
             this.ComparableAttribute = GetType(compilation, Attributes.ComparableAttributeName);
             this.CompareByAttribute = GetType(compilation, Attributes.CompareByAttributeName);
 
@@ -24,7 +25,9 @@ namespace Aetos.ComparisonGenerator
             this.GenericComparable = GetType(compilation, typeof(IComparable<>));
             this.NonGenericComparable = GetType(compilation, typeof(IComparable));
         }
-        
+
+        public INamedTypeSymbol EquatableAttribute { get; }
+
         public INamedTypeSymbol ComparableAttribute { get; }
 
         public INamedTypeSymbol CompareByAttribute { get; }
@@ -151,7 +154,7 @@ namespace Aetos.ComparisonGenerator
             return data;
         }
 
-        public int? GetComparisonOrder(
+        public AttributeData? GetComparisonOrder(
             ISymbol symbol)
         {
             if (symbol is null)
@@ -166,12 +169,7 @@ namespace Aetos.ComparisonGenerator
             }
 
             var compareByAttribute = symbol.GetAttribute(this.CompareByAttribute);
-            if (compareByAttribute is null)
-            {
-                return null;
-            }
-
-            return (int) compareByAttribute.ConstructorArguments[0].Value!;
+            return compareByAttribute;
         }
 
         private static INamedTypeSymbol GetType(

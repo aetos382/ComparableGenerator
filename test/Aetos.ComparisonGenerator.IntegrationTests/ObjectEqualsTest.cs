@@ -20,10 +20,10 @@ using Aetos.ComparisonGenerator;
 [Comparable]
 public partial class Person
 {
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 }";
 
@@ -58,10 +58,10 @@ using Aetos.ComparisonGenerator;
 [Comparable]
 public partial class Person
 {
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 }";
 
@@ -108,10 +108,10 @@ public partial class Person :
         this._hooks = hooks;
     }
 
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 
     bool IEquatable<Person>.Equals(
@@ -177,10 +177,10 @@ public partial class Person :
         this._hooks = hooks;
     }
 
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 
     int IComparable<Person>.CompareTo(
@@ -247,10 +247,10 @@ public partial class Person :
         this._hooks = hooks;
     }
 
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 
     int IComparable.CompareTo(

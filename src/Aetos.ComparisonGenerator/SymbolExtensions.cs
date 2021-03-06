@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -117,59 +118,38 @@ namespace Aetos.ComparisonGenerator
             return null;
         }
 
-        public static string GetFullName(
-            this ITypeSymbol type)
-        {
-            return GetFullName(type, out _, out _);
-        }
+        private static readonly ConditionalWeakTable<INamespaceOrTypeSymbol, string> _names = new();
+
+        private static readonly ConditionalWeakTable<INamespaceOrTypeSymbol, string> _namesWithGlobalPrefix = new();
+
+        private static readonly SymbolDisplayFormat _withoutGlobalNamespace =
+            SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(
+                SymbolDisplayGlobalNamespaceStyle.Omitted);
 
         public static string GetFullName(
-            this ITypeSymbol type,
-            out string namespaceName,
-            out string typeName)
+            this INamespaceOrTypeSymbol type,
+            bool includeGlobalNamespacePrefix = false)
         {
             if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            var typeNames = new List<string>();
-
-            ITypeSymbol? currentType = type;
-            var lastValidType = type;
-
-            while (currentType is not null)
+            if (includeGlobalNamespacePrefix)
             {
-                typeNames.Add(currentType.Name);
-
-                lastValidType = currentType;
-                currentType = currentType.ContainingType;
-            }
-
-            var namespaceNames = new List<string>();
-
-            var currentNamespace = lastValidType.ContainingNamespace;
-
-            while (currentNamespace is not null && !currentNamespace.IsGlobalNamespace)
-            {
-                namespaceNames.Add(currentNamespace.Name);
-                currentNamespace = currentNamespace.ContainingNamespace;
-            }
-
-            typeNames.Reverse();
-            namespaceNames.Reverse();
-
-            typeName = string.Join(".", typeNames);
-
-            if (namespaceNames.Any())
-            {
-                namespaceName = string.Join(".", namespaceNames);
-                return $"{namespaceName}.{typeName}";
+                return GetName(_namesWithGlobalPrefix, type, SymbolDisplayFormat.FullyQualifiedFormat);
             }
             else
             {
-                namespaceName = string.Empty;
-                return typeName;
+                return GetName(_names, type, _withoutGlobalNamespace);
+            }
+
+            static string GetName(
+                ConditionalWeakTable<INamespaceOrTypeSymbol, string> table,
+                INamespaceOrTypeSymbol symbol,
+                SymbolDisplayFormat format)
+            {
+                return table.GetValue(symbol, x => x.ToDisplayString(format));
             }
         }
     }

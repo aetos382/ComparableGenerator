@@ -11,9 +11,9 @@ public partial class Person
         this.LastName = default;
     }
 
-    [CompareBy(0)]
+    [CompareBy(Order = 0)]
     public string FirstName { get; set; }
 
-    [CompareBy(1)]
+    [CompareBy(Order = 1)]
     public string LastName { get; set; }
 }
