@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,7 +11,7 @@
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>C# source generator for generating IComparable&lt;T&gt; and IEquatable&lt;T&gt; implementations, comparison operator implementations, etc.</Description>
+    <Description>C# source generator for implement IComparable&lt;T&gt;, IEquatable&lt;T&gt; and comparison operators.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>0.1.0-alpha4</Version>
     <Authors>aetos</Authors>
