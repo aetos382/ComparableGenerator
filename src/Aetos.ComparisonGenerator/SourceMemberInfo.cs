@@ -20,6 +20,24 @@ namespace Aetos.ComparisonGenerator
         public bool PreferStructuralComparison { get; }
 
         public SourceMemberInfo(
+            IFieldSymbol member,
+            AttributeData compareByAttribute)
+            : this(
+                (ISymbol)member,
+                compareByAttribute)
+        {
+        }
+        
+        public SourceMemberInfo(
+            IPropertySymbol member,
+            AttributeData compareByAttribute)
+            : this(
+                (ISymbol)member,
+                compareByAttribute)
+        {
+        }
+
+        private SourceMemberInfo(
             ISymbol memberSymbol,
             AttributeData compareByAttribute)
         {

@@ -351,7 +351,16 @@ namespace Aetos.ComparisonGenerator
                     continue;
                 }
 
-                var memberInfo = new SourceMemberInfo(member, compareByAttribute);
+                var memberInfo = member switch {
+                    IFieldSymbol fs => new SourceMemberInfo(fs, compareByAttribute),
+                    IPropertySymbol ps => new SourceMemberInfo(ps, compareByAttribute),
+                    _ => null
+                };
+
+                if (memberInfo is null)
+                {
+                    continue;
+                }
 
                 if (options.GenerateGenericComparable ||
                     options.GenerateNonGenericComparable ||
