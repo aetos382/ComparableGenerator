@@ -79,8 +79,6 @@ namespace Aetos.ComparisonGenerator
 
         protected readonly Helper ToStringHelper;
 
-        private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
-
         public struct Helper
         {
             [SuppressMessage("Performance", "CA1822:メンバーを static に設定します", Justification = "By design.")]
@@ -95,6 +93,8 @@ namespace Aetos.ComparisonGenerator
                     var other => other.ToString()
                 };
             }
+
+            private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
         }
     }
 }
