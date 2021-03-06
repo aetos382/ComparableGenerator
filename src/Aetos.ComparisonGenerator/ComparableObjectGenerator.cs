@@ -345,7 +345,7 @@ namespace Aetos.ComparisonGenerator
 
             foreach (var member in symbol.GetMembers())
             {
-                var compareByAttribute = commonTypes.GetComparisonOrder(member);
+                var compareByAttribute = commonTypes.GetCompareByAttribute(member);
                 if (compareByAttribute is null)
                 {
                     continue;

@@ -154,7 +154,7 @@ namespace Aetos.ComparisonGenerator
             return data;
         }
 
-        public AttributeData? GetComparisonOrder(
+        public AttributeData? GetCompareByAttribute(
             ISymbol symbol)
         {
             if (symbol is null)
