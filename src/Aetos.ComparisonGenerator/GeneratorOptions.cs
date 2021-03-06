@@ -25,7 +25,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateObjectEquals = generateObjectEquals;
             this.GenerateEqualityContract = generateEqualityContract;
             this.GenerateEqualityOperators = generateEqualityOperators;
-            this.GenerateComparisonOperatos = generateComparisonOperators;
+            this.GenerateComparisonOperators = generateComparisonOperators;
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
         }
 
@@ -74,8 +74,6 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateObjectEquals { get; }
 
         public bool GenerateEqualityOperators { get; }
-
-        public bool GenerateComparisonOperatos { get; }
 
         public bool GenerateComparisonOperators { get; }
 
