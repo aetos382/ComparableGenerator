@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -139,7 +139,7 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
                 {
                     Assert.Fail();
                 }
-                
+
                 return null;
             }
 

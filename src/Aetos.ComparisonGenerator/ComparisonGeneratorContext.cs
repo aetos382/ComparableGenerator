@@ -62,7 +62,7 @@ namespace Aetos.ComparisonGenerator
                 }
             }
         }
-        
+
         public string NullableObjectTypeName
         {
             get
@@ -124,7 +124,7 @@ namespace Aetos.ComparisonGenerator
             this.Members = members;
             this.Options = options;
             this.CommonTypes = commonTypes;
-            this.SourceType= sourceTypeInfo;
+            this.SourceType = sourceTypeInfo;
             this.NullableContext = nullableContext;
         }
     }

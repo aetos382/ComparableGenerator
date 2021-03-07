@@ -60,7 +60,7 @@ namespace Aetos.ComparisonGenerator
             }
 
             var knownTypes = new KnownTypes(context.Compilation);
-            
+
             foreach (var candidateSymbol in receiver.CandidateSymbols)
             {
                 GenerateCode(
