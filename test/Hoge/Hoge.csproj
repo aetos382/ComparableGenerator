@@ -1,13 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
-  <Import Project="..\..\src\Aetos.ComparisonGenerator\build\Aetos.ComparisonGenerator.props"/>
+  <Import Project="..\..\src\Aetos.ComparisonGenerator\build\Aetos.ComparisonGenerator.props" />
 
   <ItemGroup>
     <CompilerVisibleProperty Include="DebugGenerator" />
@@ -25,12 +27,12 @@
   </PropertyGroup>
 
   <Target Name="_RemoveCompilerGeneratedFiles"
-    AfterTargets="CreateCompilerGeneratedFilesOutputPath"
-    Condition="'$(RemoveCompilerGeneratedFiles)' == 'true' and '$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and '$(DesignTimeBuild)' != 'true' and '$(BuildingProject)' == 'true'">
+          AfterTargets="CreateCompilerGeneratedFilesOutputPath"
+          Condition="'$(RemoveCompilerGeneratedFiles)' == 'true' and '$(EmitCompilerGeneratedFiles)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' != '' and '$(DesignTimeBuild)' != 'true' and '$(BuildingProject)' == 'true'">
     <ItemGroup>
-      <_CompilerGeneratedFiles Include="$(CompilerGeneratedFilesOutputPath)/**/*"/>
+      <_CompilerGeneratedFiles Include="$(CompilerGeneratedFilesOutputPath)/**/*" />
     </ItemGroup>
-    <Delete Files="@(_CompilerGeneratedFiles)"/>
+    <Delete Files="@(_CompilerGeneratedFiles)" />
   </Target>
 
 </Project>

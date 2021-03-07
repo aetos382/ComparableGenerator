@@ -44,7 +44,7 @@ namespace Aetos.ComparisonGenerator
         {
             get
             {
-                return this.Types.Last();
+                return this.Types[this.Types.Count - 1];
             }
         }
 

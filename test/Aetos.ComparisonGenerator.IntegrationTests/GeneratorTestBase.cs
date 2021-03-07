@@ -177,11 +177,6 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
                 throw new ArgumentNullException(nameof(methodName));
             }
 
-            if (parameterTypes is null)
-            {
-                throw new ArgumentNullException(nameof(parameterTypes));
-            }
-
             var method = type.GetMethod(
                 methodName,
                 BindingFlags.Public |

@@ -78,7 +78,7 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateComparisonOperators { get; }
 
         public bool GenerateEqualityContract { get; }
-        
+
         public bool GenerateMethodsAsVirtual { get; }
 
         private static bool? GetOption(

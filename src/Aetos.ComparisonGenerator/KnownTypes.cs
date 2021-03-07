@@ -95,7 +95,7 @@ namespace Aetos.ComparisonGenerator
 
             return result;
         }
-                
+
         public bool IsNonGenericComparable(
             ITypeSymbol type)
         {
@@ -119,7 +119,7 @@ namespace Aetos.ComparisonGenerator
             bool result = type.HasInterface(this.StructuralEquatable);
             return result;
         }
-        
+
         public bool IsStructuralComparable(
             ITypeSymbol type)
         {
@@ -160,7 +160,7 @@ namespace Aetos.ComparisonGenerator
 
             return this.Equatable.Construct(typeArgument);
         }
-        
+
         public INamedTypeSymbol MakeConstructedComparable(
             ITypeSymbol typeArgument)
         {
@@ -192,8 +192,7 @@ namespace Aetos.ComparisonGenerator
                 throw new ArgumentNullException(nameof(symbol));
             }
 
-            if (symbol is not IPropertySymbol &&
-                symbol is not IFieldSymbol)
+            if (symbol is not (IPropertySymbol or IFieldSymbol))
             {
                 return null;
             }
