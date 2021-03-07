@@ -27,7 +27,7 @@ namespace Aetos.ComparisonGenerator
                 compareByAttribute)
         {
         }
-        
+
         public SourceMemberInfo(
             IPropertySymbol member,
             AttributeData compareByAttribute)
@@ -75,7 +75,7 @@ namespace Aetos.ComparisonGenerator
 
             if (arguments.TryGetValue("PreferStructuralComparison", out var preferStructuralComparison))
             {
-                this.PreferStructuralComparison = (bool) preferStructuralComparison.Value!;
+                this.PreferStructuralComparison = (bool)preferStructuralComparison.Value!;
             }
         }
     }
