@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --configuration ${CONFIGURATION} --no-restore -p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration ${CONFIGURATION} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings
+      run: dotnet test --configuration ${CONFIGURATION} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger junit
 
     - name: Upload coverage report
       uses: codecov/codecov-action@v1
@@ -41,5 +41,13 @@ jobs:
         flags: unittests
         fail_ci_if_error: true
 
-    - name: Push
+    - name: Publish test report
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: '**/TestResults.xml'
+        report_individual_runs: true
+        check_run_annotations: all tests, skipped tests
+
+    - name: Push Package
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}

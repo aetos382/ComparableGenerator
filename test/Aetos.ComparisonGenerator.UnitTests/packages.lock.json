@@ -8,6 +8,12 @@
         "resolved": "3.0.3",
         "contentHash": "PdyhdzG2LK7YUEtccObPql+3OuFODaFNeYayxdPoK1eHb2StZoeQf1WMb16QrKiIdi4fs5Kog8jxXtlZOgAEuA=="
       },
+      "JunitXml.TestLogger": {
+        "type": "Direct",
+        "requested": "[2.1.81, )",
+        "resolved": "2.1.81",
+        "contentHash": "x5q2WEPRyvwEHnXrHsVwlL40eKI07M1cs5TByz8M5JLewycJjzP/pRKO90q/Jl+4K+8bfrJ+hFZHeMeOzBO6Nw=="
+      },
       "Microsoft.CodeAnalysis.CSharp": {
         "type": "Direct",
         "requested": "[3.9.0, )",
