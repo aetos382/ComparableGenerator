@@ -54,17 +54,6 @@ namespace Aetos.ComparisonGenerator
         {
             LaunchDebugger(context);
 
-            if (context.Compilation.Language != LanguageNames.CSharp)
-            {
-                context.ReportDiagnostic(
-                    Diagnostic.Create(
-                        DiagnosticDescriptors.LanguageNotSupported,
-                        null,
-                        context.Compilation.Language));
-
-                return;
-            }
-
             if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
             {
                 return;
