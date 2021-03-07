@@ -40,7 +40,6 @@ jobs:
         files: '**/coverage.opencover.xml'
         flags: unittests
         fail_ci_if_error: true
-        verbose: true
 
     - name: Push
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
