@@ -369,7 +369,8 @@ namespace Aetos.ComparisonGenerator
                     var memberType = memberInfo.Type;
 
                     if (!commonTypes.IsGenericComparable(memberType) &&
-                        !commonTypes.IsNonGenericComparable(memberType))
+                        !commonTypes.IsNonGenericComparable(memberType) &&
+                        !commonTypes.IsStructuralComparable(memberType))
                     {
                         diagnosticsBuilder.Add(
                             Diagnostic.Create(
