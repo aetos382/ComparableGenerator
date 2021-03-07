@@ -99,11 +99,15 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
                 .Select(x => x!)
                 .ToArray();
 
+#pragma warning disable CS8509
+
             var exception = exceptions.Length switch {
                 0 => null,
                 1 => exceptions[0],
                 > 1 => new AggregateException(exceptions)
             };
+
+#pragma warning restore CS8509
 
             if (exception is not null)
             {

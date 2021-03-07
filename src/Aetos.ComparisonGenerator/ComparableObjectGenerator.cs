@@ -442,7 +442,7 @@ namespace Aetos.ComparisonGenerator
 
                 foreach (var attribute in attributes)
                 {
-                    string attributeClassName = attribute.AttributeClass.GetFullName(true);
+                    var attributeClassName = attribute.AttributeClass?.GetFullName(true);
 
                     if (attributeClassName == Attributes.EquatableAttributeNameWithGlobalPrefix)
                     {

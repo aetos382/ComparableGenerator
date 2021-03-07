@@ -23,6 +23,7 @@
     <DevelopmentDependency>true</DevelopmentDependency>
     <NoWarn>$(NoWarn);NU5128</NoWarn>
     <PackageTags>SourceGenerator</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <DefaultItemExcludes>$(DefaultItemExcludes);*.log;*.binlog</DefaultItemExcludes>
   </PropertyGroup>
 
