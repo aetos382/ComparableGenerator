@@ -16,7 +16,8 @@ jobs:
       MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -31,6 +32,15 @@ jobs:
 
     - name: Test
       run: dotnet test --configuration ${CONFIGURATION} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings
+
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: '**/coverage.opencover.xml'
+        flags: unittests
+        fail_ci_if_error: true
+        verbose: true
 
     - name: Push
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
