@@ -27,10 +27,10 @@ jobs:
       run: dotnet restore --locked-mode
 
     - name: Build
-      run: dotnet build --configuration ${CONFIGURATION} --no-restore -p:ContinuousIntegrationBuild=true
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore -p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration ${CONFIGURATION} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger junit
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger trx --logger junit
 
     - name: Upload coverage report
       uses: codecov/codecov-action@v1
@@ -47,12 +47,6 @@ jobs:
         files: '**/TestResults.xml'
         report_individual_runs: true
         check_run_annotations: all tests, skipped tests
-
-    - name: SonarCloud
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Push Package
       env:
