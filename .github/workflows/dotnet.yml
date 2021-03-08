@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONFIGURATION: Release
-      MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
 
     steps:
     - name: Checkout
@@ -56,4 +55,6 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Push Package
+      env:
+        MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
