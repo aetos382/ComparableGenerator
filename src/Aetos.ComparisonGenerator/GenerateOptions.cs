@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Aetos.ComparisonGenerator
 {
-    internal class GeneratorOptions
+    internal class GenerateOptions
     {
-        internal GeneratorOptions(
+        internal GenerateOptions(
             bool generateEquatable = true,
             bool generateGenericComparable = true,
             bool generateNonGenericComparable = true,
@@ -17,7 +17,8 @@ namespace Aetos.ComparisonGenerator
             bool generateEqualityContract = true,
             bool generateEqualityOperators = false,
             bool generateComparisonOperators = false,
-            bool generateMethodsAsVirtual = true)
+            bool generateMethodsAsVirtual = true,
+            bool preferStructuralComparison = false)
         {
             this.GenerateEquatable = generateEquatable;
             this.GenerateGenericComparable = generateGenericComparable;
@@ -27,9 +28,10 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEqualityOperators = generateEqualityOperators;
             this.GenerateComparisonOperators = generateComparisonOperators;
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
+            this.PreferStructuralComparison = preferStructuralComparison;
         }
 
-        public GeneratorOptions(
+        public GenerateOptions(
             GeneratorExecutionContext context,
             TypeDeclarationSyntax syntax,
             AttributeData attribute)
@@ -58,6 +60,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEqualityOperators = LocalGetOption(nameof(this.GenerateEqualityOperators)) ?? false;
             this.GenerateComparisonOperators = LocalGetOption(nameof(this.GenerateComparisonOperators)) ?? false;
             this.GenerateMethodsAsVirtual = LocalGetOption(nameof(this.GenerateMethodsAsVirtual)) ?? true;
+            this.PreferStructuralComparison = LocalGetOption(nameof(this.PreferStructuralComparison)) ?? false;
 
             bool? LocalGetOption(string optionName)
             {
@@ -80,6 +83,8 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateEqualityContract { get; }
 
         public bool GenerateMethodsAsVirtual { get; }
+
+        public bool PreferStructuralComparison { get; }
 
         private static bool? GetOption(
             GeneratorExecutionContext context,

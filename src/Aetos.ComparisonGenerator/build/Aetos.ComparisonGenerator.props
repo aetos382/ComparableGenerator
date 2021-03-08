@@ -8,6 +8,7 @@
     <CompilerVisibleProperty Include="GenerateComparisonOperators" />
     <CompilerVisibleProperty Include="GenerateEqualityContract" />
     <CompilerVisibleProperty Include="GenerateMethodsAsVirtual" />
+    <CompilerVisibleProperty Include="PreferStructuralComparison" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,5 +20,6 @@
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateComparisonOperators" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityContract" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateMethodsAsVirtual" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="PreferStructuralComparison" />
   </ItemGroup>
 </Project>

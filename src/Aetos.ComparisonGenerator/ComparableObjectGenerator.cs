@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -19,10 +19,10 @@ namespace Aetos.ComparisonGenerator
         {
         }
 
-        private readonly GeneratorOptions? _options;
+        private readonly GenerateOptions? _options;
 
         internal ComparableObjectGenerator(
-            GeneratorOptions options)
+            GenerateOptions options)
         {
             if (options is null)
             {
@@ -93,7 +93,7 @@ namespace Aetos.ComparisonGenerator
             GeneratorExecutionContext context,
             CandidateTypeInfo candidateType,
             KnownTypes knownTypes,
-            GeneratorOptions? options)
+            GenerateOptions? options)
         {
             ValidateAttribute(
                 candidateType,
@@ -110,7 +110,7 @@ namespace Aetos.ComparisonGenerator
                 return;
             }
 
-            options ??= new GeneratorOptions(
+            options ??= new GenerateOptions(
                 context,
                 candidateType.SyntaxNode,
                 attribute);
@@ -325,7 +325,7 @@ namespace Aetos.ComparisonGenerator
         private static bool ValidateMembers(
             INamedTypeSymbol symbol,
             KnownTypes commonTypes,
-            GeneratorOptions options,
+            GenerateOptions options,
             out ImmutableArray<SourceMemberInfo> members,
             out ImmutableArray<Diagnostic> diagnostics)
         {

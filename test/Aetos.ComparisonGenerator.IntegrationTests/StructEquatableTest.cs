@@ -27,7 +27,7 @@ public partial struct Person
     public string LastName { get; set; }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: true);
 
             var generator = new ComparableObjectGenerator(options);
@@ -65,7 +65,7 @@ public partial struct Person
     public string LastName { get; set; }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: false);
 
             var generator = new ComparableObjectGenerator(options);
@@ -103,7 +103,7 @@ public partial struct Person
     public string LastName { get; set; }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: true,
                 generateMethodsAsVirtual: true);
 
@@ -143,7 +143,7 @@ public partial struct Person
     public string LastName { get; set; }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: true,
                 generateMethodsAsVirtual: false);
 
@@ -204,7 +204,7 @@ public partial struct Person
     }
 }";
 
-            var options = new GeneratorOptions();
+            var options = new GenerateOptions();
 
             var generator = new ComparableObjectGenerator(options);
 
@@ -275,7 +275,7 @@ public partial struct Person :
     }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: true);
 
             var generator = new ComparableObjectGenerator(options);
@@ -348,7 +348,7 @@ public partial struct Person :
     }
 }";
 
-            var options = new GeneratorOptions(
+            var options = new GenerateOptions(
                 generateEquatable: true,
                 generateGenericComparable: false);
 
