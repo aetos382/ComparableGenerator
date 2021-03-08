@@ -30,7 +30,7 @@ jobs:
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore -p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger trx --logger junit
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger junit
 
     - name: Upload coverage report
       uses: codecov/codecov-action@v1
