@@ -49,5 +49,11 @@ jobs:
         report_individual_runs: true
         check_run_annotations: all tests, skipped tests
 
+    - name: SonarCloud
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
     - name: Push Package
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${CONFIGURATION}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${MYGET_API_KEY}
