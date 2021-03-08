@@ -17,7 +17,7 @@ namespace Aetos.ComparisonGenerator
 
         public int ComparisonOrder { get; }
 
-        public bool PreferStructuralComparison { get; }
+        public bool? PreferStructuralComparison { get; }
 
         public SourceMemberInfo(
             IFieldSymbol member,
