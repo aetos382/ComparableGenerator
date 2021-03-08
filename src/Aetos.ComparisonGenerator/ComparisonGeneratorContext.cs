@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace Aetos.ComparisonGenerator
 
         public GenerateOptions Options { get; }
 
-        public KnownTypes CommonTypes { get; }
+        public KnownTypes KnownTypes { get; }
 
         public SourceTypeInfo SourceType { get; }
 
@@ -84,7 +84,7 @@ namespace Aetos.ComparisonGenerator
             IReadOnlyList<INamedTypeSymbol> types,
             IReadOnlyList<SourceMemberInfo> members,
             GenerateOptions options,
-            KnownTypes commonTypes,
+            KnownTypes knownTypes,
             SourceTypeInfo sourceTypeInfo,
             NullableContext nullableContext)
         {
@@ -108,9 +108,9 @@ namespace Aetos.ComparisonGenerator
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (commonTypes is null)
+            if (knownTypes is null)
             {
-                throw new ArgumentNullException(nameof(commonTypes));
+                throw new ArgumentNullException(nameof(knownTypes));
             }
 
             if (sourceTypeInfo is null)
@@ -123,7 +123,7 @@ namespace Aetos.ComparisonGenerator
             this.Types = types;
             this.Members = members;
             this.Options = options;
-            this.CommonTypes = commonTypes;
+            this.KnownTypes = knownTypes;
             this.SourceType = sourceTypeInfo;
             this.NullableContext = nullableContext;
         }

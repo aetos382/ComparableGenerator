@@ -326,7 +326,7 @@ namespace Aetos.ComparisonGenerator
         // TODO: 対象のメンバーが複数あって Order が設定されていない場合は Diagnostic を出す
         private static bool ValidateMembers(
             INamedTypeSymbol symbol,
-            KnownTypes commonTypes,
+            KnownTypes knownTypes,
             GenerateOptions options,
             out ImmutableArray<SourceMemberInfo> members,
             out ImmutableArray<Diagnostic> diagnostics)
@@ -336,7 +336,7 @@ namespace Aetos.ComparisonGenerator
 
             foreach (var member in symbol.GetMembers())
             {
-                var compareByAttribute = commonTypes.GetCompareByAttribute(member);
+                var compareByAttribute = knownTypes.GetCompareByAttribute(member);
                 if (compareByAttribute is null)
                 {
                     continue;
@@ -359,9 +359,9 @@ namespace Aetos.ComparisonGenerator
                 {
                     var memberType = memberInfo.Type;
 
-                    if (!commonTypes.IsGenericComparable(memberType) &&
-                        !commonTypes.IsNonGenericComparable(memberType) &&
-                        !commonTypes.IsStructuralComparable(memberType))
+                    if (!knownTypes.IsGenericComparable(memberType) &&
+                        !knownTypes.IsNonGenericComparable(memberType) &&
+                        !knownTypes.IsStructuralComparable(memberType))
                     {
                         diagnosticsBuilder.Add(
                             Diagnostic.Create(
