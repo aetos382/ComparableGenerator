@@ -66,9 +66,9 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>NonGenericComparableGenerator.cs</LastGenOutput>
     </None>
-    <None Update="EquatableOperatorsGenerator.tt">
+    <None Update="EqualityOperatorsGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EquatableOperatorsGenerator.cs</LastGenOutput>
+      <LastGenOutput>EqualityOperatorsGenerator.cs</LastGenOutput>
     </None>
     <None Update="ComparisonOperatorsGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -107,8 +107,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="EquatableOperatorsGenerator.cs">
-      <DependentUpon>EquatableOperatorsGenerator.tt</DependentUpon>
+    <Compile Update="EqualityOperatorsGenerator.cs">
+      <DependentUpon>EqualityOperatorsGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>

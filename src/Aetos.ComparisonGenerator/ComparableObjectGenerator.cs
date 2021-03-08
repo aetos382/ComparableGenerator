@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -115,7 +115,9 @@ namespace Aetos.ComparisonGenerator
                 candidateType.SyntaxNode,
                 attribute);
 
-            var sourceTypeInfo = new SourceTypeInfo(candidateType, knownTypes);
+            var sourceTypeInfo = new SourceTypeInfo(
+                candidateType.TypeSymbol,
+                knownTypes);
 
             var symbol = candidateType.TypeSymbol;
 
@@ -197,16 +199,16 @@ namespace Aetos.ComparisonGenerator
             }
 
             if (options.GenerateEqualityOperators &&
-                !sourceTypeInfo.DefinedNullableEqualityOperators)
+                !sourceTypeInfo.DefinedEqualityOperators)
             {
                 GenerateCode(
                     context,
-                    new EquatableOperatorsGenerator(c),
+                    new EqualityOperatorsGenerator(c),
                     $"{fullName}_EqualityOperators.cs");
             }
 
             if (options.GenerateComparisonOperators &&
-                !sourceTypeInfo.DefinedNullableComparisonOperators)
+                !sourceTypeInfo.DefinedComparisonOperators)
             {
                 GenerateCode(
                     context,

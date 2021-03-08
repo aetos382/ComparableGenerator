@@ -1,8 +1,8 @@
 ﻿namespace Aetos.ComparisonGenerator
 {
-    internal partial class EquatableOperatorsGenerator
+    internal partial class EqualityOperatorsGenerator
     {
-        public EquatableOperatorsGenerator(
+        public EqualityOperatorsGenerator(
             ComparisonGeneratorContext context)
             : base(
                 context)

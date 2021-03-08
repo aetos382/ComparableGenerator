@@ -15,7 +15,7 @@ namespace Aetos.ComparisonGenerator
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    internal partial class EquatableOperatorsGenerator : GeneratorBase
+    internal partial class EqualityOperatorsGenerator : GeneratorBase
     {
         /// <summary>
         /// Create the template output
@@ -98,7 +98,8 @@ this.Write("        var leftValue = left.Value;\r\n        var rightValue = righ
 
         }
 
-        if (sourceType.DefinedNonNullableEqualityOperators)
+        // TODO: 見直し
+        if (sourceType.DefinedEqualityOperators)
         {
 
 this.Write("        return ");

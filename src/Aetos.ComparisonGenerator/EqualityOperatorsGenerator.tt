@@ -64,7 +64,8 @@ partial <#= typeKind #> <#= typeName #>
 <#+
         }
 
-        if (sourceType.DefinedNonNullableEqualityOperators)
+        // TODO: 見直し
+        if (sourceType.DefinedEqualityOperators)
         {
 #>
         return <#= leftVarName #> == <#= rightVarName #>;
