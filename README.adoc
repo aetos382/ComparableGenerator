@@ -4,6 +4,126 @@ image:https://github.com/aetos382/ComparisonGenerator/workflows/.NET/badge.svg[G
 image:https://img.shields.io/myget/aetos/vpre/Aetos.ComparisonGenerator?label=myget[MyGet (with prereleases),link=https://www.myget.org/feed/aetos/package/nuget/Aetos.ComparisonGenerator]
 image:https://codecov.io/gh/aetos382/ComparisonGenerator/branch/master/graph/badge.svg?token=9UX3B72CMG[Codecov,link=https://codecov.io/gh/aetos382/ComparisonGenerator]
 
-TBD
+== 免責事項
 
-This project inspired by https://github.com/nuitsjp/ComparableGenerator[nuitsjp/ComparableGenerator]😘
+本ツールは無保証です。また、絶賛開発中であり、破壊的な変更が日常的に行われます。ご留意ください。
+
+== 概要
+link:https://docs.microsoft.com/ja-jp/dotnet/api/system.iequatable-1.equals[IEquatable<T>]、link:https://docs.microsoft.com/ja-jp/dotnet/api/system.icomparable-1[IComparable<T>]、link:https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/operators/operator-overloading[比較演算子]などを実装するための C# 用のソース ジェネレーターです。
+
+== 使い方
+
+型に `ComparableAttribute`、比較対象にしたいメンバーに `CompareByAttribute` を付けます。
+
+[source,csharp]
+----
+using Aetos.ComparisonGenerator;
+
+[Comparable]
+public partial class Person
+{
+    [CompareBy]
+    public string Name { get; set; }
+}
+----
+
+こうすると、以下のメンバーが自動生成されます（予定）。
+
+[source,csharp]
+----
+using System;
+
+partial class Person :
+    IEquatable<Person>,
+    IComparable<Person>,
+    IComparable,
+    IStructuralEquatable,
+    IStructuralComparable
+{
+    public override bool Equals(object? other);
+    public override int GetHashCode();
+
+    public virtual Type EqualityContract { get; }
+
+    // IEqatable<T>
+    public virtual bool Equals(Person? other);
+
+    // IComparable<T>
+    public virtual int CompareTo(Person? other);
+
+    // IComparable
+    public virtual int CompareTo(object? other);
+
+    // IStructuralEquatable
+    public virtual bool Equals(object? other, IEqualityComparer comarer);
+    public virtual int GetHashCode(IEqualityComparer comparer);
+
+    // IStructuralComparable
+    public virtual int CompareTo(object? other, IComparer comparer);
+
+    // 比較演算子群
+    public static bool operator ==(Person? left, Person? right);
+    public static bool operator !=(Person? left, Person? right);
+
+    public static bool operator <(Person? left, Person? right);
+    public static bool operator >(Person? left, Person? right);
+
+    public static bool operator <=(Person? left, Person? right);
+    public static bool operator >=(Person? left, Person? right);
+}
+----
+
+詳細なリファレンスはしばらくお待ちください。
+
+== 特徴
+
+=== 高いカスタマイズ性
+
+上記の実装を個別にするかしないかを選択することができます。たとえば、`IComparable<T>` を実装したくないのであれば、以下のように書くことで、実装を抑止することができます。
+
+[source,csharp]
+----
+using Aetos.ComparisonGenerator;
+
+[Comparable(
+    GenerateGenericComparable = false)]
+public partial class Person
+{
+    [CompareBy]
+    public string Name { get; set; }
+}
+----
+
+=== 適切な実装の移譲
+
+たとえば、もともと以下のように `IEquatable<T>` が実装されている場合、生成される `object.Equals` や比較演算子は、このメソッドを呼び出すように実装されます。
+
+[source,csharp]
+----
+using System;
+
+using Aetos.ComparisonGenerator;
+
+[Comparable]
+public partial class Person :
+    IEquatable<T>
+{
+    [CompareBy]
+    public string Name { get; set; }
+
+    public virtual bool Equals(Person? other)
+    {
+        // ...
+    }
+}
+----
+
+こうすることで、一部のメソッドだけを手動で実装すれば、その他のメンバーは、すべてその実装と一貫性を持つように生成されます。
+
+== 謝辞
+
+本プロジェクトは link:https://github.com/nuitsjp/ComparableGenerator[nuitsjp/ComparableGenerator] に触発されて開発しております。素晴らしいツールを公開してくださったことに感謝します。
+
+== ライセンス
+
+link:https://www.apache.org/licenses/LICENSE-2.0[Apache License 2.0] です。
