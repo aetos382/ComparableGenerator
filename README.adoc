@@ -111,7 +111,7 @@ public partial class Person
 </Project>
 ----
 
-大小比較はサポートしないが、等価比較だけはサポートしたい場合、代わりに `EquatableAttribute` をつけることで、等価比較機能のみを自動実装することができます。
+大小比較はサポートしないが、等価比較だけはサポートしたい場合、`ComparableAttribute` の代わりに `EquatableAttribute` をつけることで、等価比較機能のみを自動実装することができます。
 
 === 適切な実装の移譲
 
