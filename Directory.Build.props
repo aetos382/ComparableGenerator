@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <DefaultItemExcludes>
+      $(DefaultItemExcludes);
+      *.log;
+      *.binlog;
+      TestResults/**/*
+    </DefaultItemExcludes>
+  </PropertyGroup>
+</Project>
