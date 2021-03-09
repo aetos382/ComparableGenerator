@@ -79,7 +79,7 @@ partial class Person :
 
 === 高いカスタマイズ性
 
-上記の実装を個別にするかしないかを選択することができます。たとえば、`IComparable<T>` を実装したくないのであれば、以下のように書くことで、実装を抑止することができます。
+上記の実装を個別にするかしないかを選択することができます。たとえば、`IComparable<T>` を実装したくないのであれば、以下のように書くことで、実装を抑止することができます（なお、もともと `IComparable<T>` が手動実装されていれば、重複して実装されることはありません）。
 
 [source,csharp]
 ----
@@ -94,7 +94,24 @@ public partial class Person
 }
 ----
 
-上記のように抑止しなくても、もともと `IComparable<T>` が主導実装されていれば、重複して実装されることはありません。
+対象のクラスが多数ある場合、プロジェクト ファイルで一括指定することもできます。
+
+[source,xml]
+----
+<Project Sdk="Microsoft.NET.Sdk">
+
+  ...
+
+  <PropertyGroup>
+    <GenerateGenericComparable>false</GenerateGenericComparable>
+  </PropertyGroup>
+
+  ...
+
+</Project>
+----
+
+大小比較はサポートしないが、等価比較だけはサポートしたい場合、代わりに `EquatableAttribute` をつけることで、等価比較機能のみを自動実装することができます。
 
 === 適切な実装の移譲
 
