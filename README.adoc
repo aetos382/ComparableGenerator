@@ -6,7 +6,7 @@ image:https://codecov.io/gh/aetos382/ComparisonGenerator/branch/master/graph/bad
 
 == 免責事項
 
-本ツールは無保証です。また、絶賛開発中であり、破壊的な変更が日常的に行われます。ご留意ください。
+本ツールは無保証です。また、下記の一部機能は未実装です。絶賛開発中であり、破壊的な変更が日常的に行われます。ご留意ください。
 
 == 概要
 link:https://docs.microsoft.com/ja-jp/dotnet/api/system.iequatable-1.equals[IEquatable<T>]、link:https://docs.microsoft.com/ja-jp/dotnet/api/system.icomparable-1[IComparable<T>]、link:https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/operators/operator-overloading[比較演算子]などを実装するための C# 用のソース ジェネレーターです。
