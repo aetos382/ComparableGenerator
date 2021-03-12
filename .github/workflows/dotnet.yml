@@ -18,14 +18,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Print Environments
-      shell: pwsh
-      run: |
-        Get-Module -ListAvailable | Select-Object Name, Version | Format-Table
-        Get-ChildItem env: | Select-Object Name, Value | Format-Table
-        Get-Variable | Select-Object Name, Value | Format-Table
-        Get-PSDrive | Select-Object Name | Format-Table
-        Get-Command -CommandType Application | Select-Object Name, Path | Format-Table
+    - uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -36,7 +34,7 @@ jobs:
       run: dotnet restore --locked-mode
 
     - name: Build
-      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore -p:ContinuousIntegrationBuild=true
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --no-incremental -p:ContinuousIntegrationBuild=true
 
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger junit
