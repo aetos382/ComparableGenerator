@@ -1,6 +1,6 @@
 = ComparisonGenerator
 
-image:https://github.com/aetos382/ComparisonGenerator/workflows/.NET/badge.svg[GitHub Workflow Status,link=https://github.com/aetos382/ComparisonGenerator/actions/workflows/dotnet.yml]
+image:https://github.com/aetos382/ComparisonGenerator/workflows/dotnet.yml/badge.svg[GitHub Workflow Status,link=https://github.com/aetos382/ComparisonGenerator/actions/workflows/dotnet.yml]
 image:https://img.shields.io/myget/aetos/vpre/Aetos.ComparisonGenerator?label=myget[MyGet (with prereleases),link=https://www.myget.org/feed/aetos/package/nuget/Aetos.ComparisonGenerator]
 image:https://codecov.io/gh/aetos382/ComparisonGenerator/branch/master/graph/badge.svg?token=9UX3B72CMG[Codecov,link=https://codecov.io/gh/aetos382/ComparisonGenerator]
 
