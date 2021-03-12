@@ -59,7 +59,7 @@ jobs:
       id: coverage_reports
       shell: pwsh
       run: |-
-        $files = Get-ChildItem -Filter coverage.opencover.xml -Recurse -File -Name)
+        $files = Get-ChildItem -Filter coverage.opencover.xml -Recurse -File -Name
         echo "::set-output name=files::$($files -join ',')"
 
     - name: Run codacy-coverage-reporter
