@@ -73,11 +73,6 @@ jobs:
         MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
       run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${{ env.CONFIGURATION }}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ env.MYGET_API_KEY }}
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: nuget-package
-        path: '**/*.nupkg'
-
     # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
     - name: Run Codacy Analysis CLI
       uses: codacy/codacy-analysis-cli-action@1.1.0
@@ -98,3 +93,10 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: results.sarif
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: nuget-package
+        path: |-
+          '**/*.nupkg'
+          results.sarif
