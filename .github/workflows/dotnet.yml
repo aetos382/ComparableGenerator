@@ -18,6 +18,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Print Environments
+      shell: pwsh
+      run: |
+        Get-Module -ListAvailable
+        Get-ChildItem env:
+        Get-Variable
+        Get-PSDrive
+        Get-PSRepository
+        Get-Command -CommandType Application
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
