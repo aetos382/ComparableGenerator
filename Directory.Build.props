@@ -6,7 +6,6 @@
     <AnalysisLevel>5.0</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <ErrorLog>$(MSBuildProjectName).sarif,version=2.1</ErrorLog>
 
     <DefaultItemExcludes>
       $(DefaultItemExcludes);
