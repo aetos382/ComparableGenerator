@@ -164,17 +164,22 @@ dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 dotnet_naming_style.camel_case.capitalization = camel_case
 
-dotnet_naming_style.camel_case_starts_with_underscore.capitalization = camel_case
-dotnet_naming_style.camel_case_starts_with_underscore.required_prefix = _
+dotnet_naming_style.pascal_case_starts_with_I.capitalization = pascal_case
+dotnet_naming_style.pascal_case_starts_with_I.required_prefix = I
 
 dotnet_naming_style.pascal_case_starts_with_T.capitalization = pascal_case
 dotnet_naming_style.pascal_case_starts_with_T.required_prefix = T
 
-dotnet_naming_symbols.namespaces_or_types.applicable_kinds = namespace, class, struct, interface, enum, delegate
+dotnet_naming_style.camel_case_starts_with_underscore.capitalization = camel_case
+dotnet_naming_style.camel_case_starts_with_underscore.required_prefix = _
+
+dotnet_naming_symbols.namespaces_or_types.applicable_kinds = namespace, class, struct, enum, delegate
 dotnet_naming_symbols.namespaces_or_types.applicable_accessibilities = *
 
 dotnet_naming_symbols.general_members.applicable_kinds = property, method, event, local_function
 dotnet_naming_symbols.general_members.applicable_accessibilities = *
+
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
 
 dotnet_naming_symbols.type_parameters.applicable_kinds = type_parameter
 
@@ -193,6 +198,10 @@ dotnet_naming_rule.namespaces_or_types_should_be_pascal_case.severity = warning
 dotnet_naming_rule.general_members_should_be_pascal_case.symbols = general_members
 dotnet_naming_rule.general_members_should_be_pascal_case.style = pascal_case
 dotnet_naming_rule.general_members_should_be_pascal_case.severity = warning
+
+dotnet_naming_rule.interfaces_should_be_pascal_case_starts_with_I.symbols = interfaces
+dotnet_naming_rule.interfaces_should_be_pascal_case_starts_with_I.style = pascal_case_starts_with_I
+dotnet_naming_rule.interfaces_should_be_pascal_case_starts_with_I.severity = warning
 
 dotnet_naming_rule.type_parameters_should_be_pascal_case_starts_with_T.symbols = type_parameters
 dotnet_naming_rule.type_parameters_should_be_pascal_case_starts_with_T.style = pascal_case_starts_with_T
