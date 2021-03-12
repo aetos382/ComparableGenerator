@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), '..', $(MSBuildThisFile)))" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+</Project>

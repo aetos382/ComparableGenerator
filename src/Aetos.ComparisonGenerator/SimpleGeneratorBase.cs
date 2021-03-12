@@ -23,7 +23,7 @@ namespace Aetos.ComparisonGenerator
                 return;
             }
 
-            string newLine = "\r\n";
+            const string newLine = "\r\n";
             int newLineLen = newLine.Length;
 
             var buffer = this.GenerationEnvironment;

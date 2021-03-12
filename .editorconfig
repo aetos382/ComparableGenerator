@@ -46,6 +46,14 @@ dotnet_diagnostic.IDE0079.severity = warning
 dotnet_diagnostic.RS1015.severity = suggestion
 dotnet_diagnostic.RS1028.severity = suggestion
 
+dotnet_diagnostic.RCS1036.severity = warning
+dotnet_diagnostic.RCS1061.severity = suggestion
+dotnet_diagnostic.RCS1118.severity = warning
+dotnet_diagnostic.RCS1124.severity = silent
+dotnet_diagnostic.RCS1211.severity = silent
+dotnet_diagnostic.RCS1214.severity = warning
+dotnet_diagnostic.RCS1222.severity = warning
+
 # -------------------------- #
 # .NET and C# language rules #
 # -------------------------- #

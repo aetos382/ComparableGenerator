@@ -11,6 +11,24 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
+      "Roslynator.Analyzers": {
+        "type": "Direct",
+        "requested": "[3.1.0, )",
+        "resolved": "3.1.0",
+        "contentHash": "K9qNjlkXqKd/8zOfedaNcbqPLFGZL0I8pTKENbwlrCJ4dm0b5N4ci2h4x3fpcwr5433ievJJXlRSr4JBQQKsvw=="
+      },
+      "Roslynator.CodeAnalysis.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "7Rd3vavUU/HrSDYxTIcGn3D8rah+WOlNKPlx8L5ukf4cyiUUei7MU6U+CSz6EZ572tnASYo9rTn3oQVZv+SOEQ=="
+      },
+      "Roslynator.Formatting.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "TCrpYXvvS0j26SBiDv3EdzkD/p3rzTRiw9K0Ejon464t8vDZ6831aEBgKoGkefGJILsMa/TfneUvvAO3jB3MWA=="
+      },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
         "resolved": "1.1.0",

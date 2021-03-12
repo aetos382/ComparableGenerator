@@ -143,7 +143,7 @@ namespace Aetos.ComparisonGenerator
             if (!typeArgument.IsValueType)
             {
                 throw new ArgumentException(
-                    $"The typeArgument must be value type.",
+                    "The typeArgument must be value type.",
                     nameof(typeArgument));
             }
 

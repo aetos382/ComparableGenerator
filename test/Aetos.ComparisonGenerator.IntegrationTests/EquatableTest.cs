@@ -304,7 +304,6 @@ public partial class Person :
                 .CompareHook(Arg.Any<object>(), Arg.Any<object>());
         }
 
-
         [Test]
         public void IEquitableT_EqualsがIComparable_CompareToに移譲される()
         {

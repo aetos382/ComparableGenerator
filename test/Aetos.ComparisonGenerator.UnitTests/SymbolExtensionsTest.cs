@@ -1,8 +1,5 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using NUnit.Framework;
 
@@ -10,18 +7,14 @@ namespace Aetos.ComparisonGenerator.UnitTests
 {
     public class SymbolExtensionsTest
     {
-#pragma warning disable CA1051
-#pragma warning disable CA1034
-#pragma warning disable CA1815
+#pragma warning disable CA1034, CA1051, CA1815
 
         public struct TestType
         {
             public TestType[] Hoge;
         }
 
-#pragma warning restore CA1034
-#pragma warning restore CA1051
-#pragma warning restore CA1815
+#pragma warning restore CA1034, CA1051, CA1815
 
         private static INamedTypeSymbol GetTestType()
         {
