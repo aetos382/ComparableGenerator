@@ -21,12 +21,11 @@ jobs:
     - name: Print Environments
       shell: pwsh
       run: |
-        Get-Module -ListAvailable
-        Get-ChildItem env:
-        Get-Variable
-        Get-PSDrive
-        Get-PSRepository
-        Get-Command -CommandType Application
+        Get-Module -ListAvailable | Select-Object Name, Version | Format-Table
+        Get-ChildItem env: | Select-Object Name, Value | Format-Table
+        Get-Variable | Select-Object Name, Value | Format-Table
+        Get-PSDrive | Select-Object Name | Format-Table
+        Get-Command -CommandType Application | Select-Object Name, Path | Format-Table
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
