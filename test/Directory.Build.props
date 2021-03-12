@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), '..', $(MSBuildThisFile)))" />
+  <Import Project="$([System.IO.Path]::GetFullPath('..\$(MSBuildThisFile)', $(MSBuildThisFileDirectory)))" />
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
