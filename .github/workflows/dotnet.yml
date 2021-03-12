@@ -55,11 +55,15 @@ jobs:
         report_individual_runs: true
         check_run_annotations: all tests, skipped tests
 
+    - name: Collect coverage reports
+      id: coverage_reports
+      run: echo "::set-output name=file::$(find . -path '**/coverage.opencover.xml' -print0 | tr '\0' ',')"
+
     - name: Run codacy-coverage-reporter
       uses: codacy/codacy-coverage-reporter-action@master
       with:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: '**/coverage.opencover.xml'
+        coverage-reports: ${{ steps.coverage_reports.outputs.file }}
 
     - name: Push Package
       env:
