@@ -37,7 +37,7 @@ jobs:
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --no-incremental -p:ContinuousIntegrationBuild=true
 
     - name: Test
-      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect:"XPlat Code Coverage" --settings CI.runsettings --logger junit
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect "XPlat Code Coverage" --settings CI.runsettings --logger junit
 
     - name: Upload coverage report
       uses: codecov/codecov-action@v1
@@ -54,6 +54,12 @@ jobs:
         files: '**/TestResults.xml'
         report_individual_runs: true
         check_run_annotations: all tests, skipped tests
+
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@master
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: '**/coverage.opencover.xml'
 
     - name: Push Package
       env:
