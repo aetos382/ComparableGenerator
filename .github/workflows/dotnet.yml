@@ -47,7 +47,8 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      output: sarif/codeql.sarif
+      with:
+        output: sarif/codeql.sarif
 
     - name: Collect coverage reports
       id: coverage_reports
