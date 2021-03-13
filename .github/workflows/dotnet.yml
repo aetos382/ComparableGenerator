@@ -48,6 +48,7 @@ jobs:
       uses: github/codeql-action/analyze@v1
       with:
         output: sarif/codeql.sarif
+        upload: false
 
     - name: Collect coverage reports
       id: coverage_reports
