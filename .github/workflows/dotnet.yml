@@ -33,22 +33,11 @@ jobs:
     - name: Restore
       run: dotnet restore --locked-mode
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: csharp
-
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --no-incremental -p:ContinuousIntegrationBuild=true
 
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect "XPlat Code Coverage" --settings CI.runsettings --logger junit
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
-      with:
-        output: sarif/codeql.sarif
-        upload: false
 
     - name: Collect coverage reports
       id: coverage_reports
@@ -77,11 +66,6 @@ jobs:
         # Force 0 exit code to allow SARIF file generation
         # This will handover control about PR rejection to the GitHub side
         max-allowed-issues: 2147483647
-
-    - name: Upload result to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: sarif/
 
     - name: Push Package
       env:
