@@ -37,7 +37,6 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: csharp
-        config-file: codeql-config.yml
 
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --no-incremental -p:ContinuousIntegrationBuild=true
