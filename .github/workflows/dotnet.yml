@@ -69,8 +69,3 @@ jobs:
       with:
         name: nuget-package
         path: '**/*.nupkg'
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: sarif
-        path: sarif/
