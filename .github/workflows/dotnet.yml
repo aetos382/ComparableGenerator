@@ -33,27 +33,21 @@ jobs:
     - name: Restore
       run: dotnet restore --locked-mode
 
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: csharp
+        config-file: codeql-config.yml
+
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --no-incremental -p:ContinuousIntegrationBuild=true
 
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --collect "XPlat Code Coverage" --settings CI.runsettings --logger junit
 
-    - name: Upload coverage report
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: '**/coverage.opencover.xml'
-        flags: unittests
-        fail_ci_if_error: true
-
-    - name: Publish test report
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()
-      with:
-        files: '**/TestResults.xml'
-        report_individual_runs: true
-        check_run_annotations: all tests, skipped tests
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
+      output: sarif/codeql.sarif
 
     - name: Collect coverage reports
       id: coverage_reports
@@ -68,11 +62,6 @@ jobs:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
         coverage-reports: ${{ steps.coverage_reports.outputs.files }}
 
-    - name: Push Package
-      env:
-        MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
-      run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${{ env.CONFIGURATION }}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ env.MYGET_API_KEY }}
-
     # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
     - name: Run Codacy Analysis CLI
       uses: codacy/codacy-analysis-cli-action@1.1.0
@@ -80,8 +69,7 @@ jobs:
         # Check https://github.com/codacy/codacy-analysis-cli#project-token to get your project token from your Codacy repository
         # You can also omit the token and run the tools that support default configurations
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        verbose: true
-        output: results.sarif
+        output: sarif/codacy.sarif
         format: sarif
         # Adjust severity of non-security issues
         gh-code-scanning-compat: true
@@ -92,11 +80,27 @@ jobs:
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: results.sarif
+        sarif_file: sarif/
+
+    - name: Push Package
+      env:
+        MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
+      run: dotnet nuget push src/Aetos.ComparisonGenerator/bin/${{ env.CONFIGURATION }}/Aetos.ComparisonGenerator.*.nupkg --source https://www.myget.org/F/aetos/api/v2/package --api-key ${{ env.MYGET_API_KEY }}
+
+    - name: Publish test report
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: '**/TestResults.xml'
+        report_individual_runs: true
+        check_run_annotations: all tests, skipped tests
 
     - uses: actions/upload-artifact@v2
       with:
         name: nuget-package
-        path: |-
-          '**/*.nupkg'
-          results.sarif
+        path: '**/*.nupkg'
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: sarif
+        path: sarif/
