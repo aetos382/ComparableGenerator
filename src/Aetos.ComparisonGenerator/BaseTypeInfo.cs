@@ -25,9 +25,12 @@ namespace Aetos.ComparisonGenerator
 
             this.TypeSymbol = typeSymbol;
             this.FullName = typeSymbol.GetFullName();
+
             this.IsEquatable = knownTypes.IsEquatable(typeSymbol);
             this.IsGenericComparable = knownTypes.IsGenericComparable(typeSymbol);
             this.IsNonGenericComparable = knownTypes.IsNonGenericComparable(typeSymbol);
+            this.IsStructuralEquatable = knownTypes.IsStructuralEquatable(typeSymbol);
+            this.IsStructuralComparable = knownTypes.IsStructuralComparable(typeSymbol);
 
             var objectEquals = knownTypes.Object.GetMembers(nameof(object.Equals))
                 .OfType<IMethodSymbol>()
@@ -101,6 +104,10 @@ namespace Aetos.ComparisonGenerator
         public bool IsGenericComparable { get; }
 
         public bool IsNonGenericComparable { get; }
+
+        public bool IsStructuralEquatable { get; }
+
+        public bool IsStructuralComparable { get; }
 
         public bool OverridesObjectEquals { get; }
 

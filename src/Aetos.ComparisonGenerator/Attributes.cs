@@ -18,9 +18,11 @@ namespace Aetos.ComparisonGenerator
 
         public bool GenerateObjectEquals { get; init; } = true;
 
-        public bool GenerateEqualityContract { get; init; } = true;
-
         public bool GenerateEqualityOperators { get; init; } = false;
+
+        public bool GenerateStructuralEquatable { get; init; } = false;
+
+        public bool GenerateEqualityContract { get; init; } = true;
 
         public bool GenerateMethodsAsVirtual { get; init; } = true;
     }
@@ -42,6 +44,8 @@ namespace Aetos.ComparisonGenerator
 
         public bool GenerateNonGenericComparable { get; init; } = true;
 
+        public bool GenerateStructuralComparable { get; init; } = false;
+
         public bool GenerateComparisonOperators { get; init; } = false;
     }
 }";
@@ -61,6 +65,8 @@ namespace Aetos.ComparisonGenerator
         public int Order { get; init; } = 0;
 
         public bool PreferStructuralComparison { get; init; } = false;
+
+        public Type Comparer { get; init; } = null;
     }
 }";
 

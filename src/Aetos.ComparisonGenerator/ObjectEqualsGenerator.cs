@@ -23,33 +23,33 @@ namespace Aetos.ComparisonGenerator
         public override string TransformText()
         {
 
-base.TransformText();
+    base.TransformText();
 
             return this.GenerationEnvironment.ToString();
         }
 
-protected override void WriteCode()
-{
-    var sourceTypeInfo = this.SourceTypeInfo;
-    var type = sourceTypeInfo.TypeSymbol;
+    protected override void WriteUsings()
+    {
+        if (this.DelegateToStructuralEquatable || this.DelegateToStructuralComparable)
+        {
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+this.Write("using System.Collections;\r\n");
 
-    var options = sourceTypeInfo.GenerateOptions;
 
-    string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
-        ? "object?"
-        : "object";
+        }
+    }
 
-    bool delegateToEquatable =
-        sourceTypeInfo.IsEquatable || options.GenerateEquatable;
+    protected override void WriteCode()
+    {
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
-    bool delegateToGenericComparable =
-        sourceTypeInfo.IsGenericComparable || options.GenerateGenericComparable;
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    bool delegateToNonGenericComparable =
-        sourceTypeInfo.IsNonGenericComparable || options.GenerateNonGenericComparable;
+        string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
+            ? "object?"
+            : "object";
 
 this.Write("partial ");
 
@@ -70,8 +70,8 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n");
 
 
-    if (delegateToEquatable)
-    {
+        if (this.CanDelegateToEquatable)
+        {
 
 this.Write("        return ((IEquatable<");
 
@@ -80,10 +80,9 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 this.Write(">)this).Equals(other2);\r\n");
 
 
-
-    }
-    else if (delegateToGenericComparable)
-    {
+        }
+        else if (this.CanDelegateToGenericComparable)
+        {
 
 this.Write("        return ((IComparable<");
 
@@ -92,26 +91,42 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 this.Write(">)this).CompareTo(other2) == 0;\r\n");
 
 
-    }
-    else if (delegateToNonGenericComparable)
-    {
+        }
+        else if (this.CanDelegateToNonGenericComparable)
+        {
 
 this.Write("        return ((IComparable)this).CompareTo(other2) == 0;\r\n");
 
 
-    }
-    else
-    {
+        }
+        else if (this.CanDelegateToStructuralEquatable)
+        {
+
+this.Write("        return ((IStructuralEquatable)this).Equals(other2, StructuralComparisons." +
+        "StructuralEqualityComparer);\r\n");
+
+
+        }
+        else if (this.CanDelegateToStructuralComparable)
+        {
+
+this.Write("        return ((IStructuralComparable)this).CompareTo(other2, StructuralComparis" +
+        "ons.StructuralComparer);\r\n");
+
+
+        }
+        else
+        {
 
 this.Write("        return __EqualsCore(this, other2);\r\n");
 
 
-    }
+        }
 
 this.Write("    }\r\n}\r\n");
 
 
-}
+    }
 
     }
 }

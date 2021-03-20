@@ -137,8 +137,6 @@ namespace Aetos.ComparisonGenerator
                                 member.TypeName,
                                 memberLocation[0],
                                 memberLocation.Skip(1)));
-
-                        candidateTypes.Remove(candidateType);
                     }
                 }
             }

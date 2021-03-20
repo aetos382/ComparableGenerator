@@ -1,30 +1,29 @@
 ﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
 <#
-base.TransformText();
+    base.TransformText();
 #>
 <#+
-protected override void WriteCode()
-{
-    var sourceTypeInfo = this.SourceTypeInfo;
-    var type = sourceTypeInfo.TypeSymbol;
+    protected override void WriteUsings()
+    {
+        if (this.DelegateToStructuralEquatable || this.DelegateToStructuralComparable)
+        {
+#>
+using System.Collections;
+<#+
+        }
+    }
 
-    string typeName = type.Name;
-    string typeKind = GetTypeKind(type);
+    protected override void WriteCode()
+    {
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
-    var options = sourceTypeInfo.GenerateOptions;
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
 
-    string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
-        ? "object?"
-        : "object";
-
-    bool delegateToEquatable =
-        sourceTypeInfo.IsEquatable || options.GenerateEquatable;
-
-    bool delegateToGenericComparable =
-        sourceTypeInfo.IsGenericComparable || options.GenerateGenericComparable;
-
-    bool delegateToNonGenericComparable =
-        sourceTypeInfo.IsNonGenericComparable || options.GenerateNonGenericComparable;
+        string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
+            ? "object?"
+            : "object";
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -37,34 +36,45 @@ partial <#= typeKind #> <#= typeName #>
         }
 
 <#+
-    if (delegateToEquatable)
-    {
+        if (this.CanDelegateToEquatable)
+        {
 #>
         return ((IEquatable<<#= typeName #>>)this).Equals(other2);
 <#+
-
-    }
-    else if (delegateToGenericComparable)
-    {
+        }
+        else if (this.CanDelegateToGenericComparable)
+        {
 #>
         return ((IComparable<<#= typeName #>>)this).CompareTo(other2) == 0;
 <#+
-    }
-    else if (delegateToNonGenericComparable)
-    {
+        }
+        else if (this.CanDelegateToNonGenericComparable)
+        {
 #>
         return ((IComparable)this).CompareTo(other2) == 0;
 <#+
-    }
-    else
-    {
+        }
+        else if (this.CanDelegateToStructuralEquatable)
+        {
+#>
+        return ((IStructuralEquatable)this).Equals(other2, StructuralComparisons.StructuralEqualityComparer);
+<#+
+        }
+        else if (this.CanDelegateToStructuralComparable)
+        {
+#>
+        return ((IStructuralComparable)this).CompareTo(other2, StructuralComparisons.StructuralComparer);
+<#+
+        }
+        else
+        {
 #>
         return __EqualsCore(this, other2);
 <#+
-    }
+        }
 #>
     }
 }
 <#+
-}
+    }
 #>

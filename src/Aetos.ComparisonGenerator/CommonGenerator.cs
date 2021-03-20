@@ -153,7 +153,7 @@ this.Write(" right)\r\n    {\r\n");
         {
 
 this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return 0" +
-        ";\r\n        }\r\n");
+        ";\r\n        }\r\n\r\n");
 
 
         }
