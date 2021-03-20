@@ -3,7 +3,7 @@
 namespace Hoge
 {
     [Comparable]
-    public partial class Struct
+    public partial struct Struct
     {
         [CompareBy]
         public int X { get; }
