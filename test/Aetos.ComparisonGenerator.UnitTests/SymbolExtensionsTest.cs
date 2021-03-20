@@ -26,9 +26,9 @@ namespace Aetos.ComparisonGenerator.UnitTests
 
             var compilation = CSharpCompilation.Create(null, references: references);
 
-            var typeSymbol = compilation.GetTypeByMetadataName(testType.FullName);
+            var typeSymbol = compilation.GetTypeByMetadataName(testType.FullName!);
 
-            return typeSymbol;
+            return typeSymbol!;
         }
 
         [Test]
