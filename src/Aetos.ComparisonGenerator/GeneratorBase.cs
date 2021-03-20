@@ -102,7 +102,7 @@ for (int i = 0; i < numEnclosingTypes; ++i)
 
 this.WriteCode();
 
-for (int i = 0; i < numEnclosingTypes - 1; ++i)
+for (int i = 0; i < numEnclosingTypes; ++i)
 {
     this.PopIndent();
 

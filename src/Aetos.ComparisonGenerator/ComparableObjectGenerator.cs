@@ -79,7 +79,7 @@ namespace Aetos.ComparisonGenerator
 
             var typeMap = candidateTypes.ToDictionary(
                 x => x.TypeSymbol,
-                SymbolEqualityComparer.Default);
+                (IEqualityComparer<ITypeSymbol>)SymbolEqualityComparer.Default);
 
             foreach (var candidateType in candidateTypes.ToArray())
             {

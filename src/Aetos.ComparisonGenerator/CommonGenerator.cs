@@ -22,7 +22,6 @@ namespace Aetos.ComparisonGenerator
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n");
 
     base.TransformText();
 
@@ -52,7 +51,7 @@ this.Write("using System.Collections.Generic;\r\nusing System.ComponentModel;\r\
 
         var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
 
-            (true, _) => typeName,
+            (true, _) => $"{typeName}?",
             (false, false) => typeName,
             (false, true) => $"{typeName}?"
 

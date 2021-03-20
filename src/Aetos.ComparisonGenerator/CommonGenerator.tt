@@ -26,7 +26,7 @@ using System.ComponentModel;
 
         var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
 
-            (true, _) => typeName,
+            (true, _) => $"{typeName}?",
             (false, false) => typeName,
             (false, true) => $"{typeName}?"
 
