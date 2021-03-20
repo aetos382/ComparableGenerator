@@ -36,7 +36,7 @@ namespace Aetos.ComparisonGenerator
                     comparer.Equals(x.Parameters[0].Type, knownTypes.Object));
 
             var objectEqualsOverride =
-                typeSymbol.GetOverrideSymbol(objectEquals, comparer);
+                typeSymbol.GetOverrideSymbol(objectEquals!, comparer);
 
             this.OverridesObjectEquals = objectEqualsOverride is not null;
 
