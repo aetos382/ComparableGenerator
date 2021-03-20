@@ -29,6 +29,7 @@ namespace Aetos.ComparisonGenerator.IntegrationTests
 
         public override bool TryGetValue(
             string key,
+
             [MaybeNullWhen(false)]
             out string value)
         {

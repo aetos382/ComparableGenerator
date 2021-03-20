@@ -134,6 +134,10 @@
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fake.System.Diagnostics.CodeAnalysis\Fake.System.Diagnostics.CodeAnalysis.csproj"/>
+  </ItemGroup>
+
   <PropertyGroup>
     <BeforePack>
       _PrepareForPack;

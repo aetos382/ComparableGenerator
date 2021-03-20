@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis;
 
@@ -75,7 +76,9 @@ namespace Aetos.ComparisonGenerator
 
         public bool TryGetNullableUnderlyingType(
             ITypeSymbol typeSymbol,
-            out INamedTypeSymbol? underlyingTypeSymbol)
+
+            [MaybeNullWhen(false)]
+            out INamedTypeSymbol underlyingTypeSymbol)
         {
             if (typeSymbol is null)
             {

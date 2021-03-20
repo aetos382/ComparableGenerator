@@ -912,9 +912,15 @@
         }
       },
       "aetos.comparisongenerator": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "Fake.System.Diagnostics.CodeAnalysis": "1.0.0"
+        }
       },
       "aetos.comparisongenerator.integrationtests.injection": {
+        "type": "Project"
+      },
+      "fake.system.diagnostics.codeanalysis": {
         "type": "Project"
       }
     }

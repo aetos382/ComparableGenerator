@@ -864,6 +864,12 @@
         }
       },
       "aetos.comparisongenerator": {
+        "type": "Project",
+        "dependencies": {
+          "Fake.System.Diagnostics.CodeAnalysis": "1.0.0"
+        }
+      },
+      "fake.system.diagnostics.codeanalysis": {
         "type": "Project"
       }
     }
