@@ -1,5 +1,8 @@
 <Project>
   <ItemGroup>
+    <CompilerVisibleProperty Include="TargetFrameworkIdentifier" />
+    <CompilerVisibleProperty Include="TargetFrameworkVersion" />
+
     <CompilerVisibleProperty Include="GenerateObjectEquals" />
     <CompilerVisibleProperty Include="GenerateEquatable" />
     <CompilerVisibleProperty Include="GenerateGenericComparable" />
@@ -10,6 +13,7 @@
     <CompilerVisibleProperty Include="GenerateStructuralComparable" />
     <CompilerVisibleProperty Include="GenerateEqualityContract" />
     <CompilerVisibleProperty Include="GenerateMethodsAsVirtual" />
+    <CompilerVisibleProperty Include="GenerateNullabilityAttributes" />
     <CompilerVisibleProperty Include="PreferStructuralComparison" />
   </ItemGroup>
 
@@ -24,6 +28,7 @@
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateStructuralComparable" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityContract" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateMethodsAsVirtual" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateNullabilityAttributes" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="PreferStructuralComparison" />
   </ItemGroup>
 </Project>

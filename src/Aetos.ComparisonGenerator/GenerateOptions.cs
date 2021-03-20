@@ -20,6 +20,7 @@ namespace Aetos.ComparisonGenerator
             bool generateStructuralEquatable = false,
             bool generateStructuralComparable = false,
             bool generateMethodsAsVirtual = true,
+            bool generateNullabilityAttributes = true,
             bool preferStructuralComparison = false)
         {
             this.GenerateEquatable = generateEquatable;
@@ -31,8 +32,8 @@ namespace Aetos.ComparisonGenerator
             this.GenerateComparisonOperators = generateComparisonOperators;
             this.GenerateStructuralEquatable = generateStructuralEquatable;
             this.GenerateStructuralComparable = generateStructuralComparable;
-
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
+            this.GenerateNullabilityAttributes = generateNullabilityAttributes;
             this.PreferStructuralComparison = preferStructuralComparison;
         }
 
@@ -67,6 +68,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateStructuralEquatable = LocalGetOption(nameof(this.GenerateStructuralEquatable)) ?? false;
             this.GenerateStructuralComparable = LocalGetOption(nameof(this.GenerateStructuralComparable)) ?? false;
             this.GenerateMethodsAsVirtual = LocalGetOption(nameof(this.GenerateMethodsAsVirtual)) ?? true;
+            this.GenerateNullabilityAttributes = LocalGetOption(nameof(this.GenerateNullabilityAttributes)) ?? true;
             this.PreferStructuralComparison = LocalGetOption(nameof(this.PreferStructuralComparison)) ?? false;
 
             bool? LocalGetOption(string optionName)
@@ -94,6 +96,8 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateEqualityContract { get; }
 
         public bool GenerateMethodsAsVirtual { get; }
+
+        public bool GenerateNullabilityAttributes { get; }
 
         public bool PreferStructuralComparison { get; }
 
