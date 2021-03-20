@@ -60,6 +60,7 @@ dotnet_diagnostic.RCS1124.severity = silent
 dotnet_diagnostic.RCS1128.severity = suggestion
 dotnet_diagnostic.RCS1134.severity = warning
 dotnet_diagnostic.RCS1163.severity = warning
+dotnet_diagnostic.RCS1181.severity = suggestion
 dotnet_diagnostic.RCS1211.severity = silent
 dotnet_diagnostic.RCS1213.severity = warning
 dotnet_diagnostic.RCS1214.severity = warning
