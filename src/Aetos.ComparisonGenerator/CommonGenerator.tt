@@ -76,7 +76,7 @@ partial <#= typeKind #> <#= typeName #>
             string memberName = member.Name;
 #>
 
-        result = EqualityComparer<<#= member.TypeName #>>.Default.Equals(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
+        result = EqualityComparer<<#= member.FullTypeNameWithGlobalPrefix #>>.Default.Equals(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
         if (!result)
         {
             return result;
@@ -128,7 +128,7 @@ partial <#= typeKind #> <#= typeName #>
             string memberName = member.Name;
 #>
 
-        result = Comparer<<#= member.TypeName #>>.Default.Compare(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
+        result = Comparer<<#= member.FullTypeNameWithGlobalPrefix #>>.Default.Compare(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
         if (result != 0)
         {
             return result;

@@ -15,6 +15,8 @@ namespace Aetos.ComparisonGenerator
 
         public string TypeName { get; }
 
+        public string FullTypeNameWithGlobalPrefix { get; }
+
         public int ComparisonOrder { get; }
 
         public bool? PreferStructuralComparison { get; }
@@ -62,6 +64,7 @@ namespace Aetos.ComparisonGenerator
 
             this.Type = type;
             this.TypeName = type.GetFullName();
+            this.FullTypeNameWithGlobalPrefix = type.GetFullName(true);
 
             var arguments = compareByAttribute.NamedArguments.ToDictionary(
                 x => x.Key,

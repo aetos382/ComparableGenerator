@@ -73,6 +73,31 @@ namespace Aetos.ComparisonGenerator
                 SymbolEqualityComparer.Default.Equals(nts.ConstructedFrom, this.Nullable);
         }
 
+        public bool TryGetNullableUnderlyingType(
+            ITypeSymbol typeSymbol,
+            out INamedTypeSymbol? underlyingTypeSymbol)
+        {
+            if (typeSymbol is null)
+            {
+                throw new ArgumentNullException(nameof(typeSymbol));
+            }
+
+            underlyingTypeSymbol = default;
+
+            if (!this.IsNullableValueType(typeSymbol))
+            {
+                return false;
+            }
+
+            if (typeSymbol is not INamedTypeSymbol nts)
+            {
+                return false;
+            }
+
+            underlyingTypeSymbol = (INamedTypeSymbol)nts.TypeArguments[0];
+            return true;
+        }
+
         public bool IsEquatable(
             ITypeSymbol type)
         {

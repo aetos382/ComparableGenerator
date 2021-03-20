@@ -92,28 +92,53 @@ namespace Aetos.ComparisonGenerator
                         options.GenerateComparisonOperators ||
                         options.GenerateStructuralComparable)
                     {
-                        if (!knownTypes.IsGenericComparable(member.Type) &&
-                            !knownTypes.IsNonGenericComparable(member.Type) &&
-                            !knownTypes.IsStructuralComparable(member.Type) &&
-                            !(
-                                typeMap.TryGetValue(member.Type, out var targetType) &&
-                                targetType.HasComparableAttribute)
-                            )
+                        var memberType = member.Type;
+
+                        if (knownTypes.IsGenericComparable(memberType))
                         {
-                            var memberLocation = member.Symbol.DeclaringSyntaxReferences
-                                .Select(x => Location.Create(x.SyntaxTree, x.Span))
-                                .ToArray();
-
-                            context.ReportDiagnostic(
-                                DiagnosticFactory.MemberIsNotComparable(
-                                    candidateType.FullName,
-                                    member.Name,
-                                    member.TypeName,
-                                    memberLocation[0],
-                                    memberLocation.Skip(1)));
-
-                            candidateTypes.Remove(candidateType);
+                            continue;
                         }
+
+                        if (knownTypes.IsNonGenericComparable(memberType))
+                        {
+                            continue;
+                        }
+
+                        if (knownTypes.IsStructuralComparable(memberType))
+                        {
+                            continue;
+                        }
+
+                        if (typeMap.TryGetValue(memberType, out var targetType) &&
+                            targetType.HasComparableAttribute)
+                        {
+                            continue;
+                        }
+
+                        if (!knownTypes.TryGetNullableUnderlyingType(memberType, out var underlyingType))
+                        {
+                            continue;
+                        }
+
+                        if (typeMap.TryGetValue(underlyingType, out var targetType2) &&
+                            targetType2.HasComparableAttribute)
+                        {
+                            continue;
+                        }
+
+                        var memberLocation = member.Symbol.DeclaringSyntaxReferences
+                            .Select(x => Location.Create(x.SyntaxTree, x.Span))
+                            .ToArray();
+
+                        context.ReportDiagnostic(
+                            DiagnosticFactory.MemberIsNotComparable(
+                                candidateType.FullName,
+                                member.Name,
+                                member.TypeName,
+                                memberLocation[0],
+                                memberLocation.Skip(1)));
+
+                        candidateTypes.Remove(candidateType);
                     }
                 }
             }

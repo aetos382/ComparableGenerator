@@ -113,7 +113,7 @@ this.Write("\r\n        bool result;\r\n");
 
 this.Write("\r\n        result = EqualityComparer<");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(member.FullTypeNameWithGlobalPrefix));
 
 this.Write(">.Default.Equals(left");
 
@@ -177,7 +177,7 @@ this.Write("\r\n        int result;\r\n");
 
 this.Write("\r\n        result = Comparer<");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(member.TypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(member.FullTypeNameWithGlobalPrefix));
 
 this.Write(">.Default.Compare(left");
 

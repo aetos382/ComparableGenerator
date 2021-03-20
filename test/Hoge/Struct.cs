@@ -8,4 +8,11 @@ namespace Hoge
         [CompareBy]
         public int X { get; }
     }
+
+    [Comparable]
+    public partial class Hoge
+    {
+        [CompareBy]
+        public Struct? X { get; }
+    }
 }

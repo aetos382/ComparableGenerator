@@ -123,8 +123,8 @@ namespace Aetos.ComparisonGenerator
         private static readonly ConditionalWeakTable<INamespaceOrTypeSymbol, string> _namesWithGlobalPrefix = new();
 
         private static readonly SymbolDisplayFormat _withoutGlobalNamespace =
-            SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(
-                SymbolDisplayGlobalNamespaceStyle.Omitted);
+            SymbolDisplayFormat.FullyQualifiedFormat
+                .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted);
 
         public static string GetFullName(
             this INamespaceOrTypeSymbol type,
