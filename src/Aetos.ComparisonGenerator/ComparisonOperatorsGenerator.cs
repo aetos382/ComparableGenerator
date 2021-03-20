@@ -30,24 +30,22 @@ namespace Aetos.ComparisonGenerator
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
-        var options = context.Options;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
-        string nullableTypeName = context.NullableTypeName;
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
 
-        bool hasGenericCompareTo =
-            sourceType.IsGenericComparable ||
-            options.GenerateGenericComparable;
+            (true, _) => $"{typeName}?",
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
 
-        bool hasNonGenericCompareTo =
-            sourceType.IsNonGenericComparable ||
-            options.GenerateNonGenericComparable;
+        };
 
 this.Write("partial ");
 
@@ -59,38 +57,38 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write("\r\n{\r\n    public static bool operator <(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n        return __CompareCore(left, right) < 0;\r\n    }\r\n\r\n    publ" +
         "ic static bool operator >(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n        return __CompareCore(left, right) > 0;\r\n    }\r\n\r\n    publ" +
         "ic static bool operator <=(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n        return !(left > right);\r\n    }\r\n    \r\n    public static b" +
         "ool operator >=(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n        return !(left < right);\r\n    }\r\n}\r\n");
 

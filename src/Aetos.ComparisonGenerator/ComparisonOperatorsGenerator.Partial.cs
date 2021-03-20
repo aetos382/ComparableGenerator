@@ -3,9 +3,9 @@
     internal partial class ComparisonOperatorsGenerator
     {
         public ComparisonOperatorsGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

@@ -22,6 +22,7 @@ namespace Aetos.ComparisonGenerator
         /// </summary>
         public override string TransformText()
         {
+            this.Write("\n");
 
     base.TransformText();
 
@@ -38,18 +39,29 @@ this.Write("using System.Collections.Generic;\r\nusing System.ComponentModel;\r\
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
-        var options = context.Options;
+        var options = sourceTypeInfo.GenerateOptions;
 
-        string nullableTypeName = context.NullableTypeName;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
-        var isValueType = sourceType.IsValueType;
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
+
+            (true, _) => typeName,
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
+
+        };
+
+        bool parameterIsNullable =
+            !sourceTypeInfo.IsValueType ||
+            sourceTypeInfo.IsNullableValueType;
+
         string dotValue = isValueType ? ".Value" : "";
 
 this.Write("partial ");
@@ -63,11 +75,11 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 this.Write("\r\n{\r\n    [EditorBrowsable(EditorBrowsableState.Never)]\r\n    private static bool _" +
         "_EqualsCore(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n");
 
@@ -84,7 +96,7 @@ this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n   
 this.Write("        \r\n");
 
 
-        if (context.IsNullable)
+        if (parameterIsNullable)
         {
 
 this.Write("        if (left is null || right is null)\r\n        {\r\n            return false;\r" +
@@ -96,7 +108,7 @@ this.Write("        if (left is null || right is null)\r\n        {\r\n         
 this.Write("\r\n        bool result;\r\n");
 
 
-        foreach (var member in context.Members)
+        foreach (var member in sourceTypeInfo.Members)
         {
             string memberName = member.Name;
 
@@ -129,11 +141,11 @@ this.Write(");\r\n        if (!result)\r\n        {\r\n            return result
 this.Write("\r\n        return true;\r\n    }\r\n\r\n    [EditorBrowsable(EditorBrowsableState.Never)" +
         "]\r\n    private static int __CompareCore(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n");
 
@@ -147,7 +159,7 @@ this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n   
 
         }
 
-        if (context.IsNullable)
+        if (parameterIsNullable)
         {
 
 this.Write("        if (left is null)\r\n        {\r\n            return int.MinValue;\r\n        }" +
@@ -160,7 +172,7 @@ this.Write("        if (left is null)\r\n        {\r\n            return int.Min
 this.Write("\r\n        int result;\r\n");
 
 
-        foreach (var member in context.Members)
+        foreach (var member in sourceTypeInfo.Members)
         {
             string memberName = member.Name;
 
@@ -194,7 +206,7 @@ this.Write("\r\n        return 0;\r\n    }\r\n\r\n");
 
 
         if (options.GenerateEqualityContract &&
-            !sourceType.HasEqualityContract &&
+            !sourceTypeInfo.HasEqualityContract &&
             !isValueType)
         {
 

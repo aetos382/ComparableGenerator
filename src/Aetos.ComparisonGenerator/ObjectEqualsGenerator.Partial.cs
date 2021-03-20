@@ -3,9 +3,9 @@
     internal partial class ObjectEqualsGenerator
     {
         public ObjectEqualsGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

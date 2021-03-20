@@ -3,9 +3,9 @@
     internal partial class EquatableGenerator
     {
         public EquatableGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

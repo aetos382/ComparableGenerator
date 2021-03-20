@@ -42,7 +42,7 @@ namespace Aetos.ComparisonGenerator
 
             this.Write("</auto-generated>\r\n*/\r\n\r\n");
 
-    var nullableContext = this.Context.NullableContext;
+    var nullableContext = this.SourceTypeInfo.NullableContext;
 
     bool annotationsEnabled = nullableContext.AnnotationsEnabled();
     bool warningsEnabled = nullableContext.WarningsEnabled();
@@ -69,9 +69,9 @@ this.WriteUsings();
 
             this.Write("\r\n");
 
-var context = this.Context;
+var sourceTypeInfo = this.SourceTypeInfo;
 
-var namespaceName = context.Namespace;
+var namespaceName = sourceTypeInfo.NamespaceName;
 bool hasNamespace = !string.IsNullOrEmpty(namespaceName);
 if (hasNamespace)
 {
@@ -83,11 +83,12 @@ if (hasNamespace)
     this.PushIndent();
 }
 
-int numTypes = context.Types.Count;
+var enclosingTypes = sourceTypeInfo.EnclosingTypes;
+int numEnclosingTypes = enclosingTypes.Count;
 
-for (int i = 0; i < numTypes - 1; ++i)
+for (int i = 0; i < numEnclosingTypes; ++i)
 {
-    var type = context.Types[i];
+    var type = enclosingTypes[i];
     string typeKind = GetTypeKind(type);
 
             this.Write("partial ");
@@ -101,7 +102,7 @@ for (int i = 0; i < numTypes - 1; ++i)
 
 this.WriteCode();
 
-for (int i = 0; i < numTypes - 1; ++i)
+for (int i = 0; i < numEnclosingTypes - 1; ++i)
 {
     this.PopIndent();
 

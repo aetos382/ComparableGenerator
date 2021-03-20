@@ -30,19 +30,25 @@ namespace Aetos.ComparisonGenerator
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
-        string parameterType =
-            sourceType.IsValueType ? typeName : context.NullableTypeName;
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
+
+            (true, _) => typeName,
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
+
+        };
 
         string virtualModifier =
-            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+            !sourceTypeInfo.IsValueType && sourceTypeInfo.GenerateOptions.GenerateMethodsAsVirtual ?
                 " virtual" : "";
 
 
@@ -64,12 +70,12 @@ this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
 
 this.Write(" int CompareTo(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" other)\r\n    {\r\n");
 
 
-        if (context.SourceType.IsNonGenericComparable)
+        if (sourceTypeInfo.IsNonGenericComparable)
         {
 
 this.Write("        return ((IComparable)this).CompareTo(other);\r\n");

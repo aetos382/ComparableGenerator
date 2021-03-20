@@ -3,9 +3,9 @@
     internal partial class CommonGenerator
     {
         public CommonGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

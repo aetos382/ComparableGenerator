@@ -61,7 +61,25 @@ namespace Aetos.ComparisonGenerator.Properties {
         }
         
         /// <summary>
-        ///   no members. に類似しているローカライズされた文字列を検索します。
+        ///   {0}.{1}: {2} is not comparable に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MemberTypeIsNotComparableMessage {
+            get {
+                return ResourceManager.GetString("MemberTypeIsNotComparableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   type is not comparable. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MemberTypeIsNotComparableTitle {
+            get {
+                return ResourceManager.GetString("MemberTypeIsNotComparableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   {0} has no members. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string NoMembersMessage {
             get {
@@ -75,24 +93,6 @@ namespace Aetos.ComparisonGenerator.Properties {
         internal static string NoMembersTitle {
             get {
                 return ResourceManager.GetString("NoMembersTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   {0}.{1}: {2} is not comparable に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string TypeIsNotComparableMessage {
-            get {
-                return ResourceManager.GetString("TypeIsNotComparableMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   type is not comparable. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string TypeIsNotComparableTitle {
-            get {
-                return ResourceManager.GetString("TypeIsNotComparableTitle", resourceCulture);
             }
         }
         

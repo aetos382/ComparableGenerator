@@ -30,33 +30,39 @@ namespace Aetos.ComparisonGenerator
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
-        var options = context.Options;
+        var options = sourceTypeInfo.GenerateOptions;
 
-        string nullableTypeName = context.NullableTypeName;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
+
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
+
+            (true, _) => $"{typeName}?",
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
+
+        };
 
         bool hasEquals =
-            sourceType.OverridesObjectEquals ||
+            sourceTypeInfo.OverridesObjectEquals ||
             options.GenerateObjectEquals ||
-            sourceType.IsEquatable ||
+            sourceTypeInfo.IsEquatable ||
             options.GenerateEquatable;
 
         bool hasCompareTo =
-            sourceType.IsGenericComparable ||
+            sourceTypeInfo.IsGenericComparable ||
             options.GenerateGenericComparable ||
-            sourceType.IsNonGenericComparable ||
+            sourceTypeInfo.IsNonGenericComparable ||
             options.GenerateNonGenericComparable;
 
-        string leftVarName = sourceType.IsValueType ? "leftValue" : "left";
-        string rightVarName = sourceType.IsValueType ? "rightValue" : "right";
-
-        var isValueType = sourceType.IsValueType;
+        string leftVarName = sourceTypeInfo.IsValueType ? "leftValue" : "left";
+        string rightVarName = sourceTypeInfo.IsValueType ? "rightValue" : "right";
 
 this.Write("partial ");
 
@@ -68,11 +74,11 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write("\r\n{\r\n    public static bool operator ==(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n");
 
@@ -99,7 +105,7 @@ this.Write("        var leftValue = left.Value;\r\n        var rightValue = righ
         }
 
         // TODO: 見直し
-        if (sourceType.DefinedEqualityOperators)
+        if (sourceTypeInfo.DefinedEqualityOperators)
         {
 
 this.Write("        return ");
@@ -162,11 +168,11 @@ this.Write(");\r\n");
 
 this.Write("    }\r\n\r\n    public static bool operator !=(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" left,\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" right)\r\n    {\r\n        return !(left == right);\r\n    }\r\n}\r\n");
 

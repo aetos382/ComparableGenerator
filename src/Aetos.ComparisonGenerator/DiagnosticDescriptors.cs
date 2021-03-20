@@ -76,11 +76,11 @@ namespace Aetos.ComparisonGenerator
                 DiagnosticCategories.Design,
                 DiagnosticSeverity.Warning);
 
-        public static readonly DiagnosticDescriptor TypeIsNotComparable =
+        public static readonly DiagnosticDescriptor MemberTypeIsNotComparable =
             CreateDiagnosticDescriptor(
                 "CG0004",
-                nameof(Resources.TypeIsNotComparableTitle),
-                nameof(Resources.TypeIsNotComparableMessage),
+                nameof(Resources.MemberTypeIsNotComparableTitle),
+                nameof(Resources.MemberTypeIsNotComparableMessage),
                 DiagnosticCategories.Design,
                 DiagnosticSeverity.Warning);
     }

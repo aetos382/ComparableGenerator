@@ -3,9 +3,9 @@
     internal partial class EqualityOperatorsGenerator
     {
         public EqualityOperatorsGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

@@ -30,23 +30,26 @@ base.TransformText();
 
 protected override void WriteCode()
 {
-    var context = this.Context;
-    var type = context.Type;
+    var sourceTypeInfo = this.SourceTypeInfo;
+    var type = sourceTypeInfo.TypeSymbol;
 
     string typeName = type.Name;
     string typeKind = GetTypeKind(type);
 
-    var sourceType = context.SourceType;
-    var options = context.Options;
+    var options = sourceTypeInfo.GenerateOptions;
+
+    string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
+        ? "object?"
+        : "object";
 
     bool delegateToEquatable =
-        sourceType.IsEquatable || options.GenerateEquatable;
+        sourceTypeInfo.IsEquatable || options.GenerateEquatable;
 
     bool delegateToGenericComparable =
-        sourceType.IsGenericComparable || options.GenerateGenericComparable;
+        sourceTypeInfo.IsGenericComparable || options.GenerateGenericComparable;
 
     bool delegateToNonGenericComparable =
-        sourceType.IsNonGenericComparable || options.GenerateNonGenericComparable;
+        sourceTypeInfo.IsNonGenericComparable || options.GenerateNonGenericComparable;
 
 this.Write("partial ");
 
@@ -58,7 +61,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write("\r\n{\r\n    public override bool Equals(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(nullableObjectTypeName));
 
 this.Write(" other)\r\n    {\r\n        if (other is not ");
 

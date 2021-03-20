@@ -5,24 +5,29 @@
 <#+
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
+        var options = sourceTypeInfo.GenerateOptions;
 
         string virtualModifier =
-            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+            !sourceTypeInfo.IsValueType && options.GenerateMethodsAsVirtual ?
                 " virtual" : "";
+
+        string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
+            ? "object?"
+            : "object";
+
 
 #>
 partial <#= typeKind #> <#= typeName #> :
     IComparable
 {
     public<#= virtualModifier #> int CompareTo(
-        <#= context.NullableObjectTypeName #> other)
+        <#= nullableObjectTypeName #> other)
     {
         if (other is null)
         {
@@ -35,8 +40,8 @@ partial <#= typeKind #> <#= typeName #> :
         }
 
 <#+
-        if (context.SourceType.IsGenericComparable ||
-            context.Options.GenerateGenericComparable)
+        if (sourceTypeInfo.IsGenericComparable ||
+            options.GenerateGenericComparable)
         {
 #>
         return ((IComparable<<#= typeName #>>)this).CompareTo(other2);

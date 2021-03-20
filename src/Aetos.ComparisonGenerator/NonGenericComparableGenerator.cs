@@ -30,17 +30,22 @@ namespace Aetos.ComparisonGenerator
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
+        var options = sourceTypeInfo.GenerateOptions;
 
         string virtualModifier =
-            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+            !sourceTypeInfo.IsValueType && options.GenerateMethodsAsVirtual ?
                 " virtual" : "";
+
+        string nullableObjectTypeName = sourceTypeInfo.NullableAnnotationsEnabled
+            ? "object?"
+            : "object";
+
 
 
 this.Write("partial ");
@@ -57,7 +62,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
 
 this.Write(" int CompareTo(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(nullableObjectTypeName));
 
 this.Write(" other)\r\n    {\r\n        if (other is null)\r\n        {\r\n            return int.Max" +
         "Value;\r\n        }\r\n\r\n        if (other is not ");
@@ -67,8 +72,8 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 this.Write(" other2)\r\n        {\r\n            throw new ArgumentException();\r\n        }\r\n\r\n");
 
 
-        if (context.SourceType.IsGenericComparable ||
-            context.Options.GenerateGenericComparable)
+        if (sourceTypeInfo.IsGenericComparable ||
+            options.GenerateGenericComparable)
         {
 
 this.Write("        return ((IComparable<");

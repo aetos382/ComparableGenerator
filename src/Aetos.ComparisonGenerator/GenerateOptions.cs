@@ -17,6 +17,8 @@ namespace Aetos.ComparisonGenerator
             bool generateEqualityContract = true,
             bool generateEqualityOperators = false,
             bool generateComparisonOperators = false,
+            bool generateStructuralEquatable = false,
+            bool generateStructuralComparable = false,
             bool generateMethodsAsVirtual = true,
             bool preferStructuralComparison = false)
         {
@@ -27,6 +29,9 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEqualityContract = generateEqualityContract;
             this.GenerateEqualityOperators = generateEqualityOperators;
             this.GenerateComparisonOperators = generateComparisonOperators;
+            this.GenerateStructuralEquatable = generateStructuralEquatable;
+            this.GenerateStructuralComparable = generateStructuralComparable;
+
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
             this.PreferStructuralComparison = preferStructuralComparison;
         }
@@ -59,6 +64,8 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEqualityContract = LocalGetOption(nameof(this.GenerateEqualityContract)) ?? true;
             this.GenerateEqualityOperators = LocalGetOption(nameof(this.GenerateEqualityOperators)) ?? false;
             this.GenerateComparisonOperators = LocalGetOption(nameof(this.GenerateComparisonOperators)) ?? false;
+            this.GenerateStructuralEquatable = LocalGetOption(nameof(this.GenerateStructuralEquatable)) ?? false;
+            this.GenerateStructuralComparable = LocalGetOption(nameof(this.GenerateStructuralComparable)) ?? false;
             this.GenerateMethodsAsVirtual = LocalGetOption(nameof(this.GenerateMethodsAsVirtual)) ?? true;
             this.PreferStructuralComparison = LocalGetOption(nameof(this.PreferStructuralComparison)) ?? false;
 
@@ -79,6 +86,10 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateEqualityOperators { get; }
 
         public bool GenerateComparisonOperators { get; }
+
+        public bool GenerateStructuralEquatable { get; }
+
+        public bool GenerateStructuralComparable { get; }
 
         public bool GenerateEqualityContract { get; }
 

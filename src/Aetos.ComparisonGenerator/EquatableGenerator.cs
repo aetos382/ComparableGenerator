@@ -30,20 +30,31 @@ namespace Aetos.ComparisonGenerator
 
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
-        var options = context.Options;
+        var options = sourceTypeInfo.GenerateOptions;
 
-        string parameterType =
-            sourceType.IsValueType ? typeName : context.NullableTypeName;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
+
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
+
+            (true, _) => typeName,
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
+
+        };
+
+        string nullableObjectTypeName = nullableAnnotationEnabled
+            ? "object?"
+            : "object";
 
         string virtualModifier =
-            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+            !sourceTypeInfo.IsValueType && options.GenerateMethodsAsVirtual ?
                 " virtual" : "";
 
 this.Write("partial ");
@@ -64,23 +75,23 @@ this.Write(this.ToStringHelper.ToStringWithCulture(virtualModifier));
 
 this.Write(" bool Equals(\r\n        ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameterType));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
 this.Write(" other)\r\n    {\r\n");
 
 
-        if (sourceType.OverridesObjectEquals)
+        if (sourceTypeInfo.OverridesObjectEquals)
         {
 
 this.Write("        return this.Equals((");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(context.NullableObjectTypeName));
+this.Write(this.ToStringHelper.ToStringWithCulture(nullableObjectTypeName));
 
 this.Write(")other);\r\n");
 
 
         }
-        else if (sourceType.IsGenericComparable)
+        else if (sourceTypeInfo.IsGenericComparable)
         {
 
 this.Write("        return ((IComparable<");
@@ -91,7 +102,7 @@ this.Write(">)this).CompareTo(other) == 0;\r\n");
 
 
         }
-        else if (sourceType.IsNonGenericComparable)
+        else if (sourceTypeInfo.IsNonGenericComparable)
         {
 
 this.Write("        return ((IComparable)this).CompareTo(other) == 0;\r\n");

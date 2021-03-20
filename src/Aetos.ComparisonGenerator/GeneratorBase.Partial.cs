@@ -6,17 +6,17 @@ namespace Aetos.ComparisonGenerator
 {
     internal abstract partial class GeneratorBase
     {
-        private protected ComparisonGeneratorContext Context { get; }
+        private protected SourceTypeInfo SourceTypeInfo { get; }
 
         internal GeneratorBase(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
         {
-            if (context is null)
+            if (sourceTypeInfo is null)
             {
-                throw new ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(sourceTypeInfo));
             }
 
-            this.Context = context;
+            this.SourceTypeInfo = sourceTypeInfo;
         }
 
         protected static string GetTypeKind(

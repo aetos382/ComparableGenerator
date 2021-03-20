@@ -51,6 +51,28 @@ namespace Aetos.ComparisonGenerator
 
         public INamedTypeSymbol StructuralComparable { get; }
 
+        public bool IsNullableValueType(
+            ITypeSymbol type)
+        {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (type is not INamedTypeSymbol nts)
+            {
+                return false;
+            }
+
+            if (!nts.IsValueType || !nts.IsGenericType)
+            {
+                return false;
+            }
+
+            return
+                SymbolEqualityComparer.Default.Equals(nts.ConstructedFrom, this.Nullable);
+        }
+
         public bool IsEquatable(
             ITypeSymbol type)
         {
@@ -60,26 +82,22 @@ namespace Aetos.ComparisonGenerator
             }
 
             var equatable = this.MakeConstructedEquatable(type);
+
             bool result = type.HasInterface(equatable);
+            if (result)
+            {
+                return result;
+            }
+
+            if (type is INamedTypeSymbol nts)
+            {
+                if (this.IsNullableValueType(nts))
+                {
+                    result = this.IsEquatable(nts.TypeArguments[0]);
+                }
+            }
 
             return result;
-        }
-
-        public bool IsNullable(
-            INamedTypeSymbol type)
-        {
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            if (!type.IsValueType || !type.IsGenericType)
-            {
-                return false;
-            }
-
-            return
-                SymbolEqualityComparer.Default.Equals(type.ConstructedFrom, this.Nullable);
         }
 
         public bool IsGenericComparable(
@@ -91,7 +109,20 @@ namespace Aetos.ComparisonGenerator
             }
 
             var comparable = this.MakeConstructedComparable(type);
+
             bool result = type.HasInterface(comparable);
+            if (result)
+            {
+                return result;
+            }
+
+            if (type is INamedTypeSymbol nts)
+            {
+                if (this.IsNullableValueType(nts))
+                {
+                    result = this.IsGenericComparable(nts.TypeArguments[0]);
+                }
+            }
 
             return result;
         }
@@ -105,6 +136,19 @@ namespace Aetos.ComparisonGenerator
             }
 
             bool result = type.HasInterface(this.NonGenericComparable);
+            if (result)
+            {
+                return result;
+            }
+
+            if (type is INamedTypeSymbol nts)
+            {
+                if (this.IsNullableValueType(nts))
+                {
+                    result = this.IsNonGenericComparable(nts.TypeArguments[0]);
+                }
+            }
+
             return result;
         }
 
@@ -117,6 +161,19 @@ namespace Aetos.ComparisonGenerator
             }
 
             bool result = type.HasInterface(this.StructuralEquatable);
+            if (result)
+            {
+                return result;
+            }
+
+            if (type is INamedTypeSymbol nts)
+            {
+                if (this.IsNullableValueType(nts))
+                {
+                    result = this.IsStructuralEquatable(nts.TypeArguments[0]);
+                }
+            }
+
             return result;
         }
 
@@ -129,6 +186,19 @@ namespace Aetos.ComparisonGenerator
             }
 
             bool result = type.HasInterface(this.StructuralComparable);
+            if (result)
+            {
+                return result;
+            }
+
+            if (type is INamedTypeSymbol nts)
+            {
+                if (this.IsNullableValueType(nts))
+                {
+                    result = this.IsStructuralComparable(nts.TypeArguments[0]);
+                }
+            }
+
             return result;
         }
 
@@ -170,6 +240,18 @@ namespace Aetos.ComparisonGenerator
             }
 
             return this.GenericComparable.Construct(typeArgument);
+        }
+
+        public AttributeData? GetEquatableAttribute(
+            ISymbol symbol)
+        {
+            if (symbol is null)
+            {
+                throw new ArgumentNullException(nameof(symbol));
+            }
+
+            var data = symbol.GetAttribute(this.EquatableAttribute);
+            return data;
         }
 
         public AttributeData? GetComparableAttribute(

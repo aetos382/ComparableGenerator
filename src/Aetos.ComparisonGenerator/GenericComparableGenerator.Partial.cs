@@ -3,9 +3,9 @@
     internal partial class GenericComparableGenerator
     {
         public GenericComparableGenerator(
-            ComparisonGeneratorContext context)
+            SourceTypeInfo sourceTypeInfo)
             : base(
-                context)
+                sourceTypeInfo)
         {
         }
     }

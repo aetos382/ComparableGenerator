@@ -5,42 +5,53 @@
 <#+
     protected override void WriteCode()
     {
-        var context = this.Context;
-        var type = context.Type;
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
 
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var sourceType = context.SourceType;
-        var options = context.Options;
+        var options = sourceTypeInfo.GenerateOptions;
 
-        string parameterType =
-            sourceType.IsValueType ? typeName : context.NullableTypeName;
+        var isValueType = sourceTypeInfo.IsValueType;
+        var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
+
+        var parameterTypeName = (isValueType, nullableAnnotationEnabled) switch {
+
+            (true, _) => typeName,
+            (false, false) => typeName,
+            (false, true) => $"{typeName}?"
+
+        };
+
+        string nullableObjectTypeName = nullableAnnotationEnabled
+            ? "object?"
+            : "object";
 
         string virtualModifier =
-            !sourceType.IsValueType && context.Options.GenerateMethodsAsVirtual ?
+            !sourceTypeInfo.IsValueType && options.GenerateMethodsAsVirtual ?
                 " virtual" : "";
 #>
 partial <#= typeKind #> <#= typeName #> :
     IEquatable<<#= typeName #>>
 {
     public<#= virtualModifier #> bool Equals(
-        <#= parameterType #> other)
+        <#= parameterTypeName #> other)
     {
 <#+
-        if (sourceType.OverridesObjectEquals)
+        if (sourceTypeInfo.OverridesObjectEquals)
         {
 #>
-        return this.Equals((<#= context.NullableObjectTypeName #>)other);
+        return this.Equals((<#= nullableObjectTypeName #>)other);
 <#+
         }
-        else if (sourceType.IsGenericComparable)
+        else if (sourceTypeInfo.IsGenericComparable)
         {
 #>
         return ((IComparable<<#= typeName #>>)this).CompareTo(other) == 0;
 <#+
         }
-        else if (sourceType.IsNonGenericComparable)
+        else if (sourceTypeInfo.IsNonGenericComparable)
         {
 #>
         return ((IComparable)this).CompareTo(other) == 0;

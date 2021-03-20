@@ -37,8 +37,11 @@ dotnet_diagnostic.IDE0018.severity = suggestion
 dotnet_diagnostic.IDE0025.severity = silent
 dotnet_diagnostic.IDE0045.severity = suggestion
 dotnet_diagnostic.IDE0046.severity = suggestion
+dotnet_diagnostic.IDE0047.severity = suggestion
+dotnet_diagnostic.IDE0051.severity = warning
 dotnet_diagnostic.IDE0055.severity = suggestion
 dotnet_diagnostic.IDE0058.severity = suggestion
+dotnet_diagnostic.IDE0059.severity = warning
 dotnet_diagnostic.IDE0060.severity = suggestion
 dotnet_diagnostic.IDE0072.severity = suggestion
 dotnet_diagnostic.IDE0078.severity = suggestion
@@ -46,13 +49,21 @@ dotnet_diagnostic.IDE0079.severity = warning
 dotnet_diagnostic.RS1015.severity = suggestion
 dotnet_diagnostic.RS1028.severity = suggestion
 
+dotnet_diagnostic.RCS1032.severity = suggestion
 dotnet_diagnostic.RCS1036.severity = warning
+dotnet_diagnostic.RCS1037.severity = warning
 dotnet_diagnostic.RCS1061.severity = suggestion
+dotnet_diagnostic.RCS1080.severity = warning
 dotnet_diagnostic.RCS1118.severity = warning
 dotnet_diagnostic.RCS1124.severity = silent
+dotnet_diagnostic.RCS1128.severity = suggestion
+dotnet_diagnostic.RCS1134.severity = warning
+dotnet_diagnostic.RCS1163.severity = warning
 dotnet_diagnostic.RCS1211.severity = silent
+dotnet_diagnostic.RCS1213.severity = warning
 dotnet_diagnostic.RCS1214.severity = warning
 dotnet_diagnostic.RCS1222.severity = warning
+dotnet_diagnostic.RCS1225.severity = suggestion
 
 # -------------------------- #
 # .NET and C# language rules #

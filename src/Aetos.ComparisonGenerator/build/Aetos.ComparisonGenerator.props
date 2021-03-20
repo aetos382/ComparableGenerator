@@ -6,6 +6,8 @@
     <CompilerVisibleProperty Include="GenerateNonGenericComparable" />
     <CompilerVisibleProperty Include="GenerateEqualityOperators" />
     <CompilerVisibleProperty Include="GenerateComparisonOperators" />
+    <CompilerVisibleProperty Include="GenerateStructuralEquatable" />
+    <CompilerVisibleProperty Include="GenerateStructuralComparable" />
     <CompilerVisibleProperty Include="GenerateEqualityContract" />
     <CompilerVisibleProperty Include="GenerateMethodsAsVirtual" />
     <CompilerVisibleProperty Include="PreferStructuralComparison" />
@@ -18,6 +20,8 @@
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateNonGenericComparable" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityOperators" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateComparisonOperators" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateStructuralEquatable" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateStructuralComparable" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEqualityContract" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateMethodsAsVirtual" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="PreferStructuralComparison" />

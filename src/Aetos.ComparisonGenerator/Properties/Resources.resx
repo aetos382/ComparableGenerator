@@ -117,17 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MemberTypeIsNotComparableMessage" xml:space="preserve">
+    <value>{0}.{1}: {2} is not comparable</value>
+  </data>
+  <data name="MemberTypeIsNotComparableTitle" xml:space="preserve">
+    <value>type is not comparable.</value>
+  </data>
   <data name="NoMembersMessage" xml:space="preserve">
-    <value>no members.</value>
+    <value>{0} has no members.</value>
   </data>
   <data name="NoMembersTitle" xml:space="preserve">
     <value>no members.</value>
-  </data>
-  <data name="TypeIsNotComparableMessage" xml:space="preserve">
-    <value>{0}.{1}: {2} is not comparable</value>
-  </data>
-  <data name="TypeIsNotComparableTitle" xml:space="preserve">
-    <value>type is not comparable.</value>
   </data>
   <data name="TypeIsNotPartialMessage" xml:space="preserve">
     <value>{0} is not partial type.</value>
