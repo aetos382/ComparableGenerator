@@ -20,9 +20,9 @@ namespace Aetos.ComparisonGenerator
 
         public bool GenerateMethodsAsVirtual { get; init; } = true;
 
-        public bool GenerateEquatable { get; init; } = true;
+        public bool GenerateOperators { get; init; } = false;
 
-        public bool GenerateEqualityOperators { get; init; } = false;
+        public bool GenerateEquatable { get; init; } = true;
 
         public bool GenerateStructuralEquatable { get; init; } = false;
     }
@@ -45,8 +45,6 @@ namespace Aetos.ComparisonGenerator
         public bool GenerateNonGenericComparable { get; init; } = true;
 
         public bool GenerateStructuralComparable { get; init; } = false;
-
-        public bool GenerateComparisonOperators { get; init; } = false;
     }
 }";
 

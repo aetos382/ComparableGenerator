@@ -15,8 +15,7 @@ namespace Aetos.ComparisonGenerator
             bool generateNonGenericComparable = true,
             bool overrideObjectMethods = true,
             bool generateEqualityContract = true,
-            bool generateEqualityOperators = false,
-            bool generateComparisonOperators = false,
+            bool generateOperators = false,
             bool generateStructuralEquatable = false,
             bool generateStructuralComparable = false,
             bool generateMethodsAsVirtual = true,
@@ -28,8 +27,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateNonGenericComparable = generateNonGenericComparable;
             this.OverrideObjectMethods = overrideObjectMethods;
             this.GenerateEqualityContract = generateEqualityContract;
-            this.GenerateEqualityOperators = generateEqualityOperators;
-            this.GenerateComparisonOperators = generateComparisonOperators;
+            this.GenerateOperators = generateOperators;
             this.GenerateStructuralEquatable = generateStructuralEquatable;
             this.GenerateStructuralComparable = generateStructuralComparable;
             this.GenerateMethodsAsVirtual = generateMethodsAsVirtual;
@@ -63,8 +61,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateNonGenericComparable = LocalGetOption(nameof(this.GenerateNonGenericComparable)) ?? true;
             this.OverrideObjectMethods = LocalGetOption(nameof(this.OverrideObjectMethods)) ?? true;
             this.GenerateEqualityContract = LocalGetOption(nameof(this.GenerateEqualityContract)) ?? true;
-            this.GenerateEqualityOperators = LocalGetOption(nameof(this.GenerateEqualityOperators)) ?? false;
-            this.GenerateComparisonOperators = LocalGetOption(nameof(this.GenerateComparisonOperators)) ?? false;
+            this.GenerateOperators = LocalGetOption(nameof(this.GenerateOperators)) ?? false;
             this.GenerateStructuralEquatable = LocalGetOption(nameof(this.GenerateStructuralEquatable)) ?? false;
             this.GenerateStructuralComparable = LocalGetOption(nameof(this.GenerateStructuralComparable)) ?? false;
             this.GenerateMethodsAsVirtual = LocalGetOption(nameof(this.GenerateMethodsAsVirtual)) ?? true;
@@ -85,9 +82,7 @@ namespace Aetos.ComparisonGenerator
 
         public bool OverrideObjectMethods { get; }
 
-        public bool GenerateEqualityOperators { get; }
-
-        public bool GenerateComparisonOperators { get; }
+        public bool GenerateOperators { get; }
 
         public bool GenerateStructuralEquatable { get; }
 

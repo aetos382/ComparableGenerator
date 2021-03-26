@@ -83,13 +83,18 @@ namespace Aetos.ComparisonGenerator
 
             foreach (var candidateType in candidateTypes.ToArray())
             {
+                if (!candidateType.HasComparableAttribute)
+                {
+                    continue;
+                }
+
                 var options = candidateType.GenerateOptions;
 
                 foreach (var member in candidateType.Members)
                 {
                     if (options.GenerateGenericComparable ||
                         options.GenerateNonGenericComparable ||
-                        options.GenerateComparisonOperators ||
+                        options.GenerateOperators ||
                         options.GenerateStructuralComparable)
                     {
                         var memberType = member.Type;
@@ -207,22 +212,21 @@ namespace Aetos.ComparisonGenerator
                     }
                 }
 
-                if (options.GenerateEqualityOperators &&
-                    !sourceType.DefinedEqualityOperators)
+                if (options.GenerateOperators &&
+                    !sourceType.DefinedOperator)
                 {
                     GenerateCode(
                         context,
                         new EqualityOperatorsGenerator(sourceType),
                         $"{fullName}_EqualityOperators.cs");
-                }
 
-                if (options.GenerateComparisonOperators &&
-                    !sourceType.DefinedComparisonOperators)
-                {
-                    GenerateCode(
-                        context,
-                        new ComparisonOperatorsGenerator(sourceType),
-                        $"{fullName}_ComparisonOperators.cs");
+                    if (sourceType.HasComparableAttribute)
+                    {
+                        GenerateCode(
+                            context,
+                            new ComparisonOperatorsGenerator(sourceType),
+                            $"{fullName}_ComparisonOperators.cs");
+                    }
                 }
             }
         }

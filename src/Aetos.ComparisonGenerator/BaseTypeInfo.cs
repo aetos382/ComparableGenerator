@@ -66,34 +66,28 @@ namespace Aetos.ComparisonGenerator
                 operatorParameterType = knownTypes.MakeNullable(typeSymbol);
             }
 
-            foreach (var op in operators)
-            {
-                var type1 = op.Parameters[0].Type;
-                var type2 = op.Parameters[1].Type;
-
-                bool matchTypes =
-                    comparer.Equals(type1, operatorParameterType) &&
-                    comparer.Equals(type2, operatorParameterType);
-
+            this.DefinedOperator = operators.Any(op => {
                 switch (op.Name)
                 {
                     case "op_Equality":
-                        if (matchTypes)
-                        {
-                            this.DefinedEqualityOperators = true;
-                        }
-
-                        break;
-
+                    case "op_Inequality":
                     case "op_LessThan":
-                        if (matchTypes)
-                        {
-                            this.DefinedComparisonOperators = true;
-                        }
+                    case "op_GreaterThan":
+                    case "op_LessThanOrEqual":
+                    case "op_GreaterThanOrEqual":
+                        var type1 = op.Parameters[0].Type;
+                        var type2 = op.Parameters[1].Type;
 
-                        break;
+                        bool matchTypes =
+                            comparer.Equals(type1, operatorParameterType) &&
+                            comparer.Equals(type2, operatorParameterType);
+
+                        return matchTypes;
+
+                    default:
+                        return false;
                 }
-            }
+            });
 
             bool hasEqualityContract = typeSymbol.GetMembers("EqualityContract")
                 .OfType<IPropertySymbol>()
@@ -122,9 +116,7 @@ namespace Aetos.ComparisonGenerator
 
         public bool OverridesObjectGetHashCode { get; }
 
-        public bool DefinedEqualityOperators { get; }
-
-        public bool DefinedComparisonOperators { get; }
+        public bool DefinedOperator { get; }
 
         public bool HasEqualityContract { get; }
     }

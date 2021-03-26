@@ -36,8 +36,6 @@ namespace Aetos.ComparisonGenerator
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var options = sourceTypeInfo.GenerateOptions;
-
         var isValueType = sourceTypeInfo.IsValueType;
         var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
@@ -48,21 +46,6 @@ namespace Aetos.ComparisonGenerator
             (false, true) => $"{typeName}?"
 
         };
-
-        bool hasEquals =
-            sourceTypeInfo.OverridesObjectEquals ||
-            options.OverrideObjectMethods ||
-            sourceTypeInfo.IsEquatable ||
-            options.GenerateEquatable;
-
-        bool hasCompareTo =
-            sourceTypeInfo.IsGenericComparable ||
-            options.GenerateGenericComparable ||
-            sourceTypeInfo.IsNonGenericComparable ||
-            options.GenerateNonGenericComparable;
-
-        string leftVarName = sourceTypeInfo.IsValueType ? "leftValue" : "left";
-        string rightVarName = sourceTypeInfo.IsValueType ? "rightValue" : "right";
 
 this.Write("partial ");
 
@@ -80,93 +63,8 @@ this.Write(" left,\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
-this.Write(" right)\r\n    {\r\n");
-
-
-        if (!isValueType)
-        {
-
-this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return t" +
-        "rue;\r\n        }\r\n");
-
-
-        }
-
-this.Write("        if (left is null || right is null)\r\n        {\r\n            return false;\r" +
-        "\n        }\r\n\r\n");
-
-
-        if (isValueType)
-        {
-
-this.Write("        var leftValue = left.Value;\r\n        var rightValue = right.Value;\r\n");
-
-
-        }
-
-        // TODO: 見直し
-        if (sourceTypeInfo.DefinedEqualityOperators)
-        {
-
-this.Write("        return ");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
-
-this.Write(" == ");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
-
-this.Write(";\r\n");
-
-
-        }
-        else if (hasEquals)
-        {
-
-this.Write("        return ");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
-
-this.Write(".Equals(");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
-
-this.Write(");     \r\n");
-
-
-        }
-        else if (hasCompareTo)
-        {
-
-this.Write("        return ");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
-
-this.Write(".CompareTo(");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
-
-this.Write(") == 0;\r\n");
-
-
-        }
-        else
-        {
-
-this.Write("        return __EqualsCore(");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(leftVarName));
-
-this.Write(", ");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(rightVarName));
-
-this.Write(");\r\n");
-
-
-        }
-
-this.Write("    }\r\n\r\n    public static bool operator !=(\r\n        ");
+this.Write(" right)\r\n    {\r\n        return __EqualsCore(left, right);\r\n    }\r\n\r\n    public st" +
+        "atic bool operator !=(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 

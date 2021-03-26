@@ -11,8 +11,6 @@
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var options = sourceTypeInfo.GenerateOptions;
-
         var isValueType = sourceTypeInfo.IsValueType;
         var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
@@ -23,21 +21,6 @@
             (false, true) => $"{typeName}?"
 
         };
-
-        bool hasEquals =
-            sourceTypeInfo.OverridesObjectEquals ||
-            options.GenerateObjectEquals ||
-            sourceTypeInfo.IsEquatable ||
-            options.GenerateEquatable;
-
-        bool hasCompareTo =
-            sourceTypeInfo.IsGenericComparable ||
-            options.GenerateGenericComparable ||
-            sourceTypeInfo.IsNonGenericComparable ||
-            options.GenerateNonGenericComparable;
-
-        string leftVarName = sourceTypeInfo.IsValueType ? "leftValue" : "left";
-        string rightVarName = sourceTypeInfo.IsValueType ? "rightValue" : "right";
 #>
 partial <#= typeKind #> <#= typeName #>
 {
@@ -45,57 +28,7 @@ partial <#= typeKind #> <#= typeName #>
         <#= parameterTypeName #> left,
         <#= parameterTypeName #> right)
     {
-<#+
-        if (!isValueType)
-        {
-#>
-        if (object.ReferenceEquals(left, right))
-        {
-            return true;
-        }
-<#+
-        }
-#>
-        if (left is null || right is null)
-        {
-            return false;
-        }
-
-<#+
-        if (isValueType)
-        {
-#>
-        var leftValue = left.Value;
-        var rightValue = right.Value;
-<#+
-        }
-
-        // TODO: 見直し
-        if (sourceTypeInfo.DefinedEqualityOperators)
-        {
-#>
-        return <#= leftVarName #> == <#= rightVarName #>;
-<#+
-        }
-        else if (hasEquals)
-        {
-#>
-        return <#= leftVarName #>.Equals(<#= rightVarName #>);     
-<#+
-        }
-        else if (hasCompareTo)
-        {
-#>
-        return <#= leftVarName #>.CompareTo(<#= rightVarName #>) == 0;
-<#+
-        }
-        else
-        {
-#>
-        return __EqualsCore(<#= leftVarName #>, <#= rightVarName #>);
-<#+
-        }
-#>
+        return __EqualsCore(left, right);
     }
 
     public static bool operator !=(
