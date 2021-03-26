@@ -151,6 +151,16 @@ namespace Aetos.ComparisonGenerator
                     new CommonGenerator(sourceType),
                     $"{fullName}_Common.cs");
 
+                if (options.GenerateEqualityContract &&
+                    !sourceType.HasEqualityContract &&
+                    !sourceType.IsValueType)
+                {
+                    GenerateCode(
+                        context,
+                        new EqualityContractGenerator(sourceType),
+                        $"{fullName}_EqualityContract.cs");
+                }
+
                 if (options.GenerateEquatable &&
                     !sourceType.IsEquatable)
                 {

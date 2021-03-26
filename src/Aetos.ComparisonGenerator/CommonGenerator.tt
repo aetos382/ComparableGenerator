@@ -32,10 +32,6 @@ using System.ComponentModel;
 
         };
 
-        bool parameterIsNullable =
-            !sourceTypeInfo.IsValueType ||
-            sourceTypeInfo.IsNullableValueType;
-
         string dotValue = isValueType ? ".Value" : "";
 #>
 partial <#= typeKind #> <#= typeName #>
@@ -57,17 +53,10 @@ partial <#= typeKind #> <#= typeName #>
         }
 #>
         
-<#+
-        if (parameterIsNullable)
-        {
-#>
         if (left is null || right is null)
         {
             return false;
         }
-<#+
-        }
-#>
 
         bool result;
 <#+
@@ -105,9 +94,6 @@ partial <#= typeKind #> <#= typeName #>
 
 <#+
         }
-
-        if (parameterIsNullable)
-        {
 #>
         if (left is null)
         {
@@ -118,9 +104,6 @@ partial <#= typeKind #> <#= typeName #>
         {
             return int.MaxValue;
         }
-<#+
-        }
-#>
 
         int result;
 <#+
@@ -141,23 +124,6 @@ partial <#= typeKind #> <#= typeName #>
 
         return 0;
     }
-
-<#+
-        if (options.GenerateEqualityContract &&
-            !sourceTypeInfo.HasEqualityContract &&
-            !isValueType)
-        {
-#>
-    protected virtual Type EqualityContract
-    {
-        get
-        {
-            return typeof(<#= typeName #>);
-        }
-    }
-<#+
-        }
-#>
 }
 <#+
     }

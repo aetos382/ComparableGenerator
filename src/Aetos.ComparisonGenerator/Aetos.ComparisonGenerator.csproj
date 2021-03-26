@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -48,6 +48,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CommonGenerator.cs</LastGenOutput>
     </None>
+    <None Update="EqualityContractGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EqualityContractGenerator.cs</LastGenOutput>
+    </None>
     <None Update="ObjectEqualsGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ObjectEqualsGenerator.cs</LastGenOutput>
@@ -93,6 +97,11 @@
       <DependentUpon>CommonGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="EqualityContractGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EqualityContractGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="ObjectEqualsGenerator.cs">
       <DependentUpon>ObjectEqualsGenerator.tt</DependentUpon>

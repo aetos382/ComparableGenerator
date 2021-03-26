@@ -1,0 +1,28 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="GeneratorBase" #>
+<#
+    base.TransformText();
+#>
+<#+
+    protected override void WriteCode()
+    {
+        var sourceTypeInfo = this.SourceTypeInfo;
+        var type = sourceTypeInfo.TypeSymbol;
+
+        string typeName = type.Name;
+        string typeKind = GetTypeKind(type);
+
+        string fullTypeName = type.GetFullName(true);
+#>
+partial <#= typeKind #> <#= typeName #>
+{
+    public virtual Type EqualityContract
+    {
+        get
+        {
+            return typeof(<#= fullTypeName #>);
+        }
+    }
+}
+<#+
+    }
+#>

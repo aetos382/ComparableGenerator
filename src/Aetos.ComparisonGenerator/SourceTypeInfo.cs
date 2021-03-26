@@ -48,8 +48,6 @@ namespace Aetos.ComparisonGenerator
             }
         }
 
-        public bool IsNullableValueType { get; }
-
         public static SourceTypeInfo? TryCreate(
             GeneratorExecutionContext context,
             TypeDeclarationSyntax syntax,
@@ -239,7 +237,6 @@ namespace Aetos.ComparisonGenerator
             this.Members = members;
             this.NullableContext = nullableContext;
             this.GenerateOptions = options;
-            this.IsNullableValueType = knownTypes.IsNullableValueType(typeSymbol);
             this.NamespaceName = typeSymbol.ContainingNamespace?.GetFullName() ?? string.Empty;
 
             var baseTypeSymbol = typeSymbol.BaseType;
