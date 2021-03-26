@@ -3,16 +3,6 @@
     base.TransformText();
 #>
 <#+
-    protected override void WriteUsings()
-    {
-        if (this.DelegateToStructuralEquatable || this.DelegateToStructuralComparable)
-        {
-#>
-using System.Collections;
-<#+
-        }
-    }
-
     protected override void WriteCode()
     {
         var sourceTypeInfo = this.SourceTypeInfo;
@@ -35,44 +25,7 @@ partial <#= typeKind #> <#= typeName #>
             return false;
         }
 
-<#+
-        if (this.CanDelegateToEquatable)
-        {
-#>
-        return ((IEquatable<<#= typeName #>>)this).Equals(other2);
-<#+
-        }
-        else if (this.CanDelegateToGenericComparable)
-        {
-#>
-        return ((IComparable<<#= typeName #>>)this).CompareTo(other2) == 0;
-<#+
-        }
-        else if (this.CanDelegateToNonGenericComparable)
-        {
-#>
-        return ((IComparable)this).CompareTo(other2) == 0;
-<#+
-        }
-        else if (this.CanDelegateToStructuralEquatable)
-        {
-#>
-        return ((IStructuralEquatable)this).Equals(other2, StructuralComparisons.StructuralEqualityComparer);
-<#+
-        }
-        else if (this.CanDelegateToStructuralComparable)
-        {
-#>
-        return ((IStructuralComparable)this).CompareTo(other2, StructuralComparisons.StructuralComparer);
-<#+
-        }
-        else
-        {
-#>
         return __EqualsCore(this, other2);
-<#+
-        }
-#>
     }
 }
 <#+

@@ -72,33 +72,7 @@ this.Write(" int CompareTo(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
-this.Write(" other)\r\n    {\r\n");
-
-
-        if (sourceTypeInfo.IsNonGenericComparable)
-        {
-
-this.Write("        return ((IComparable)this).CompareTo(other);\r\n");
-
-
-        }
-        else
-        {
-            if (!type.IsValueType)
-            {
-
-this.Write("        if (other is null)\r\n        {\r\n            return int.MaxValue;\r\n        " +
-        "}\r\n");
-
-
-            }
-
-this.Write("\r\n        return __CompareCore(this, other);\r\n");
-
-
-        }
-
-this.Write("    }\r\n}\r\n");
+this.Write(" other)\r\n    {\r\n        return __CompareCore(this, other);\r\n    }\r\n}\r\n");
 
 
     }

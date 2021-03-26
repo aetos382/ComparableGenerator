@@ -69,30 +69,8 @@ this.Write(" other)\r\n    {\r\n        if (other is null)\r\n        {\r\n     
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(" other2)\r\n        {\r\n            throw new ArgumentException();\r\n        }\r\n\r\n");
-
-
-        if (sourceTypeInfo.IsGenericComparable ||
-            options.GenerateGenericComparable)
-        {
-
-this.Write("        return ((IComparable<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
-
-this.Write(">)this).CompareTo(other2);\r\n");
-
-
-        }
-        else
-        {
-
-this.Write("        return __CompareCore(this, other2);\r\n");
-
-
-        }
-
-this.Write("    }\r\n}\r\n");
+this.Write(" other2)\r\n        {\r\n            throw new ArgumentException();\r\n        }\r\n\r\n   " +
+        "     return __CompareCore(this, other2);\r\n    }\r\n}\r\n");
 
 
     }

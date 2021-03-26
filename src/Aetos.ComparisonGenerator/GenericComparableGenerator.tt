@@ -33,30 +33,7 @@ partial <#= typeKind #> <#= typeName #> :
     public<#= virtualModifier #> int CompareTo(
         <#= parameterTypeName #> other)
     {
-<#+
-        if (sourceTypeInfo.IsNonGenericComparable)
-        {
-#>
-        return ((IComparable)this).CompareTo(other);
-<#+
-        }
-        else
-        {
-            if (!type.IsValueType)
-            {
-#>
-        if (other is null)
-        {
-            return int.MaxValue;
-        }
-<#+
-            }
-#>
-
         return __CompareCore(this, other);
-<#+
-        }
-#>
     }
 }
 <#+

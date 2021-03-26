@@ -39,21 +39,7 @@ partial <#= typeKind #> <#= typeName #> :
             throw new ArgumentException();
         }
 
-<#+
-        if (sourceTypeInfo.IsGenericComparable ||
-            options.GenerateGenericComparable)
-        {
-#>
-        return ((IComparable<<#= typeName #>>)this).CompareTo(other2);
-<#+
-        }
-        else
-        {
-#>
         return __CompareCore(this, other2);
-<#+
-        }
-#>
     }
 }
 <#+

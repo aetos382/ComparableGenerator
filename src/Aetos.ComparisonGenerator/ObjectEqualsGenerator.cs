@@ -28,17 +28,6 @@ namespace Aetos.ComparisonGenerator
             return this.GenerationEnvironment.ToString();
         }
 
-    protected override void WriteUsings()
-    {
-        if (this.DelegateToStructuralEquatable || this.DelegateToStructuralComparable)
-        {
-
-this.Write("using System.Collections;\r\n");
-
-
-        }
-    }
-
     protected override void WriteCode()
     {
         var sourceTypeInfo = this.SourceTypeInfo;
@@ -67,63 +56,8 @@ this.Write(" other)\r\n    {\r\n        if (other is not ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n");
-
-
-        if (this.CanDelegateToEquatable)
-        {
-
-this.Write("        return ((IEquatable<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
-
-this.Write(">)this).Equals(other2);\r\n");
-
-
-        }
-        else if (this.CanDelegateToGenericComparable)
-        {
-
-this.Write("        return ((IComparable<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
-
-this.Write(">)this).CompareTo(other2) == 0;\r\n");
-
-
-        }
-        else if (this.CanDelegateToNonGenericComparable)
-        {
-
-this.Write("        return ((IComparable)this).CompareTo(other2) == 0;\r\n");
-
-
-        }
-        else if (this.CanDelegateToStructuralEquatable)
-        {
-
-this.Write("        return ((IStructuralEquatable)this).Equals(other2, StructuralComparisons." +
-        "StructuralEqualityComparer);\r\n");
-
-
-        }
-        else if (this.CanDelegateToStructuralComparable)
-        {
-
-this.Write("        return ((IStructuralComparable)this).CompareTo(other2, StructuralComparis" +
-        "ons.StructuralComparer);\r\n");
-
-
-        }
-        else
-        {
-
-this.Write("        return __EqualsCore(this, other2);\r\n");
-
-
-        }
-
-this.Write("    }\r\n}\r\n");
+this.Write(" other2)\r\n        {\r\n            return false;\r\n        }\r\n\r\n        return __Equ" +
+        "alsCore(this, other2);\r\n    }\r\n}\r\n");
 
 
     }

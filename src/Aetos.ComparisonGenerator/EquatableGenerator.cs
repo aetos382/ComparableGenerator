@@ -77,47 +77,7 @@ this.Write(" bool Equals(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
-this.Write(" other)\r\n    {\r\n");
-
-
-        if (sourceTypeInfo.OverridesObjectEquals)
-        {
-
-this.Write("        return this.Equals((");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(nullableObjectTypeName));
-
-this.Write(")other);\r\n");
-
-
-        }
-        else if (sourceTypeInfo.IsGenericComparable)
-        {
-
-this.Write("        return ((IComparable<");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
-
-this.Write(">)this).CompareTo(other) == 0;\r\n");
-
-
-        }
-        else if (sourceTypeInfo.IsNonGenericComparable)
-        {
-
-this.Write("        return ((IComparable)this).CompareTo(other) == 0;\r\n");
-
-
-        }
-        else
-        {
-
-this.Write("        return __EqualsCore(this, other);\r\n");
-
-
-        }
-
-this.Write("    }\r\n}\r\n");
+this.Write(" other)\r\n    {\r\n        return __EqualsCore(this, other);\r\n    }\r\n}\r\n");
 
 
     }
