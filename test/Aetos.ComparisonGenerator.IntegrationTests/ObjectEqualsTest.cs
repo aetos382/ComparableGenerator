@@ -88,6 +88,7 @@ public partial class Person
         }
 
         [Test]
+        [Ignore("移譲は未実装")]
         public void Object_EqualsがIEquitableT_Equalsに移譲される()
         {
             const string source = @"
@@ -157,6 +158,8 @@ public partial class Person :
         }
 
         [Test]
+        [Ignore("移譲は未実装")]
+
         public void Object_EqualsがIComparableT_CompareToに移譲される()
         {
             const string source = @"
@@ -226,6 +229,7 @@ public partial class Person :
         }
 
         [Test]
+        [Ignore("移譲は未実装")]
         public void Object_EqualsがIComparable_CompareToに移譲される()
         {
             const string source = @"
