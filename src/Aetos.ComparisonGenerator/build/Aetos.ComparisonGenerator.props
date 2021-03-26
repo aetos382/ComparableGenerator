@@ -3,7 +3,7 @@
     <CompilerVisibleProperty Include="TargetFrameworkIdentifier" />
     <CompilerVisibleProperty Include="TargetFrameworkVersion" />
 
-    <CompilerVisibleProperty Include="GenerateObjectEquals" />
+    <CompilerVisibleProperty Include="OverrideObjectMethods" />
     <CompilerVisibleProperty Include="GenerateEquatable" />
     <CompilerVisibleProperty Include="GenerateGenericComparable" />
     <CompilerVisibleProperty Include="GenerateNonGenericComparable" />
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateObjectEquals" />
+    <CompilerVisibleItemMetadata Include="Compile" MetadataName="OverrideObjectMethods" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateEquatable" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateGenericComparable" />
     <CompilerVisibleItemMetadata Include="Compile" MetadataName="GenerateNonGenericComparable" />

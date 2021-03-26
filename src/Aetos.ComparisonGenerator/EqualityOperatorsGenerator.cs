@@ -51,7 +51,7 @@ namespace Aetos.ComparisonGenerator
 
         bool hasEquals =
             sourceTypeInfo.OverridesObjectEquals ||
-            options.GenerateObjectEquals ||
+            options.OverrideObjectMethods ||
             sourceTypeInfo.IsEquatable ||
             options.GenerateEquatable;
 

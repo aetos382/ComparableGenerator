@@ -28,7 +28,7 @@ public partial class Person
 }";
 
             var options = new GenerateOptions(
-                generateObjectEquals: true);
+                overrideObjectMethods: true);
 
             var generator = new ComparableObjectGenerator(options);
 
@@ -66,7 +66,7 @@ public partial class Person
 }";
 
             var options = new GenerateOptions(
-                generateObjectEquals: false);
+                overrideObjectMethods: false);
 
             var generator = new ComparableObjectGenerator(options);
 
@@ -122,7 +122,7 @@ public partial class Person :
 }";
 
             var options = new GenerateOptions(
-                generateObjectEquals: true,
+                overrideObjectMethods: true,
                 generateEquatable: false);
 
             var generator = new ComparableObjectGenerator(options);
@@ -191,7 +191,7 @@ public partial class Person :
 }";
 
             var options = new GenerateOptions(
-                generateObjectEquals: true);
+                overrideObjectMethods: true);
 
             var generator = new ComparableObjectGenerator(options);
 

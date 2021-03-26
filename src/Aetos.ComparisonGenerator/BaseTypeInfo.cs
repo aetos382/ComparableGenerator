@@ -42,6 +42,15 @@ namespace Aetos.ComparisonGenerator
                 typeSymbol.GetOverrideSymbol(objectEquals!, comparer);
 
             this.OverridesObjectEquals = objectEqualsOverride is not null;
+            
+            var objectGetHashCode = knownTypes.Object.GetMembers(nameof(object.GetHashCode))
+                .OfType<IMethodSymbol>()
+                .Single(x => x.Parameters.Length == 0);
+
+            var objectGetHashCodeOverride =
+                typeSymbol.GetOverrideSymbol(objectGetHashCode!, comparer);
+
+            this.OverridesObjectGetHashCode = objectGetHashCodeOverride is not null;
 
             var operators =
                 typeSymbol.GetMembers()
@@ -110,6 +119,8 @@ namespace Aetos.ComparisonGenerator
         public bool IsStructuralComparable { get; }
 
         public bool OverridesObjectEquals { get; }
+
+        public bool OverridesObjectGetHashCode { get; }
 
         public bool DefinedEqualityOperators { get; }
 

@@ -178,13 +178,23 @@ namespace Aetos.ComparisonGenerator
                         $"{fullName}_NonGenericComparable.cs");
                 }
 
-                if (options.GenerateObjectEquals &&
-                    !sourceType.OverridesObjectEquals)
+                if (options.OverrideObjectMethods)
                 {
-                    GenerateCode(
-                        context,
-                        new ObjectEqualsGenerator(sourceType),
-                        $"{fullName}_ObjectEquals.cs");
+                    if (!sourceType.OverridesObjectEquals)
+                    {
+                        GenerateCode(
+                            context,
+                            new ObjectEqualsGenerator(sourceType),
+                            $"{fullName}_ObjectEquals.cs");
+                    }
+
+                    if (!sourceType.OverridesObjectGetHashCode)
+                    {
+                        GenerateCode(
+                            context,
+                            new ObjectGetHashCodeGenerator(sourceType),
+                            $"{fullName}_ObjectGetHashCode.cs");
+                    }
                 }
 
                 if (options.GenerateEqualityOperators &&

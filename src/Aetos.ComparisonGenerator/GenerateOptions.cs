@@ -13,7 +13,7 @@ namespace Aetos.ComparisonGenerator
             bool generateEquatable = true,
             bool generateGenericComparable = true,
             bool generateNonGenericComparable = true,
-            bool generateObjectEquals = true,
+            bool overrideObjectMethods = true,
             bool generateEqualityContract = true,
             bool generateEqualityOperators = false,
             bool generateComparisonOperators = false,
@@ -26,7 +26,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEquatable = generateEquatable;
             this.GenerateGenericComparable = generateGenericComparable;
             this.GenerateNonGenericComparable = generateNonGenericComparable;
-            this.GenerateObjectEquals = generateObjectEquals;
+            this.OverrideObjectMethods = overrideObjectMethods;
             this.GenerateEqualityContract = generateEqualityContract;
             this.GenerateEqualityOperators = generateEqualityOperators;
             this.GenerateComparisonOperators = generateComparisonOperators;
@@ -61,7 +61,7 @@ namespace Aetos.ComparisonGenerator
             this.GenerateEquatable = LocalGetOption(nameof(this.GenerateEquatable)) ?? true;
             this.GenerateGenericComparable = LocalGetOption(nameof(this.GenerateGenericComparable)) ?? true;
             this.GenerateNonGenericComparable = LocalGetOption(nameof(this.GenerateNonGenericComparable)) ?? true;
-            this.GenerateObjectEquals = LocalGetOption(nameof(this.GenerateObjectEquals)) ?? true;
+            this.OverrideObjectMethods = LocalGetOption(nameof(this.OverrideObjectMethods)) ?? true;
             this.GenerateEqualityContract = LocalGetOption(nameof(this.GenerateEqualityContract)) ?? true;
             this.GenerateEqualityOperators = LocalGetOption(nameof(this.GenerateEqualityOperators)) ?? false;
             this.GenerateComparisonOperators = LocalGetOption(nameof(this.GenerateComparisonOperators)) ?? false;
@@ -83,7 +83,7 @@ namespace Aetos.ComparisonGenerator
 
         public bool GenerateNonGenericComparable { get; }
 
-        public bool GenerateObjectEquals { get; }
+        public bool OverrideObjectMethods { get; }
 
         public bool GenerateEqualityOperators { get; }
 

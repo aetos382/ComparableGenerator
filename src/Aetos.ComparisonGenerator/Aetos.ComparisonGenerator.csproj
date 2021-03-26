@@ -52,6 +52,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ObjectEqualsGenerator.cs</LastGenOutput>
     </None>
+    <None Update="ObjectGetHashCodeGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ObjectGetHashCodeGenerator.cs</LastGenOutput>
+    </None>
     <None Update="EquatableGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EquatableGenerator.cs</LastGenOutput>
@@ -75,6 +79,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="GeneratorBase.cs">
       <DependentUpon>GeneratorBase.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -89,6 +98,11 @@
       <DependentUpon>ObjectEqualsGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="ObjectGetHashCodeGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ObjectGetHashCodeGenerator.tt</DependentUpon>
     </Compile>
     <Compile Update="EquatableGenerator.cs">
       <DependentUpon>EquatableGenerator.tt</DependentUpon>
@@ -115,11 +129,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -135,7 +144,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fake.System.Diagnostics.CodeAnalysis\Fake.System.Diagnostics.CodeAnalysis.csproj"/>
+    <ProjectReference Include="..\Fake.System.Diagnostics.CodeAnalysis\Fake.System.Diagnostics.CodeAnalysis.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
