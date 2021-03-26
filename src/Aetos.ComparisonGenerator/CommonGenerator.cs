@@ -134,8 +134,14 @@ this.Write("\r\n        return true;\r\n");
 
         }
 
-this.Write("    }\r\n\r\n    [EditorBrowsable(EditorBrowsableState.Never)]\r\n    private static in" +
-        "t __CompareCore(\r\n        ");
+this.Write("    }\r\n\r\n");
+
+
+        if (sourceTypeInfo.HasComparableAttribute)
+        {
+
+this.Write("    [EditorBrowsable(EditorBrowsableState.Never)]\r\n    private static int __Compa" +
+        "reCore(\r\n        ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 
@@ -146,23 +152,23 @@ this.Write(this.ToStringHelper.ToStringWithCulture(parameterTypeName));
 this.Write(" right)\r\n    {\r\n");
 
 
-        if (!isValueType)
-        {
+            if (!isValueType)
+            {
 
 this.Write("        if (object.ReferenceEquals(left, right))\r\n        {\r\n            return 0" +
         ";\r\n        }\r\n\r\n");
 
 
-        }
+            }
 
 this.Write("        if (left is null)\r\n        {\r\n            return int.MinValue;\r\n        }" +
         "\r\n\r\n        if (right is null)\r\n        {\r\n            return int.MaxValue;\r\n   " +
         "     }\r\n\r\n        int result;\r\n");
 
 
-        foreach (var member in sourceTypeInfo.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in sourceTypeInfo.Members)
+            {
+                string memberName = member.Name;
 
 this.Write("\r\n        result = Comparer<");
 
@@ -187,10 +193,15 @@ this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return result;\r\n        }\r\n");
 
 
+            }
+
+
+this.Write("\r\n        return 0;\r\n    }\r\n    ");
+
+
         }
 
-
-this.Write("\r\n        return 0;\r\n    }\r\n}\r\n");
+this.Write("}\r\n");
 
 
     }

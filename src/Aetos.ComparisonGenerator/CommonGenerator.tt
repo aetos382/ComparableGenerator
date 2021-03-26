@@ -87,14 +87,18 @@ partial <#= typeKind #> <#= typeName #>
 #>
     }
 
+<#+
+        if (sourceTypeInfo.HasComparableAttribute)
+        {
+#>
     [EditorBrowsable(EditorBrowsableState.Never)]
     private static int __CompareCore(
         <#= parameterTypeName #> left,
         <#= parameterTypeName #> right)
     {
 <#+
-        if (!isValueType)
-        {
+            if (!isValueType)
+            {
 #>
         if (object.ReferenceEquals(left, right))
         {
@@ -102,7 +106,7 @@ partial <#= typeKind #> <#= typeName #>
         }
 
 <#+
-        }
+            }
 #>
         if (left is null)
         {
@@ -116,9 +120,9 @@ partial <#= typeKind #> <#= typeName #>
 
         int result;
 <#+
-        foreach (var member in sourceTypeInfo.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in sourceTypeInfo.Members)
+            {
+                string memberName = member.Name;
 #>
 
         result = Comparer<<#= member.FullTypeNameWithGlobalPrefix #>>.Default.Compare(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
@@ -127,12 +131,15 @@ partial <#= typeKind #> <#= typeName #>
             return result;
         }
 <#+
-        }
+            }
 
 #>
 
         return 0;
     }
+<#+
+        }
+#>
 }
 <#+
     }
