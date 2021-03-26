@@ -14,17 +14,17 @@ namespace Aetos.ComparisonGenerator
     internal class EquatableAttribute :
         Attribute
     {
-        public bool GenerateEquatable { get; init; } = true;
-
-        public bool GenerateObjectEquals { get; init; } = true;
-
-        public bool GenerateEqualityOperators { get; init; } = false;
-
-        public bool GenerateStructuralEquatable { get; init; } = false;
+        public bool OverrideObjectMethods { get; init; } = true;
 
         public bool GenerateEqualityContract { get; init; } = true;
 
         public bool GenerateMethodsAsVirtual { get; init; } = true;
+
+        public bool GenerateEquatable { get; init; } = true;
+
+        public bool GenerateEqualityOperators { get; init; } = false;
+
+        public bool GenerateStructuralEquatable { get; init; } = false;
     }
 }";
 
@@ -73,8 +73,5 @@ namespace Aetos.ComparisonGenerator
         public const string EquatableAttributeName = "Aetos.ComparisonGenerator.EquatableAttribute";
         public const string ComparableAttributeName = "Aetos.ComparisonGenerator.ComparableAttribute";
         public const string CompareByAttributeName = "Aetos.ComparisonGenerator.CompareByAttribute";
-
-        public const string EquatableAttributeNameWithGlobalPrefix = "global::Aetos.ComparisonGenerator.EquatableAttribute";
-        public const string ComparableAttributeNameWithGlobalPrefix = "global::Aetos.ComparisonGenerator.ComparableAttribute";
     }
 }
