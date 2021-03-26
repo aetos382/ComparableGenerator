@@ -196,7 +196,7 @@ this.Write(");\r\n        if (result != 0)\r\n        {\r\n            return re
             }
 
 
-this.Write("\r\n        return 0;\r\n    }\r\n    ");
+this.Write("\r\n        return 0;\r\n    }\r\n");
 
 
         }

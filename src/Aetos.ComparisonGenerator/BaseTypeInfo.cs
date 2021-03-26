@@ -42,7 +42,7 @@ namespace Aetos.ComparisonGenerator
                 typeSymbol.GetOverrideSymbol(objectEquals!, comparer);
 
             this.OverridesObjectEquals = objectEqualsOverride is not null;
-            
+
             var objectGetHashCode = knownTypes.Object.GetMembers(nameof(object.GetHashCode))
                 .OfType<IMethodSymbol>()
                 .Single(x => x.Parameters.Length == 0);
@@ -59,35 +59,52 @@ namespace Aetos.ComparisonGenerator
                         x.MethodKind == MethodKind.UserDefinedOperator &&
                         x.Parameters.Length == 2);
 
-            var operatorParameterType = typeSymbol;
+            var nullableType = typeSymbol;
 
             if (typeSymbol.IsValueType)
             {
-                operatorParameterType = knownTypes.MakeNullable(typeSymbol);
+                nullableType = knownTypes.MakeNullable(typeSymbol);
             }
 
-            this.DefinedOperator = operators.Any(op => {
-                switch (op.Name)
+            var operatorNames = new[]
+            {
+                "op_Equality",
+                "op_Inequality",
+                "op_LessThan",
+                "op_GreaterThan",
+                "op_LessThanOrEqual",
+                "op_GreaterThanOrEqual"
+            };
+
+            foreach (var op in operators)
+            {
+                if (!operatorNames.Contains(op.Name, StringComparer.Ordinal))
                 {
-                    case "op_Equality":
-                    case "op_Inequality":
-                    case "op_LessThan":
-                    case "op_GreaterThan":
-                    case "op_LessThanOrEqual":
-                    case "op_GreaterThanOrEqual":
-                        var type1 = op.Parameters[0].Type;
-                        var type2 = op.Parameters[1].Type;
-
-                        bool matchTypes =
-                            comparer.Equals(type1, operatorParameterType) &&
-                            comparer.Equals(type2, operatorParameterType);
-
-                        return matchTypes;
-
-                    default:
-                        return false;
+                    continue;
                 }
-            });
+
+                var type1 = op.Parameters[0].Type;
+                var type2 = op.Parameters[1].Type;
+
+                if (!this.DefinedNullableParameterOperator)
+                {
+                    bool matchTypes =
+                        comparer.Equals(type1, nullableType) &&
+                        comparer.Equals(type2, nullableType);
+
+                    this.DefinedNullableParameterOperator = matchTypes;
+                }
+
+                if (typeSymbol.IsValueType &&
+                    !this.DefinedNonNullableParameterOperator)
+                {
+                    bool matchTypes =
+                        comparer.Equals(type1, typeSymbol) &&
+                        comparer.Equals(type2, typeSymbol);
+
+                    this.DefinedNonNullableParameterOperator = matchTypes;
+                }
+            }
 
             bool hasEqualityContract = typeSymbol.GetMembers("EqualityContract")
                 .OfType<IPropertySymbol>()
@@ -116,7 +133,9 @@ namespace Aetos.ComparisonGenerator
 
         public bool OverridesObjectGetHashCode { get; }
 
-        public bool DefinedOperator { get; }
+        public bool DefinedNullableParameterOperator { get; }
+
+        public bool DefinedNonNullableParameterOperator { get; }
 
         public bool HasEqualityContract { get; }
     }

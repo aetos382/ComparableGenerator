@@ -213,7 +213,7 @@ namespace Aetos.ComparisonGenerator
                 }
 
                 if (options.GenerateOperators &&
-                    !sourceType.DefinedOperator)
+                    !sourceType.DefinedNullableParameterOperator)
                 {
                     GenerateCode(
                         context,
