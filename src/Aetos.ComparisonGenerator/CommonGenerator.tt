@@ -19,8 +19,6 @@ using System.ComponentModel;
         string typeName = type.Name;
         string typeKind = GetTypeKind(type);
 
-        var options = sourceTypeInfo.GenerateOptions;
-
         var isValueType = sourceTypeInfo.IsValueType;
         var nullableAnnotationEnabled = sourceTypeInfo.NullableAnnotationsEnabled;
 
@@ -42,15 +40,23 @@ partial <#= typeKind #> <#= typeName #>
         <#= parameterTypeName #> right)
     {
 <#+
-        if (!isValueType)
+        if (sourceTypeInfo.HasComparableAttribute)
         {
+#>
+        return __CompareCore(left, right) == 0;
+<#+
+        }
+        else
+        {
+            if (!isValueType)
+            {
 #>
         if (object.ReferenceEquals(left, right))
         {
             return true;
         }
 <#+
-        }
+            }
 #>
         
         if (left is null || right is null)
@@ -60,9 +66,9 @@ partial <#= typeKind #> <#= typeName #>
 
         bool result;
 <#+
-        foreach (var member in sourceTypeInfo.Members)
-        {
-            string memberName = member.Name;
+            foreach (var member in sourceTypeInfo.Members)
+            {
+                string memberName = member.Name;
 #>
 
         result = EqualityComparer<<#= member.FullTypeNameWithGlobalPrefix #>>.Default.Equals(left<#= dotValue #>.<#= memberName #>, right<#= dotValue #>.<#= memberName #>);
@@ -71,11 +77,14 @@ partial <#= typeKind #> <#= typeName #>
             return result;
         }
 <#+
-        }
+            }
 
 #>
 
         return true;
+<#+
+        }
+#>
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
